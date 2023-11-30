@@ -64,7 +64,7 @@ namespace ProjetPOO {
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(219, 87);
 			this->button1->TabIndex = 0;
-			this->button1->Text = L"Clique moi";
+			this->button1->Text = L"Clique moi !";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &Projet::button1_Click);
 			// 
