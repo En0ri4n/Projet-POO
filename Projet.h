@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 namespace ProjetPOO {
 
@@ -36,6 +36,7 @@ namespace ProjetPOO {
 		}
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::Label^ label1;
 	protected:
 
 	private:
@@ -53,44 +54,61 @@ namespace ProjetPOO {
 		{
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(73, 87);
+			this->button1->Location = System::Drawing::Point(97, 107);
+			this->button1->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(164, 71);
+			this->button1->Size = System::Drawing::Size(219, 87);
 			this->button1->TabIndex = 0;
-			this->button1->Text = L"Clique moi";
+			this->button1->Text = L"Clique moi !";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &Projet::button1_Click);
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(400, 87);
+			this->button2->Location = System::Drawing::Point(533, 107);
+			this->button2->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(180, 71);
+			this->button2->Size = System::Drawing::Size(240, 87);
 			this->button2->TabIndex = 1;
 			this->button2->Text = L"Ne clique pas";
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &Projet::button2_Click);
 			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Location = System::Drawing::Point(393, 322);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(44, 16);
+			this->label1->TabIndex = 2;
+			this->label1->Text = L"label1";
+			// 
 			// Projet
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(635, 465);
+			this->ClientSize = System::Drawing::Size(847, 572);
+			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
+			this->Margin = System::Windows::Forms::Padding(4, 4, 4, 4);
 			this->Name = L"Projet";
 			this->Text = L"Projet";
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->label1->Text = "BIEN JOUE";
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->label1->Text = "le code va s'autodétruire dans 3 secondes";
 	}
 	};
 }
