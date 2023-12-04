@@ -123,9 +123,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SqlManager.cpp" />
+    <ClCompile Include="SqlQuery.cpp" />
+    <ClCompile Include="SqlHandler.cpp" />
     <ClCompile Include="Projet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SqlManager.h" />
+    <ClInclude Include="SqlQuery.h" />
+    <ClInclude Include="SqlHandler.h" />
     <ClInclude Include="Projet.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -134,6 +140,9 @@
     <EmbeddedResource Include="Projet.resx">
       <DependentUpon>Projet.h</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
