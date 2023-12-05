@@ -84,6 +84,11 @@ namespace ProjetPOO
 	private: System::Windows::Forms::Label^ idPersonnelLabel;
 	private: System::Windows::Forms::TextBox^ nomPersonnelBox;
 
+	private:
+		bool connected;
+	private: System::Windows::Forms::Button^ button8;
+	private: System::Windows::Forms::Label^ messageConnexionBDD;
+
 	protected:
 
 	private:
@@ -215,6 +220,7 @@ namespace ProjetPOO
 			this->dataGridView->ReadOnly = true;
 			this->dataGridView->Size = System::Drawing::Size(657, 548);
 			this->dataGridView->TabIndex = 3;
+			this->dataGridView->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &Projet::dataGridView_CellContentClick);
 			// 
 			// Name
 			// 
@@ -225,6 +231,7 @@ namespace ProjetPOO
 			// id
 			// 
 			this->id->HeaderText = L"Id";
+			this->id->MinimumWidth = 6;
 			this->id->Name = L"id";
 			this->id->ReadOnly = true;
 			// 
@@ -772,7 +779,7 @@ namespace ProjetPOO
 			// 
 			// Projet
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::ScrollBar;
 			this->ClientSize = System::Drawing::Size(1251, 572);
@@ -807,7 +814,6 @@ namespace ProjetPOO
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
-		}
 #pragma endregion
 
 	private: System::Void onFormLoad(System::Object^ sender, System::EventArgs^ e)
