@@ -208,7 +208,7 @@ namespace ProjetPOO
 			   });
 			   this->dataGridView->GridColor = System::Drawing::SystemColors::ActiveBorder;
 			   this->dataGridView->Location = System::Drawing::Point(598, 11);
-			   this->dataGridView->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->dataGridView->Margin = System::Windows::Forms::Padding(2);
 			   this->dataGridView->Name = L"dataGridView";
 			   this->dataGridView->ReadOnly = true;
 			   this->dataGridView->Size = System::Drawing::Size(581, 551);
@@ -232,7 +232,7 @@ namespace ProjetPOO
 			   this->boutonAfficher->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->boutonAfficher->Location = System::Drawing::Point(9, 401);
-			   this->boutonAfficher->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->boutonAfficher->Margin = System::Windows::Forms::Padding(2);
 			   this->boutonAfficher->Name = L"boutonAfficher";
 			   this->boutonAfficher->Size = System::Drawing::Size(106, 38);
 			   this->boutonAfficher->TabIndex = 8;
@@ -245,7 +245,7 @@ namespace ProjetPOO
 			   this->boutonSupprimer->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->boutonSupprimer->Location = System::Drawing::Point(163, 401);
-			   this->boutonSupprimer->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->boutonSupprimer->Margin = System::Windows::Forms::Padding(2);
 			   this->boutonSupprimer->Name = L"boutonSupprimer";
 			   this->boutonSupprimer->Size = System::Drawing::Size(106, 38);
 			   this->boutonSupprimer->TabIndex = 7;
@@ -258,7 +258,7 @@ namespace ProjetPOO
 			   this->boutonModifier->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->boutonModifier->Location = System::Drawing::Point(488, 401);
-			   this->boutonModifier->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->boutonModifier->Margin = System::Windows::Forms::Padding(2);
 			   this->boutonModifier->Name = L"boutonModifier";
 			   this->boutonModifier->Size = System::Drawing::Size(106, 38);
 			   this->boutonModifier->TabIndex = 6;
@@ -271,7 +271,7 @@ namespace ProjetPOO
 			   this->boutonAjouter->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->boutonAjouter->Location = System::Drawing::Point(322, 401);
-			   this->boutonAjouter->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->boutonAjouter->Margin = System::Windows::Forms::Padding(2);
 			   this->boutonAjouter->Name = L"boutonAjouter";
 			   this->boutonAjouter->Size = System::Drawing::Size(106, 38);
 			   this->boutonAjouter->TabIndex = 5;
@@ -282,7 +282,7 @@ namespace ProjetPOO
 			   // historiqueBox
 			   // 
 			   this->historiqueBox->Location = System::Drawing::Point(9, 459);
-			   this->historiqueBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->historiqueBox->Margin = System::Windows::Forms::Padding(2);
 			   this->historiqueBox->Name = L"historiqueBox";
 			   this->historiqueBox->ReadOnly = true;
 			   this->historiqueBox->Size = System::Drawing::Size(585, 103);
@@ -305,9 +305,9 @@ namespace ProjetPOO
 			   // tabStatistiques
 			   // 
 			   this->tabStatistiques->Location = System::Drawing::Point(4, 22);
-			   this->tabStatistiques->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabStatistiques->Margin = System::Windows::Forms::Padding(2);
 			   this->tabStatistiques->Name = L"tabStatistiques";
-			   this->tabStatistiques->Size = System::Drawing::Size(415, 245);
+			   this->tabStatistiques->Size = System::Drawing::Size(577, 324);
 			   this->tabStatistiques->TabIndex = 5;
 			   this->tabStatistiques->Text = L"Statistiques";
 			   this->tabStatistiques->UseVisualStyleBackColor = true;
@@ -315,9 +315,9 @@ namespace ProjetPOO
 			   // tabClients
 			   // 
 			   this->tabClients->Location = System::Drawing::Point(4, 22);
-			   this->tabClients->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabClients->Margin = System::Windows::Forms::Padding(2);
 			   this->tabClients->Name = L"tabClients";
-			   this->tabClients->Size = System::Drawing::Size(415, 245);
+			   this->tabClients->Size = System::Drawing::Size(577, 324);
 			   this->tabClients->TabIndex = 4;
 			   this->tabClients->Text = L"Clients";
 			   this->tabClients->UseVisualStyleBackColor = true;
@@ -328,7 +328,7 @@ namespace ProjetPOO
 			   this->tabCommandes->Controls->Add(this->comboBox1);
 			   this->tabCommandes->Controls->Add(this->commandesLabel);
 			   this->tabCommandes->Location = System::Drawing::Point(4, 22);
-			   this->tabCommandes->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabCommandes->Margin = System::Windows::Forms::Padding(2);
 			   this->tabCommandes->Name = L"tabCommandes";
 			   this->tabCommandes->Size = System::Drawing::Size(577, 324);
 			   this->tabCommandes->TabIndex = 3;
@@ -343,7 +343,7 @@ namespace ProjetPOO
 				   L"a", L"b", L"c", L"d", L"e", L"f", L"g", L"h"
 			   });
 			   this->comboBox1->Location = System::Drawing::Point(227, 176);
-			   this->comboBox1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->comboBox1->Margin = System::Windows::Forms::Padding(2);
 			   this->comboBox1->Name = L"comboBox1";
 			   this->comboBox1->Size = System::Drawing::Size(92, 21);
 			   this->comboBox1->TabIndex = 28;
@@ -378,7 +378,7 @@ namespace ProjetPOO
 			   this->tabStocks->Controls->Add(this->label2);
 			   this->tabStocks->Controls->Add(this->idStockBox);
 			   this->tabStocks->Location = System::Drawing::Point(4, 22);
-			   this->tabStocks->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabStocks->Margin = System::Windows::Forms::Padding(2);
 			   this->tabStocks->Name = L"tabStocks";
 			   this->tabStocks->Size = System::Drawing::Size(577, 324);
 			   this->tabStocks->TabIndex = 2;
@@ -390,7 +390,7 @@ namespace ProjetPOO
 			   this->quantiteStockLabel->AutoSize = true;
 			   this->quantiteStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->quantiteStockLabel->Location = System::Drawing::Point(60, 210);
+			   this->quantiteStockLabel->Location = System::Drawing::Point(98, 257);
 			   this->quantiteStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->quantiteStockLabel->Name = L"quantiteStockLabel";
 			   this->quantiteStockLabel->Size = System::Drawing::Size(80, 20);
@@ -402,7 +402,7 @@ namespace ProjetPOO
 			   this->seuilStockLabel->AutoSize = true;
 			   this->seuilStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->seuilStockLabel->Location = System::Drawing::Point(50, 184);
+			   this->seuilStockLabel->Location = System::Drawing::Point(85, 226);
 			   this->seuilStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->seuilStockLabel->Name = L"seuilStockLabel";
 			   this->seuilStockLabel->Size = System::Drawing::Size(93, 20);
@@ -414,7 +414,7 @@ namespace ProjetPOO
 			   this->couleurStockLabel->AutoSize = true;
 			   this->couleurStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->couleurStockLabel->Location = System::Drawing::Point(64, 158);
+			   this->couleurStockLabel->Location = System::Drawing::Point(104, 196);
 			   this->couleurStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->couleurStockLabel->Name = L"couleurStockLabel";
 			   this->couleurStockLabel->Size = System::Drawing::Size(74, 20);
@@ -426,7 +426,7 @@ namespace ProjetPOO
 			   this->natureStockLabel->AutoSize = true;
 			   this->natureStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->natureStockLabel->Location = System::Drawing::Point(70, 131);
+			   this->natureStockLabel->Location = System::Drawing::Point(111, 165);
 			   this->natureStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->natureStockLabel->Name = L"natureStockLabel";
 			   this->natureStockLabel->Size = System::Drawing::Size(67, 20);
@@ -437,20 +437,20 @@ namespace ProjetPOO
 			   // 
 			   this->quantiteStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->quantiteStockBox->Location = System::Drawing::Point(136, 208);
-			   this->quantiteStockBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->quantiteStockBox->Location = System::Drawing::Point(196, 255);
+			   this->quantiteStockBox->Margin = System::Windows::Forms::Padding(2);
 			   this->quantiteStockBox->Name = L"quantiteStockBox";
-			   this->quantiteStockBox->Size = System::Drawing::Size(243, 27);
+			   this->quantiteStockBox->Size = System::Drawing::Size(244, 27);
 			   this->quantiteStockBox->TabIndex = 21;
 			   // 
 			   // seuilStockBox
 			   // 
 			   this->seuilStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->seuilStockBox->Location = System::Drawing::Point(136, 182);
-			   this->seuilStockBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->seuilStockBox->Location = System::Drawing::Point(196, 224);
+			   this->seuilStockBox->Margin = System::Windows::Forms::Padding(2);
 			   this->seuilStockBox->Name = L"seuilStockBox";
-			   this->seuilStockBox->Size = System::Drawing::Size(243, 27);
+			   this->seuilStockBox->Size = System::Drawing::Size(244, 27);
 			   this->seuilStockBox->TabIndex = 20;
 			   // 
 			   // couleurStockBox
@@ -458,8 +458,8 @@ namespace ProjetPOO
 			   this->couleurStockBox->BackColor = System::Drawing::SystemColors::Window;
 			   this->couleurStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->couleurStockBox->Location = System::Drawing::Point(136, 155);
-			   this->couleurStockBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->couleurStockBox->Location = System::Drawing::Point(196, 193);
+			   this->couleurStockBox->Margin = System::Windows::Forms::Padding(2);
 			   this->couleurStockBox->Name = L"couleurStockBox";
 			   this->couleurStockBox->Size = System::Drawing::Size(244, 27);
 			   this->couleurStockBox->TabIndex = 19;
@@ -469,8 +469,8 @@ namespace ProjetPOO
 			   this->natureStockBox->BackColor = System::Drawing::SystemColors::Window;
 			   this->natureStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->natureStockBox->Location = System::Drawing::Point(136, 128);
-			   this->natureStockBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->natureStockBox->Location = System::Drawing::Point(196, 162);
+			   this->natureStockBox->Margin = System::Windows::Forms::Padding(2);
 			   this->natureStockBox->Name = L"natureStockBox";
 			   this->natureStockBox->Size = System::Drawing::Size(244, 27);
 			   this->natureStockBox->TabIndex = 18;
@@ -479,10 +479,10 @@ namespace ProjetPOO
 			   // 
 			   this->prixStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->prixStockBox->Location = System::Drawing::Point(136, 102);
-			   this->prixStockBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->prixStockBox->Location = System::Drawing::Point(196, 131);
+			   this->prixStockBox->Margin = System::Windows::Forms::Padding(2);
 			   this->prixStockBox->Name = L"prixStockBox";
-			   this->prixStockBox->Size = System::Drawing::Size(243, 27);
+			   this->prixStockBox->Size = System::Drawing::Size(244, 27);
 			   this->prixStockBox->TabIndex = 17;
 			   // 
 			   // nomStockBox
@@ -490,8 +490,8 @@ namespace ProjetPOO
 			   this->nomStockBox->BackColor = System::Drawing::SystemColors::Window;
 			   this->nomStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->nomStockBox->Location = System::Drawing::Point(136, 75);
-			   this->nomStockBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->nomStockBox->Location = System::Drawing::Point(196, 100);
+			   this->nomStockBox->Margin = System::Windows::Forms::Padding(2);
 			   this->nomStockBox->Name = L"nomStockBox";
 			   this->nomStockBox->Size = System::Drawing::Size(244, 27);
 			   this->nomStockBox->TabIndex = 16;
@@ -501,7 +501,7 @@ namespace ProjetPOO
 			   this->prixStockLabel->AutoSize = true;
 			   this->prixStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->prixStockLabel->Location = System::Drawing::Point(87, 102);
+			   this->prixStockLabel->Location = System::Drawing::Point(134, 133);
 			   this->prixStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->prixStockLabel->Name = L"prixStockLabel";
 			   this->prixStockLabel->Size = System::Drawing::Size(44, 20);
@@ -513,7 +513,7 @@ namespace ProjetPOO
 			   this->nomStockLabel->AutoSize = true;
 			   this->nomStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->nomStockLabel->Location = System::Drawing::Point(80, 76);
+			   this->nomStockLabel->Location = System::Drawing::Point(125, 103);
 			   this->nomStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->nomStockLabel->Name = L"nomStockLabel";
 			   this->nomStockLabel->Size = System::Drawing::Size(53, 20);
@@ -525,7 +525,7 @@ namespace ProjetPOO
 			   this->idStockLabel->AutoSize = true;
 			   this->idStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->idStockLabel->Location = System::Drawing::Point(96, 49);
+			   this->idStockLabel->Location = System::Drawing::Point(146, 72);
 			   this->idStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->idStockLabel->Name = L"idStockLabel";
 			   this->idStockLabel->Size = System::Drawing::Size(32, 20);
@@ -537,7 +537,7 @@ namespace ProjetPOO
 			   this->label2->AutoSize = true;
 			   this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->label2->Location = System::Drawing::Point(169, 3);
+			   this->label2->Location = System::Drawing::Point(217, 0);
 			   this->label2->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->label2->Name = L"label2";
 			   this->label2->Size = System::Drawing::Size(123, 42);
@@ -549,8 +549,8 @@ namespace ProjetPOO
 			   this->idStockBox->BackColor = System::Drawing::SystemColors::Window;
 			   this->idStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->idStockBox->Location = System::Drawing::Point(136, 48);
-			   this->idStockBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->idStockBox->Location = System::Drawing::Point(196, 69);
+			   this->idStockBox->Margin = System::Windows::Forms::Padding(2);
 			   this->idStockBox->Name = L"idStockBox";
 			   this->idStockBox->Size = System::Drawing::Size(244, 27);
 			   this->idStockBox->TabIndex = 12;
@@ -567,9 +567,9 @@ namespace ProjetPOO
 			   this->tabPersonnel->Controls->Add(this->idPersonnelBox);
 			   this->tabPersonnel->Controls->Add(this->label1);
 			   this->tabPersonnel->Location = System::Drawing::Point(4, 22);
-			   this->tabPersonnel->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabPersonnel->Margin = System::Windows::Forms::Padding(2);
 			   this->tabPersonnel->Name = L"tabPersonnel";
-			   this->tabPersonnel->Padding = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabPersonnel->Padding = System::Windows::Forms::Padding(2);
 			   this->tabPersonnel->Size = System::Drawing::Size(577, 324);
 			   this->tabPersonnel->TabIndex = 1;
 			   this->tabPersonnel->Text = L"Personnel";
@@ -594,7 +594,7 @@ namespace ProjetPOO
 			   this->dateEmbauchePersonnelPicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			   this->dateEmbauchePersonnelPicker->Location = System::Drawing::Point(205, 153);
-			   this->dateEmbauchePersonnelPicker->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->dateEmbauchePersonnelPicker->Margin = System::Windows::Forms::Padding(2);
 			   this->dateEmbauchePersonnelPicker->Name = L"dateEmbauchePersonnelPicker";
 			   this->dateEmbauchePersonnelPicker->Size = System::Drawing::Size(244, 27);
 			   this->dateEmbauchePersonnelPicker->TabIndex = 10;
@@ -616,7 +616,7 @@ namespace ProjetPOO
 			   this->prenomPersonnelBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			   this->prenomPersonnelBox->Location = System::Drawing::Point(205, 122);
-			   this->prenomPersonnelBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->prenomPersonnelBox->Margin = System::Windows::Forms::Padding(2);
 			   this->prenomPersonnelBox->Name = L"prenomPersonnelBox";
 			   this->prenomPersonnelBox->Size = System::Drawing::Size(244, 27);
 			   this->prenomPersonnelBox->TabIndex = 8;
@@ -651,7 +651,7 @@ namespace ProjetPOO
 			   this->nomPersonnelBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->nomPersonnelBox->Location = System::Drawing::Point(205, 91);
-			   this->nomPersonnelBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->nomPersonnelBox->Margin = System::Windows::Forms::Padding(2);
 			   this->nomPersonnelBox->Name = L"nomPersonnelBox";
 			   this->nomPersonnelBox->Size = System::Drawing::Size(243, 27);
 			   this->nomPersonnelBox->TabIndex = 5;
@@ -661,7 +661,7 @@ namespace ProjetPOO
 			   this->idPersonnelBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->idPersonnelBox->Location = System::Drawing::Point(205, 60);
-			   this->idPersonnelBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->idPersonnelBox->Margin = System::Windows::Forms::Padding(2);
 			   this->idPersonnelBox->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
 			   {
 				   999999999, 0, 0, 0
@@ -688,7 +688,7 @@ namespace ProjetPOO
 				   static_cast<System::Byte>(0)));
 			   this->boutonValider->ForeColor = System::Drawing::Color::Green;
 			   this->boutonValider->Location = System::Drawing::Point(228, 364);
-			   this->boutonValider->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->boutonValider->Margin = System::Windows::Forms::Padding(2);
 			   this->boutonValider->Name = L"boutonValider";
 			   this->boutonValider->Size = System::Drawing::Size(140, 32);
 			   this->boutonValider->TabIndex = 0;
@@ -706,10 +706,10 @@ namespace ProjetPOO
 			   this->tabAccueil->Controls->Add(this->label4);
 			   this->tabAccueil->Controls->Add(this->welcomeTitleLabel);
 			   this->tabAccueil->Location = System::Drawing::Point(4, 22);
-			   this->tabAccueil->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabAccueil->Margin = System::Windows::Forms::Padding(2);
 			   this->tabAccueil->Name = L"tabAccueil";
-			   this->tabAccueil->Padding = System::Windows::Forms::Padding(2, 2, 2, 2);
-			   this->tabAccueil->Size = System::Drawing::Size(540, 245);
+			   this->tabAccueil->Padding = System::Windows::Forms::Padding(2);
+			   this->tabAccueil->Size = System::Drawing::Size(577, 324);
 			   this->tabAccueil->TabIndex = 0;
 			   this->tabAccueil->Text = L"Accueil";
 			   this->tabAccueil->UseVisualStyleBackColor = true;
@@ -719,7 +719,7 @@ namespace ProjetPOO
 			   this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->button8->Location = System::Drawing::Point(174, 217);
-			   this->button8->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->button8->Margin = System::Windows::Forms::Padding(2);
 			   this->button8->Name = L"button8";
 			   this->button8->Size = System::Drawing::Size(208, 24);
 			   this->button8->TabIndex = 12;
@@ -744,7 +744,7 @@ namespace ProjetPOO
 			   this->passwordBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->passwordBox->Location = System::Drawing::Point(172, 181);
-			   this->passwordBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->passwordBox->Margin = System::Windows::Forms::Padding(2);
 			   this->passwordBox->Name = L"passwordBox";
 			   this->passwordBox->PasswordChar = '*';
 			   this->passwordBox->Size = System::Drawing::Size(210, 22);
@@ -756,7 +756,7 @@ namespace ProjetPOO
 			   this->usernameBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->usernameBox->Location = System::Drawing::Point(172, 148);
-			   this->usernameBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->usernameBox->Margin = System::Windows::Forms::Padding(2);
 			   this->usernameBox->Name = L"usernameBox";
 			   this->usernameBox->Size = System::Drawing::Size(210, 22);
 			   this->usernameBox->TabIndex = 8;
@@ -807,7 +807,7 @@ namespace ProjetPOO
 			   this->tabController->Controls->Add(this->tabClients);
 			   this->tabController->Controls->Add(this->tabStatistiques);
 			   this->tabController->Location = System::Drawing::Point(9, 10);
-			   this->tabController->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->tabController->Margin = System::Windows::Forms::Padding(2);
 			   this->tabController->Name = L"tabController";
 			   this->tabController->SelectedIndex = 0;
 			   this->tabController->Size = System::Drawing::Size(585, 350);
@@ -829,7 +829,7 @@ namespace ProjetPOO
 			   this->Controls->Add(this->dataGridView);
 			   this->Controls->Add(this->boutonValider);
 			   this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
-			   this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			   this->Margin = System::Windows::Forms::Padding(2);
 			   this->MaximizeBox = false;
 			   // this->Name = L"Projet";
 			   this->Text = L"Business Manager - Powered by EVAL";
@@ -1026,5 +1026,5 @@ namespace ProjetPOO
 
 		addHistorique("Mode : " + name);
 	}
-	};
+};
 }
