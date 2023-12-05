@@ -48,8 +48,6 @@ namespace ProjetPOO
 
 
 	private: System::Windows::Forms::DataGridView^ dataGridView;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Name;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ id;
 	private: System::Windows::Forms::RichTextBox^ historiqueBox;
 	private: System::Windows::Forms::Label^ historiqueLabel;
 
@@ -135,8 +133,6 @@ namespace ProjetPOO
 		   {
 			   System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Projet::typeid));
 			   this->dataGridView = (gcnew System::Windows::Forms::DataGridView());
-			   this->Name = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			   this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			   this->boutonAfficher = (gcnew System::Windows::Forms::Button());
 			   this->boutonSupprimer = (gcnew System::Windows::Forms::Button());
 			   this->boutonModifier = (gcnew System::Windows::Forms::Button());
@@ -202,10 +198,7 @@ namespace ProjetPOO
 			   this->dataGridView->AllowUserToOrderColumns = true;
 			   this->dataGridView->BackgroundColor = System::Drawing::SystemColors::ActiveBorder;
 			   this->dataGridView->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			   this->dataGridView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(2)
-			   {
-				   this->Name, this->id
-			   });
+			   
 			   this->dataGridView->GridColor = System::Drawing::SystemColors::ActiveBorder;
 			   this->dataGridView->Location = System::Drawing::Point(598, 11);
 			   this->dataGridView->Margin = System::Windows::Forms::Padding(2);
@@ -213,19 +206,6 @@ namespace ProjetPOO
 			   this->dataGridView->ReadOnly = true;
 			   this->dataGridView->Size = System::Drawing::Size(581, 551);
 			   this->dataGridView->TabIndex = 3;
-			   // 
-			   // Name
-			   // 
-			   this->Name->HeaderText = L"Projet";
-			   this->Name->Name = L"Name";
-			   this->Name->ReadOnly = true;
-			   // 
-			   // id
-			   // 
-			   this->id->HeaderText = L"Id";
-			   this->id->MinimumWidth = 6;
-			   this->id->Name = L"id";
-			   this->id->ReadOnly = true;
 			   // 
 			   // boutonAfficher
 			   // 
@@ -718,7 +698,7 @@ namespace ProjetPOO
 			   // 
 			   this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->button8->Location = System::Drawing::Point(174, 217);
+			   this->button8->Location = System::Drawing::Point(263, 222);
 			   this->button8->Margin = System::Windows::Forms::Padding(2);
 			   this->button8->Name = L"button8";
 			   this->button8->Size = System::Drawing::Size(208, 24);
@@ -732,7 +712,7 @@ namespace ProjetPOO
 			   this->passwordLabel->AutoSize = true;
 			   this->passwordLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->passwordLabel->Location = System::Drawing::Point(73, 181);
+			   this->passwordLabel->Location = System::Drawing::Point(164, 186);
 			   this->passwordLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->passwordLabel->Name = L"passwordLabel";
 			   this->passwordLabel->Size = System::Drawing::Size(89, 16);
@@ -743,7 +723,7 @@ namespace ProjetPOO
 			   // 
 			   this->passwordBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->passwordBox->Location = System::Drawing::Point(172, 181);
+			   this->passwordBox->Location = System::Drawing::Point(263, 186);
 			   this->passwordBox->Margin = System::Windows::Forms::Padding(2);
 			   this->passwordBox->Name = L"passwordBox";
 			   this->passwordBox->PasswordChar = '*';
@@ -755,7 +735,7 @@ namespace ProjetPOO
 			   // 
 			   this->usernameBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->usernameBox->Location = System::Drawing::Point(172, 148);
+			   this->usernameBox->Location = System::Drawing::Point(263, 153);
 			   this->usernameBox->Margin = System::Windows::Forms::Padding(2);
 			   this->usernameBox->Name = L"usernameBox";
 			   this->usernameBox->Size = System::Drawing::Size(210, 22);
@@ -766,7 +746,7 @@ namespace ProjetPOO
 			   this->usernameLabel->AutoSize = true;
 			   this->usernameLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->usernameLabel->Location = System::Drawing::Point(56, 150);
+			   this->usernameLabel->Location = System::Drawing::Point(147, 155);
 			   this->usernameLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->usernameLabel->Name = L"usernameLabel";
 			   this->usernameLabel->Size = System::Drawing::Size(106, 16);
@@ -831,7 +811,7 @@ namespace ProjetPOO
 			   this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			   this->Margin = System::Windows::Forms::Padding(2);
 			   this->MaximizeBox = false;
-			   // this->Name = L"Projet";
+			   this->Name = L"Projet";
 			   this->Text = L"Business Manager - Powered by EVAL";
 			   this->Load += gcnew System::EventHandler(this, &Projet::onFormLoad);
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->EndInit();
