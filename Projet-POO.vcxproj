@@ -123,10 +123,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SqlManager.cpp" />
+    <ClCompile Include="SqlQuery.cpp" />
+    <ClCompile Include="SqlHandler.cpp" />
     <ClCompile Include="Projet.cpp" />
-    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SqlManager.h" />
+    <ClInclude Include="SqlQuery.h" />
+    <ClInclude Include="SqlHandler.h" />
     <ClInclude Include="Projet.h">
       <FileType>CppForm</FileType>
     </ClInclude>
