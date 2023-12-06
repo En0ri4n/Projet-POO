@@ -123,12 +123,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArticlePopup.cpp" />
     <ClCompile Include="SqlManager.cpp" />
     <ClCompile Include="SqlQuery.cpp" />
     <ClCompile Include="SqlHandler.cpp" />
     <ClCompile Include="Projet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArticlePopup.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="SqlManager.h" />
     <ClInclude Include="SqlQuery.h" />
     <ClInclude Include="SqlHandler.h" />
@@ -137,6 +141,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ArticlePopup.resx">
+      <DependentUpon>ArticlePopup.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Projet.resx">
       <DependentUpon>Projet.h</DependentUpon>
       <SubType>Designer</SubType>

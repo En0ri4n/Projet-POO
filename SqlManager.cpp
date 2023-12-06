@@ -1,48 +1,39 @@
 #include "SqlManager.h"
 #include <iostream>
 
-ProjetPOO::SqlManager::SqlManager(void)
+SqlManager::SqlManager()
 {
 	this->connectionCmd = "Data Source=ENO-LAPTOP;Initial Catalog=bdd;Integrated Security=True;User ID=sa;Password=a";
 
-	this->sqlCmd = "EMPTY";
-
 	this->connection = gcnew Data::SqlClient::SqlConnection(this->connectionCmd);
-	this->command = gcnew Data::SqlClient::SqlCommand(this->sqlCmd, this->connection);
+	this->command = gcnew Data::SqlClient::SqlCommand(L"EMPTY", this->connection);
 	this->dataAdapter = gcnew Data::SqlClient::SqlDataAdapter();
 	this->dataSet = gcnew Data::DataSet();
 
 	this->command->CommandType = Data::CommandType::Text;
 }
 
-System::Data::DataSet^ ProjetPOO::SqlManager::getRows(String^ sSql, String^ sDataTableName)
+System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, String^ table)
 {
 	this->dataSet->Clear();
-	this->sqlCmd = sSql;
-	this->command->CommandText = this->sqlCmd;
+	this->command->CommandText = query->toQuery();
 	this->dataAdapter->SelectCommand = this->command;
-	this->dataAdapter->Fill(this->dataSet, sDataTableName);
+	lastCount = this->dataAdapter->Fill(this->dataSet, table);
 
 	return this->dataSet;
 }
 
-void ProjetPOO::SqlManager::actionRows(String^ sqlQuery)
+System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, Table^ table)
 {
-	this->sqlCmd = sqlQuery;
-	this->command->CommandText = this->sqlCmd;
-	this->dataAdapter->SelectCommand = this->command;
-	this->connection->Open();
-	this->command->ExecuteNonQuery();
-	this->connection->Close();
+	return getRows(query, table->getName());
 }
 
-bool ProjetPOO::SqlManager::exists(int id)
+int SqlManager::actionRows(SqlQuery^ query)
 {
-	this->sqlCmd = String::Format("SELECT * FROM rsl WHERE id={0}", id);
-	this->command->CommandText = this->sqlCmd;
+	this->command->CommandText = query->toQuery();
 	this->dataAdapter->SelectCommand = this->command;
 	this->connection->Open();
-	int count = this->command->ExecuteNonQuery();
+	int action = this->command->ExecuteNonQuery();
 	this->connection->Close();
-	return count > 0;
+	return action;
 }

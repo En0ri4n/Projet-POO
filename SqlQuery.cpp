@@ -1,40 +1,47 @@
 #include "SqlQuery.h"
 
-String^ ProjetPOOMappage::SqlQuery::Select(void)
+SqlQuery::SqlQuery()
 {
-	return "SELECT [id], [nom], [prenom] FROM [dbo].[rsl]";
+	this->isTransaction = false;
+	this->queries = gcnew System::Collections::ArrayList();
 }
 
-String^ ProjetPOOMappage::SqlQuery::Insert(void)
+SqlQuery::~SqlQuery()
 {
-	return System::String::Format("INSERT INTO rsl (nom, prenom) VALUES('{0}','{1}');", this->nom, this->prenom);
+	delete queries;
 }
 
-String^ ProjetPOOMappage::SqlQuery::Delete(void)
+void SqlQuery::newQuery(bool isTransaction, String^ query)
 {
-	return System::String::Format("DELETE FROM rsl WHERE id={0}", this->Id);
+	this->isTransaction = isTransaction;
+	this->queries->Clear();
+	addQuery(query);
 }
 
-String^ ProjetPOOMappage::SqlQuery::Update(void)
+void SqlQuery::addQuery(String^ query)
 {
-	return System::String::Format("UPDATE rsl SET nom='{0}', prenom='{1}' WHERE id={2}", this->nom, this->prenom, this->Id);
+	this->queries->Add(query);
 }
 
-void ProjetPOOMappage::SqlQuery::setId(int Id)
+void SqlQuery::useTransaction()
 {
-	this->Id = Id;
+	this->isTransaction = true;
 }
 
-void ProjetPOOMappage::SqlQuery::setNom(String^ nom)
+String^ SqlQuery::toQuery()
 {
-	this->nom = nom;
-}
+	String^ query = String::Format("USE {0};", DATABASE_NAME);
 
-void ProjetPOOMappage::SqlQuery::setPrenom(String^ prenom)
-{
-	this->prenom = prenom;
-}
+	if(isTransaction)
+		query += "BEGIN TRANSACTION;";
 
-int ProjetPOOMappage::SqlQuery::getId(void) { return this->Id; }
-String^ ProjetPOOMappage::SqlQuery::getNom(void) { return this->nom; }
-String^ ProjetPOOMappage::SqlQuery::getPrenom(void) { return this->prenom; }
+	for each(String^ strQuery in queries)
+	{
+		query += String::Format("{0};", strQuery);
+	}
+
+	if(isTransaction)
+		query += "COMMIT;";
+
+	return query;
+}

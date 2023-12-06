@@ -4,23 +4,41 @@ using namespace System;
 
 namespace ProjetPOOMappage
 {
+	ref class Table
+	{
+	public:
+		static Table^ PERSONNES = gcnew Table(L"Personnes");
+		static Table^ PERSONNELS = gcnew Table(L"Personnels");
+		static Table^ CLIENTS = gcnew Table(L"Clients");
+		static Table^ COMMANDES = gcnew Table(L"Commandes");
+		static Table^ ARTICLES = gcnew Table(L"Articles");
+		static Table^ ADRESSES = gcnew Table(L"Adresses");
+		static Table^ VILLES = gcnew Table(L"Villes");
+	private:
+		String^ name;
+	private:
+		Table(String^ tableName) : name(tableName) {};
+	public:
+		String^ getName()
+		{
+			return name;
+		};
+	};
+
 	ref class SqlQuery
 	{
 	private:
-		String^ sSql;
-		int Id;
-		String^ nom;
-		String^ prenom;
+		static String^ DATABASE_NAME = "bdd";
+		bool isTransaction;
+		System::Collections::ArrayList^ queries;
 	public:
-		String^ Select(void);
-		String^ Insert(void);
-		String^ Delete(void);
-		String^ Update(void);
-		void setId(int);
-		void setNom(String^);
-		void setPrenom(String^);
-		int getId(void);
-		String^ getNom(void);
-		String^ getPrenom(void);
+		SqlQuery();
+		~SqlQuery();
+		void newQuery(bool, String^);
+		void addQuery(String^);
+		void useTransaction();
+		String^ toQuery();
 	};
 }
+
+using namespace ProjetPOOMappage;

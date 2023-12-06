@@ -1,4 +1,8 @@
-#pragma once
+ï»¿#pragma once
+#include "ArticlePopup.h"
+#include "SqlQuery.h"
+#include "SqlManager.h"
+#include "SqlHandler.h"
 
 namespace ProjetPOO
 {
@@ -71,7 +75,8 @@ namespace ProjetPOO
 	private: System::Windows::Forms::TextBox^ passwordBox;
 	private: System::Windows::Forms::TextBox^ usernameBox;
 	private: System::Windows::Forms::Label^ usernameLabel;
-	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::Label^ descriptionLabel;
+
 	private: System::Windows::Forms::Label^ welcomeTitleLabel;
 	private: System::Windows::Forms::TabControl^ tabController;
 	private: System::Windows::Forms::Label^ dateEmbauchePersonnelLabel;
@@ -84,6 +89,8 @@ namespace ProjetPOO
 
 	private:
 		bool connected;
+		SqlHandler^ sqlHandler;
+
 
 	protected:
 
@@ -120,15 +127,43 @@ namespace ProjetPOO
 
 	private: System::Windows::Forms::TextBox^ natureStockBox;
 	private: System::Windows::Forms::Label^ commandesLabel;
-	private: System::Windows::Forms::ComboBox^ comboBox1;
-		   
-		   private: SqlMode currentMode;
+	private: System::Windows::Forms::ComboBox^ moyenPayementCommandeBox;
+
+
+
+	private: System::Windows::Forms::Label^ dateLivraisonCommandeLabel;
+	private: System::Windows::Forms::TextBox^ idCommandeBox;
+
+	private: System::Windows::Forms::Label^ label6;
+
+
+	private: System::Windows::Forms::DateTimePicker^ dateEmissionCommandePicker;
+
+	private: System::Windows::Forms::DateTimePicker^ dateLivraisonCommandePicker;
+
+
+	private: System::Windows::Forms::Label^ label7;
+	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Label^ label10;
+	private: System::Windows::Forms::DateTimePicker^ dateSoldeCommandePicker;
+
+	private: System::Windows::Forms::DateTimePicker^ datePayementCommandePicker;
+
+	private: System::Windows::Forms::Label^ label9;
+	private: System::Windows::Forms::Label^ label5;
+	private: System::Windows::Forms::Button^ boutonAfficherTout;
+private: System::Windows::Forms::Button^ boutonChercher;
+private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
+
+
+
+	private: SqlMode currentMode;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
+		   /// <summary>
+		   /// Required method for Designer support - do not modify
+		   /// the contents of this method with the code editor.
+		   /// </summary>
 		   void InitializeComponent(void)
 		   {
 			   System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Projet::typeid));
@@ -143,8 +178,20 @@ namespace ProjetPOO
 			   this->tabStatistiques = (gcnew System::Windows::Forms::TabPage());
 			   this->tabClients = (gcnew System::Windows::Forms::TabPage());
 			   this->tabCommandes = (gcnew System::Windows::Forms::TabPage());
-			   this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
+			   this->button1 = (gcnew System::Windows::Forms::Button());
+			   this->label10 = (gcnew System::Windows::Forms::Label());
+			   this->dateSoldeCommandePicker = (gcnew System::Windows::Forms::DateTimePicker());
+			   this->datePayementCommandePicker = (gcnew System::Windows::Forms::DateTimePicker());
+			   this->label9 = (gcnew System::Windows::Forms::Label());
+			   this->label5 = (gcnew System::Windows::Forms::Label());
+			   this->label7 = (gcnew System::Windows::Forms::Label());
+			   this->dateEmissionCommandePicker = (gcnew System::Windows::Forms::DateTimePicker());
+			   this->dateLivraisonCommandePicker = (gcnew System::Windows::Forms::DateTimePicker());
+			   this->moyenPayementCommandeBox = (gcnew System::Windows::Forms::ComboBox());
 			   this->commandesLabel = (gcnew System::Windows::Forms::Label());
+			   this->dateLivraisonCommandeLabel = (gcnew System::Windows::Forms::Label());
+			   this->idCommandeBox = (gcnew System::Windows::Forms::TextBox());
+			   this->label6 = (gcnew System::Windows::Forms::Label());
 			   this->tabStocks = (gcnew System::Windows::Forms::TabPage());
 			   this->quantiteStockLabel = (gcnew System::Windows::Forms::Label());
 			   this->seuilStockLabel = (gcnew System::Windows::Forms::Label());
@@ -178,9 +225,12 @@ namespace ProjetPOO
 			   this->passwordBox = (gcnew System::Windows::Forms::TextBox());
 			   this->usernameBox = (gcnew System::Windows::Forms::TextBox());
 			   this->usernameLabel = (gcnew System::Windows::Forms::Label());
-			   this->label4 = (gcnew System::Windows::Forms::Label());
+			   this->descriptionLabel = (gcnew System::Windows::Forms::Label());
 			   this->welcomeTitleLabel = (gcnew System::Windows::Forms::Label());
 			   this->tabController = (gcnew System::Windows::Forms::TabControl());
+			   this->boutonAfficherTout = (gcnew System::Windows::Forms::Button());
+			   this->boutonChercher = (gcnew System::Windows::Forms::Button());
+			   this->rechercheColonnesBox = (gcnew System::Windows::Forms::ComboBox());
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabCommandes->SuspendLayout();
 			   this->tabStocks->SuspendLayout();
@@ -304,8 +354,20 @@ namespace ProjetPOO
 			   // tabCommandes
 			   // 
 			   this->tabCommandes->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			   this->tabCommandes->Controls->Add(this->comboBox1);
+			   this->tabCommandes->Controls->Add(this->button1);
+			   this->tabCommandes->Controls->Add(this->label10);
+			   this->tabCommandes->Controls->Add(this->dateSoldeCommandePicker);
+			   this->tabCommandes->Controls->Add(this->datePayementCommandePicker);
+			   this->tabCommandes->Controls->Add(this->label9);
+			   this->tabCommandes->Controls->Add(this->label5);
+			   this->tabCommandes->Controls->Add(this->label7);
+			   this->tabCommandes->Controls->Add(this->dateEmissionCommandePicker);
+			   this->tabCommandes->Controls->Add(this->dateLivraisonCommandePicker);
+			   this->tabCommandes->Controls->Add(this->moyenPayementCommandeBox);
 			   this->tabCommandes->Controls->Add(this->commandesLabel);
+			   this->tabCommandes->Controls->Add(this->dateLivraisonCommandeLabel);
+			   this->tabCommandes->Controls->Add(this->idCommandeBox);
+			   this->tabCommandes->Controls->Add(this->label6);
 			   this->tabCommandes->Location = System::Drawing::Point(4, 22);
 			   this->tabCommandes->Margin = System::Windows::Forms::Padding(2);
 			   this->tabCommandes->Name = L"tabCommandes";
@@ -314,30 +376,171 @@ namespace ProjetPOO
 			   this->tabCommandes->Text = L"Commande";
 			   this->tabCommandes->UseVisualStyleBackColor = true;
 			   // 
-			   // comboBox1
+			   // button1
 			   // 
-			   this->comboBox1->FormattingEnabled = true;
-			   this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(8)
+			   this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->button1->Location = System::Drawing::Point(183, 276);
+			   this->button1->Name = L"button1";
+			   this->button1->Size = System::Drawing::Size(244, 35);
+			   this->button1->TabIndex = 42;
+			   this->button1->Text = L"Choisir articles";
+			   this->button1->UseVisualStyleBackColor = true;
+			   this->button1->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonArticlesCommandes);
+			   // 
+			   // label10
+			   // 
+			   this->label10->AutoSize = true;
+			   this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->label10->Location = System::Drawing::Point(32, 219);
+			   this->label10->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->label10->Name = L"label10";
+			   this->label10->Size = System::Drawing::Size(146, 20);
+			   this->label10->TabIndex = 41;
+			   this->label10->Text = L"Date solde enreg. :";
+			   // 
+			   // dateSoldeCommandePicker
+			   // 
+			   this->dateSoldeCommandePicker->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateSoldeCommandePicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateSoldeCommandePicker->Location = System::Drawing::Point(183, 214);
+			   this->dateSoldeCommandePicker->Name = L"dateSoldeCommandePicker";
+			   this->dateSoldeCommandePicker->Size = System::Drawing::Size(244, 27);
+			   this->dateSoldeCommandePicker->TabIndex = 40;
+			   // 
+			   // datePayementCommandePicker
+			   // 
+			   this->datePayementCommandePicker->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->datePayementCommandePicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->datePayementCommandePicker->Location = System::Drawing::Point(183, 181);
+			   this->datePayementCommandePicker->Name = L"datePayementCommandePicker";
+			   this->datePayementCommandePicker->Size = System::Drawing::Size(244, 27);
+			   this->datePayementCommandePicker->TabIndex = 39;
+			   // 
+			   // label9
+			   // 
+			   this->label9->AutoSize = true;
+			   this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->label9->Location = System::Drawing::Point(50, 186);
+			   this->label9->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->label9->Name = L"label9";
+			   this->label9->Size = System::Drawing::Size(128, 20);
+			   this->label9->TabIndex = 38;
+			   this->label9->Text = L"Date payement :";
+			   // 
+			   // label5
+			   // 
+			   this->label5->AutoSize = true;
+			   this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->label5->Location = System::Drawing::Point(11, 151);
+			   this->label5->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->label5->Name = L"label5";
+			   this->label5->Size = System::Drawing::Size(168, 20);
+			   this->label5->TabIndex = 37;
+			   this->label5->Text = L"Moyen de payement :";
+			   // 
+			   // label7
+			   // 
+			   this->label7->AutoSize = true;
+			   this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->label7->Location = System::Drawing::Point(30, 122);
+			   this->label7->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->label7->Name = L"label7";
+			   this->label7->Size = System::Drawing::Size(149, 20);
+			   this->label7->TabIndex = 35;
+			   this->label7->Text = L"Date emission est. :";
+			   // 
+			   // dateEmissionCommandePicker
+			   // 
+			   this->dateEmissionCommandePicker->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateEmissionCommandePicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateEmissionCommandePicker->Location = System::Drawing::Point(183, 117);
+			   this->dateEmissionCommandePicker->Name = L"dateEmissionCommandePicker";
+			   this->dateEmissionCommandePicker->Size = System::Drawing::Size(244, 27);
+			   this->dateEmissionCommandePicker->TabIndex = 33;
+			   // 
+			   // dateLivraisonCommandePicker
+			   // 
+			   this->dateLivraisonCommandePicker->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateLivraisonCommandePicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateLivraisonCommandePicker->Location = System::Drawing::Point(183, 84);
+			   this->dateLivraisonCommandePicker->Name = L"dateLivraisonCommandePicker";
+			   this->dateLivraisonCommandePicker->Size = System::Drawing::Size(244, 27);
+			   this->dateLivraisonCommandePicker->TabIndex = 32;
+			   // 
+			   // moyenPayementCommandeBox
+			   // 
+			   this->moyenPayementCommandeBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->moyenPayementCommandeBox->FormattingEnabled = true;
+			   this->moyenPayementCommandeBox->Items->AddRange(gcnew cli::array< System::Object^  >(4)
 			   {
-				   L"a", L"b", L"c", L"d", L"e", L"f", L"g", L"h"
+				   L"Carte", L"Paypal", L"Cash", L"Bitcoin"
 			   });
-			   this->comboBox1->Location = System::Drawing::Point(227, 176);
-			   this->comboBox1->Margin = System::Windows::Forms::Padding(2);
-			   this->comboBox1->Name = L"comboBox1";
-			   this->comboBox1->Size = System::Drawing::Size(92, 21);
-			   this->comboBox1->TabIndex = 28;
+			   this->moyenPayementCommandeBox->Location = System::Drawing::Point(183, 148);
+			   this->moyenPayementCommandeBox->Margin = System::Windows::Forms::Padding(2);
+			   this->moyenPayementCommandeBox->Name = L"moyenPayementCommandeBox";
+			   this->moyenPayementCommandeBox->Size = System::Drawing::Size(244, 28);
+			   this->moyenPayementCommandeBox->TabIndex = 28;
 			   // 
 			   // commandesLabel
 			   // 
 			   this->commandesLabel->AutoSize = true;
 			   this->commandesLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->commandesLabel->Location = System::Drawing::Point(168, 3);
+			   this->commandesLabel->Location = System::Drawing::Point(172, 3);
 			   this->commandesLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->commandesLabel->Name = L"commandesLabel";
 			   this->commandesLabel->Size = System::Drawing::Size(218, 42);
 			   this->commandesLabel->TabIndex = 26;
 			   this->commandesLabel->Text = L"Commandes";
+			   // 
+			   // dateLivraisonCommandeLabel
+			   // 
+			   this->dateLivraisonCommandeLabel->AutoSize = true;
+			   this->dateLivraisonCommandeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateLivraisonCommandeLabel->Location = System::Drawing::Point(33, 89);
+			   this->dateLivraisonCommandeLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->dateLivraisonCommandeLabel->Name = L"dateLivraisonCommandeLabel";
+			   this->dateLivraisonCommandeLabel->Size = System::Drawing::Size(145, 20);
+			   this->dateLivraisonCommandeLabel->TabIndex = 29;
+			   this->dateLivraisonCommandeLabel->Text = L"Date livraison est. :";
+			   // 
+			   // idCommandeBox
+			   // 
+			   this->idCommandeBox->BackColor = System::Drawing::SystemColors::Window;
+			   this->idCommandeBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->idCommandeBox->Location = System::Drawing::Point(183, 52);
+			   this->idCommandeBox->Margin = System::Windows::Forms::Padding(2);
+			   this->idCommandeBox->Name = L"idCommandeBox";
+			   this->idCommandeBox->Size = System::Drawing::Size(244, 27);
+			   this->idCommandeBox->TabIndex = 26;
+			   // 
+			   // label6
+			   // 
+			   this->label6->AutoSize = true;
+			   this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->label6->Location = System::Drawing::Point(146, 55);
+			   this->label6->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->label6->Name = L"label6";
+			   this->label6->Size = System::Drawing::Size(32, 20);
+			   this->label6->TabIndex = 27;
+			   this->label6->Text = L"ID :";
 			   // 
 			   // tabStocks
 			   // 
@@ -374,7 +577,7 @@ namespace ProjetPOO
 			   this->quantiteStockLabel->Name = L"quantiteStockLabel";
 			   this->quantiteStockLabel->Size = System::Drawing::Size(80, 20);
 			   this->quantiteStockLabel->TabIndex = 25;
-			   this->quantiteStockLabel->Text = L"Quantité :";
+			   this->quantiteStockLabel->Text = L"QuantitÃ© :";
 			   // 
 			   // seuilStockLabel
 			   // 
@@ -386,7 +589,7 @@ namespace ProjetPOO
 			   this->seuilStockLabel->Name = L"seuilStockLabel";
 			   this->seuilStockLabel->Size = System::Drawing::Size(93, 20);
 			   this->seuilStockLabel->TabIndex = 24;
-			   this->seuilStockLabel->Text = L"Seuil réap. :";
+			   this->seuilStockLabel->Text = L"Seuil rÃ©ap. :";
 			   // 
 			   // couleurStockLabel
 			   // 
@@ -588,7 +791,7 @@ namespace ProjetPOO
 			   this->prenomPersonnelLabel->Name = L"prenomPersonnelLabel";
 			   this->prenomPersonnelLabel->Size = System::Drawing::Size(74, 20);
 			   this->prenomPersonnelLabel->TabIndex = 9;
-			   this->prenomPersonnelLabel->Text = L"Prénom :";
+			   this->prenomPersonnelLabel->Text = L"PrÃ©nom :";
 			   // 
 			   // prenomPersonnelBox
 			   // 
@@ -682,7 +885,7 @@ namespace ProjetPOO
 			   this->tabAccueil->Controls->Add(this->passwordBox);
 			   this->tabAccueil->Controls->Add(this->usernameBox);
 			   this->tabAccueil->Controls->Add(this->usernameLabel);
-			   this->tabAccueil->Controls->Add(this->label4);
+			   this->tabAccueil->Controls->Add(this->descriptionLabel);
 			   this->tabAccueil->Controls->Add(this->welcomeTitleLabel);
 			   this->tabAccueil->Location = System::Drawing::Point(4, 22);
 			   this->tabAccueil->Margin = System::Windows::Forms::Padding(2);
@@ -752,18 +955,18 @@ namespace ProjetPOO
 			   this->usernameLabel->TabIndex = 9;
 			   this->usernameLabel->Text = L"Nom d\'utilisateur";
 			   // 
-			   // label4
+			   // descriptionLabel
 			   // 
-			   this->label4->AutoSize = true;
-			   this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label4->Location = System::Drawing::Point(43, 54);
-			   this->label4->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label4->Name = L"label4";
-			   this->label4->Size = System::Drawing::Size(485, 90);
-			   this->label4->TabIndex = 7;
-			   this->label4->Text = resources->GetString(L"label4.Text");
-			   this->label4->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			   this->descriptionLabel->AutoSize = true;
+			   this->descriptionLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->descriptionLabel->Location = System::Drawing::Point(43, 54);
+			   this->descriptionLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->descriptionLabel->Name = L"descriptionLabel";
+			   this->descriptionLabel->Size = System::Drawing::Size(485, 90);
+			   this->descriptionLabel->TabIndex = 7;
+			   this->descriptionLabel->Text = resources->GetString(L"descriptionLabel.Text");
+			   this->descriptionLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			   // 
 			   // welcomeTitleLabel
 			   // 
@@ -791,13 +994,50 @@ namespace ProjetPOO
 			   this->tabController->SelectedIndex = 0;
 			   this->tabController->Size = System::Drawing::Size(585, 350);
 			   this->tabController->TabIndex = 4;
+			   this->tabController->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &Projet::onChangeTab);
+			   // 
+			   // boutonAfficherTout
+			   // 
+			   this->boutonAfficherTout->Location = System::Drawing::Point(13, 373);
+			   this->boutonAfficherTout->Name = L"boutonAfficherTout";
+			   this->boutonAfficherTout->Size = System::Drawing::Size(143, 23);
+			   this->boutonAfficherTout->TabIndex = 9;
+			   this->boutonAfficherTout->Text = L"Afficher tout";
+			   this->boutonAfficherTout->UseVisualStyleBackColor = true;
+			   this->boutonAfficherTout->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonAfficherTout);
+			   // 
+			   // boutonChercher
+			   // 
+			   this->boutonChercher->Location = System::Drawing::Point(569, 361);
+			   this->boutonChercher->Name = L"boutonChercher";
+			   this->boutonChercher->Size = System::Drawing::Size(26, 23);
+			   this->boutonChercher->TabIndex = 10;
+			   this->boutonChercher->Text = L"ðŸ”";
+			   this->boutonChercher->UseVisualStyleBackColor = true;
+			   this->boutonChercher->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonChercher);
+			   // 
+			   // rechercheColonnesBox
+			   // 
+			   this->rechercheColonnesBox->FormattingEnabled = true;
+			   this->rechercheColonnesBox->Items->AddRange(gcnew cli::array< System::Object^  >(1)
+			   {
+				   L"a"
+			   });
+			   this->rechercheColonnesBox->Location = System::Drawing::Point(447, 362);
+			   this->rechercheColonnesBox->Name = L"rechercheColonnesBox";
+			   this->rechercheColonnesBox->Size = System::Drawing::Size(121, 21);
+			   this->rechercheColonnesBox->TabIndex = 11;
 			   // 
 			   // Projet
 			   // 
 			   this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			   this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			   this->AutoSize = true;
 			   this->BackColor = System::Drawing::SystemColors::ScrollBar;
 			   this->ClientSize = System::Drawing::Size(1190, 573);
+			   this->Controls->Add(this->rechercheColonnesBox);
+			   this->Controls->Add(this->boutonChercher);
+			   this->Controls->Add(this->boutonAfficherTout);
 			   this->Controls->Add(this->boutonAfficher);
 			   this->Controls->Add(this->historiqueLabel);
 			   this->Controls->Add(this->boutonSupprimer);
@@ -807,6 +1047,7 @@ namespace ProjetPOO
 			   this->Controls->Add(this->tabController);
 			   this->Controls->Add(this->dataGridView);
 			   this->Controls->Add(this->boutonValider);
+			   this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			   this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			   this->Margin = System::Windows::Forms::Padding(2);
 			   this->MaximizeBox = false;
@@ -836,6 +1077,7 @@ namespace ProjetPOO
 
 	private: System::Void onFormLoad(System::Object^ sender, System::EventArgs^ e)
 	{
+		sqlHandler = gcnew SqlHandler(this->dataGridView);
 		setConnected(false);
 	}
 
@@ -845,6 +1087,7 @@ namespace ProjetPOO
 
 		this->boutonValider->Visible = connected;
 		this->boutonAfficher->Visible = connected;
+		this->boutonAfficherTout->Visible = connected;
 		this->boutonAjouter->Visible = connected;
 		this->boutonSupprimer->Visible = connected;
 		this->boutonModifier->Visible = connected;
@@ -869,17 +1112,36 @@ namespace ProjetPOO
 			this->tabController->Controls->Remove(this->tabStatistiques);
 		}
 	}
-
 	private: System::Void clickOnBoutonValider(System::Object^ sender, System::EventArgs^ e)
 	{
-		this->label1->Text = "BIEN JOUE";
+		if(isActive(tabPersonnel))
+		{
+			switch(currentMode)
+			{
+				case ProjetPOO::AFFICHER:
+					break;
+				case ProjetPOO::SUPPRIMER:
+					break;
+				case ProjetPOO::AJOUTER:
+					break;
+				case ProjetPOO::MODIFIER:
+					break;
+				default:
+					break;
+			}
+		}
 	}
-
+	private: bool isActive(System::Windows::Forms::TabPage^ tab)
+	{
+		return this->tabController->SelectedTab == tab;
+	}
 	private: System::Void clickOnConnexionBDD(System::Object^ sender, System::EventArgs^ e)
 	{
 		addHistorique(L"Connexion en cours...");
 		setConnected(true);
 		changeMode(currentMode);
+
+		sqlHandler->fillGrid(Table::PERSONNES);
 	}
 	private: System::Void addHistorique(System::String^ historique)
 	{
@@ -888,7 +1150,6 @@ namespace ProjetPOO
 		this->historiqueBox->SelectionStart = this->historiqueBox->Text->Length - 1;
 		this->historiqueBox->ScrollToCaret();
 	}
-
 	private: System::Void clickOnBoutonAfficher(System::Object^ sender, System::EventArgs^ e)
 	{
 		changeMode(AFFICHER);
@@ -1004,6 +1265,53 @@ namespace ProjetPOO
 		}
 
 		addHistorique("Mode : " + name);
+	}
+	private: System::Void clickOnBoutonArticlesCommandes(System::Object^ sender, System::EventArgs^ e)
+	{
+		// ArticlePopup^ popup = gcnew ArticlePopup(this);
+		// popup->Show();
+	}
+	private: System::Void clickOnBoutonAfficherTout(System::Object^ sender, System::EventArgs^ e)
+	{
+		afficherTable();
+	}
+	private: System::Void onChangeTab(System::Object^ sender, System::Windows::Forms::TabControlEventArgs^ e)
+	{
+		afficherTable();
+	}
+	private: System::Void afficherTable()
+	{
+		if(isActive(tabPersonnel))
+			sqlHandler->fillGrid(Table::PERSONNELS);
+		else if(isActive(tabStocks))
+			sqlHandler->fillGrid(Table::ARTICLES);
+		else if(isActive(tabCommandes))
+			sqlHandler->fillGrid(Table::COMMANDES);
+		else if(isActive(tabClients))
+			sqlHandler->fillGrid(Table::CLIENTS);
+		else if(isActive(tabStatistiques))
+			sqlHandler->fillGrid(Table::ARTICLES);
+
+		updateRechercheColonneBox();
+	}
+	private: System::Void clickOnBoutonChercher(System::Object^ sender, System::EventArgs^ e)
+	{
+		if(isActive(tabPersonnel))
+			sqlHandler->searchByColumn(Table::PERSONNELS, "Id_personne", this->idPersonnelBox->Text, true);
+		else if(isActive(tabCommandes))
+			sqlHandler->searchByColumn(Table::COMMANDES, "Reference_commande", this->idCommandeBox->Text, false);
+	}
+
+	public: System::Void updateRechercheColonneBox()
+	{
+		array<System::Object^>^ list = gcnew array<System::Object^>(this->dataGridView->ColumnCount);
+		for(int i = 0; i < this->dataGridView->ColumnCount; i++)
+		{
+			list[i] = this->dataGridView->Columns[i]->Name;
+		}
+
+		this->rechercheColonnesBox->Items->Clear();
+		this->rechercheColonnesBox->Items->AddRange(list);
 	}
 };
 }
