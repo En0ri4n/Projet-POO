@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Mappage">
+      <UniqueIdentifier>{89eaab04-a3a7-4905-b341-944c44cf0135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Mappage">
+      <UniqueIdentifier>{8714f188-e8b8-42b9-a757-f893e7751c40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Projet.h">
@@ -21,17 +27,26 @@
     <ClInclude Include="SqlManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SqlQuery.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SqlHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArticlePopup.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="PersonnelMappage.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="SqlQuery.h">
+      <Filter>Header Files\Mappage</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonnelMap.h">
+      <Filter>Header Files\Mappage</Filter>
+    </ClInclude>
+    <ClInclude Include="AdresseMap.h">
+      <Filter>Header Files\Mappage</Filter>
+    </ClInclude>
+    <ClInclude Include="VilleMap.h">
+      <Filter>Header Files\Mappage</Filter>
+    </ClInclude>
+    <ClInclude Include="ArticleMap.h">
+      <Filter>Header Files\Mappage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,14 +56,26 @@
     <ClCompile Include="SqlManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SqlQuery.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SqlHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArticlePopup.cpp">
       <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SqlQuery.cpp">
+      <Filter>Source Files\Mappage</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonnelMap.cpp">
+      <Filter>Source Files\Mappage</Filter>
+    </ClCompile>
+    <ClCompile Include="AdresseMap.cpp">
+      <Filter>Source Files\Mappage</Filter>
+    </ClCompile>
+    <ClCompile Include="VilleMap.cpp">
+      <Filter>Source Files\Mappage</Filter>
+    </ClCompile>
+    <ClCompile Include="ArticleMap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

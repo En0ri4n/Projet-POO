@@ -39,6 +39,24 @@ void ProjetPOOServices::SqlHandler::searchByColumn(Table^ table, String^ columnN
 		this->query->newQuery(false, String::Format("SELECT * FROM {0} WHERE {1} LIKE '%{2}%'", table->getName(), columnName, value));
 	fill(table->getName());
 }
+
+void ProjetPOOServices::SqlHandler::fillGrid(Table^ table, DataGridView^ grid)
+{
+	SqlQuery^ query = gcnew SqlQuery();
+	SqlManager^ manager = gcnew SqlManager();
+	query->newQuery(false, "SELECT * FROM " + table->getName());
+	grid->DataSource = manager->getRows(query, table->getName());
+	grid->DataMember = table->getName();
+}
+
+void ProjetPOOServices::SqlHandler::fillGrid(String^ query, String^ table, DataGridView^ grid)
+{
+	SqlQuery^ sqlQuery = gcnew SqlQuery();
+	SqlManager^ manager = gcnew SqlManager();
+	sqlQuery->newQuery(false, query);
+	grid->DataSource = manager->getRows(sqlQuery, table);
+	grid->DataMember = table;
+}
 /*
 void ProjetPOOServices::SqlHandler::ajouterUnePersonne(String^ nom, String^ prenom)
 {

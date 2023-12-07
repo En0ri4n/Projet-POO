@@ -20,6 +20,9 @@ namespace ProjetPOOServices
 		void fillGrid(String^, String^);
 		void searchByColumn(Table^, String^, String^, bool);
 		int getLastCount() { return manager->getLastCount(); }
+
+		static void fillGrid(Table^, DataGridView^);
+		static void fillGrid(String^, String^, DataGridView^);
 	};
 }
 

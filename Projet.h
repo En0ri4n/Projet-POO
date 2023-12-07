@@ -1,8 +1,10 @@
 ﻿#pragma once
-#include "ArticlePopup.h"
+#include "SqlHandler.h"
 #include "SqlQuery.h"
 #include "SqlManager.h"
-#include "SqlHandler.h"
+#include "PersonnelMap.h"
+#include "ArticleMap.h"
+#include "ArticlePopup.h"
 
 namespace ProjetPOO
 {
@@ -13,6 +15,7 @@ namespace ProjetPOO
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace ProjetPOO;
 
 
 	public enum SqlMode
@@ -93,6 +96,7 @@ namespace ProjetPOO
 	private:
 		bool connected;
 		SqlHandler^ sqlHandler;
+		ArrayList^ articlesCommande;
 
 
 	protected:
@@ -158,6 +162,10 @@ namespace ProjetPOO
 	private: System::Windows::Forms::Button^ boutonChercher;
 	private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 	private: System::Windows::Forms::TextBox^ textBox1;
+private: System::Windows::Forms::Label^ tvaStockLabel;
+private: System::Windows::Forms::NumericUpDown^ tvaStockBox;
+private: System::Windows::Forms::Label^ articlesCommandeLabel;
+
 
 
 
@@ -182,6 +190,7 @@ namespace ProjetPOO
 			   this->tabStatistiques = (gcnew System::Windows::Forms::TabPage());
 			   this->tabClients = (gcnew System::Windows::Forms::TabPage());
 			   this->tabCommandes = (gcnew System::Windows::Forms::TabPage());
+			   this->articlesCommandeLabel = (gcnew System::Windows::Forms::Label());
 			   this->button1 = (gcnew System::Windows::Forms::Button());
 			   this->label10 = (gcnew System::Windows::Forms::Label());
 			   this->dateSoldeCommandePicker = (gcnew System::Windows::Forms::DateTimePicker());
@@ -197,6 +206,8 @@ namespace ProjetPOO
 			   this->idCommandeBox = (gcnew System::Windows::Forms::TextBox());
 			   this->label6 = (gcnew System::Windows::Forms::Label());
 			   this->tabStocks = (gcnew System::Windows::Forms::TabPage());
+			   this->tvaStockLabel = (gcnew System::Windows::Forms::Label());
+			   this->tvaStockBox = (gcnew System::Windows::Forms::NumericUpDown());
 			   this->quantiteStockLabel = (gcnew System::Windows::Forms::Label());
 			   this->seuilStockLabel = (gcnew System::Windows::Forms::Label());
 			   this->couleurStockLabel = (gcnew System::Windows::Forms::Label());
@@ -239,6 +250,7 @@ namespace ProjetPOO
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabCommandes->SuspendLayout();
 			   this->tabStocks->SuspendLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->tvaStockBox))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->quantiteStockBox))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->seuilStockBox))->BeginInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->prixStockBox))->BeginInit();
@@ -256,11 +268,13 @@ namespace ProjetPOO
 			   this->dataGridView->GridColor = System::Drawing::SystemColors::ActiveBorder;
 			   this->dataGridView->Location = System::Drawing::Point(598, 11);
 			   this->dataGridView->Margin = System::Windows::Forms::Padding(2);
+			   this->dataGridView->MultiSelect = false;
 			   this->dataGridView->Name = L"dataGridView";
 			   this->dataGridView->ReadOnly = true;
+			   this->dataGridView->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			   this->dataGridView->Size = System::Drawing::Size(581, 551);
 			   this->dataGridView->TabIndex = 3;
-			   this->dataGridView->CellClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &ProjetPOO::Projet::clickOnCellule);
+			   this->dataGridView->CellClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &Projet::clickOnCellule);
 			   // 
 			   // boutonAfficher
 			   // 
@@ -360,6 +374,7 @@ namespace ProjetPOO
 			   // tabCommandes
 			   // 
 			   this->tabCommandes->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			   this->tabCommandes->Controls->Add(this->articlesCommandeLabel);
 			   this->tabCommandes->Controls->Add(this->button1);
 			   this->tabCommandes->Controls->Add(this->label10);
 			   this->tabCommandes->Controls->Add(this->dateSoldeCommandePicker);
@@ -381,6 +396,18 @@ namespace ProjetPOO
 			   this->tabCommandes->TabIndex = 3;
 			   this->tabCommandes->Text = L"Commande";
 			   this->tabCommandes->UseVisualStyleBackColor = true;
+			   // 
+			   // articlesCommandeLabel
+			   // 
+			   this->articlesCommandeLabel->AutoSize = true;
+			   this->articlesCommandeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9.75F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->articlesCommandeLabel->Location = System::Drawing::Point(210, 254);
+			   this->articlesCommandeLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->articlesCommandeLabel->Name = L"articlesCommandeLabel";
+			   this->articlesCommandeLabel->Size = System::Drawing::Size(188, 19);
+			   this->articlesCommandeLabel->TabIndex = 43;
+			   this->articlesCommandeLabel->Text = L"Article(s) de la commande (0)";
 			   // 
 			   // button1
 			   // 
@@ -550,6 +577,8 @@ namespace ProjetPOO
 			   // 
 			   // tabStocks
 			   // 
+			   this->tabStocks->Controls->Add(this->tvaStockLabel);
+			   this->tabStocks->Controls->Add(this->tvaStockBox);
 			   this->tabStocks->Controls->Add(this->quantiteStockLabel);
 			   this->tabStocks->Controls->Add(this->seuilStockLabel);
 			   this->tabStocks->Controls->Add(this->couleurStockLabel);
@@ -572,6 +601,28 @@ namespace ProjetPOO
 			   this->tabStocks->TabIndex = 2;
 			   this->tabStocks->Text = L"Stock";
 			   this->tabStocks->UseVisualStyleBackColor = true;
+			   // 
+			   // tvaStockLabel
+			   // 
+			   this->tvaStockLabel->AutoSize = true;
+			   this->tvaStockLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->tvaStockLabel->Location = System::Drawing::Point(131, 285);
+			   this->tvaStockLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->tvaStockLabel->Name = L"tvaStockLabel";
+			   this->tvaStockLabel->Size = System::Drawing::Size(47, 20);
+			   this->tvaStockLabel->TabIndex = 27;
+			   this->tvaStockLabel->Text = L"TVA :";
+			   // 
+			   // tvaStockBox
+			   // 
+			   this->tvaStockBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->tvaStockBox->Location = System::Drawing::Point(196, 283);
+			   this->tvaStockBox->Margin = System::Windows::Forms::Padding(2);
+			   this->tvaStockBox->Name = L"tvaStockBox";
+			   this->tvaStockBox->Size = System::Drawing::Size(244, 27);
+			   this->tvaStockBox->TabIndex = 26;
 			   // 
 			   // quantiteStockLabel
 			   // 
@@ -858,14 +909,14 @@ namespace ProjetPOO
 			   this->idPersonnelBox->Size = System::Drawing::Size(243, 27);
 			   this->idPersonnelBox->TabIndex = 4;
 			   // 
-			   // label1
+			   // personnelTitreLabel
 			   // 
 			   this->personnelTitreLabel->AutoSize = true;
 			   this->personnelTitreLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->personnelTitreLabel->Location = System::Drawing::Point(208, 3);
 			   this->personnelTitreLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->personnelTitreLabel->Name = L"label1";
+			   this->personnelTitreLabel->Name = L"personnelTitreLabel";
 			   this->personnelTitreLabel->Size = System::Drawing::Size(179, 42);
 			   this->personnelTitreLabel->TabIndex = 2;
 			   this->personnelTitreLabel->Text = L"Personnel";
@@ -1026,13 +1077,13 @@ namespace ProjetPOO
 			   // 
 			   // rechercheColonnesBox
 			   // 
+			   this->rechercheColonnesBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			   this->rechercheColonnesBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->rechercheColonnesBox->FormattingEnabled = true;
 			   this->rechercheColonnesBox->Location = System::Drawing::Point(307, 368);
 			   this->rechercheColonnesBox->Name = L"rechercheColonnesBox";
 			   this->rechercheColonnesBox->Size = System::Drawing::Size(112, 25);
-			   this->rechercheColonnesBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			   this->rechercheColonnesBox->TabIndex = 11;
 			   // 
 			   // textBox1
@@ -1076,6 +1127,7 @@ namespace ProjetPOO
 			   this->tabCommandes->PerformLayout();
 			   this->tabStocks->ResumeLayout(false);
 			   this->tabStocks->PerformLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->tvaStockBox))->EndInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->quantiteStockBox))->EndInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->seuilStockBox))->EndInit();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->prixStockBox))->EndInit();
@@ -1089,8 +1141,6 @@ namespace ProjetPOO
 			   this->PerformLayout();
 
 		   }
-
-#pragma endregion
 
 	private: System::Void onFormLoad(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -1136,6 +1186,13 @@ namespace ProjetPOO
 			switch(currentMode)
 			{
 				case ProjetPOO::AFFICHER:
+				{
+					PersonnelMap^ personnel = gcnew PersonnelMap();
+					personnel->setIdPersonnel((int)idPersonnelBox->Value);
+					personnel->setNom(nomPersonnelBox->Text);
+					personnel->setPrenom(prenomPersonnelBox->Text);
+					personnel->setDateEmbauche(dateEmbauchePersonnelPicker->Value);
+				}
 					break;
 				case ProjetPOO::SUPPRIMER:
 					break;
@@ -1213,6 +1270,7 @@ namespace ProjetPOO
 				this->couleurStockBox->Enabled = false;
 				this->seuilStockBox->Enabled = false;
 				this->quantiteStockBox->Enabled = false;
+				this->tvaStockBox->Enabled = false;
 
 				name = L"Affichage";
 				break;
@@ -1233,6 +1291,7 @@ namespace ProjetPOO
 				this->couleurStockBox->Enabled = false;
 				this->seuilStockBox->Enabled = false;
 				this->quantiteStockBox->Enabled = false;
+				this->tvaStockBox->Enabled = false;
 
 
 				name = L"Suppression";
@@ -1254,6 +1313,7 @@ namespace ProjetPOO
 				this->couleurStockBox->Enabled = true;
 				this->seuilStockBox->Enabled = true;
 				this->quantiteStockBox->Enabled = true;
+				this->tvaStockBox->Enabled = true;
 
 				name = L"Ajout";
 				break;
@@ -1274,6 +1334,7 @@ namespace ProjetPOO
 				this->couleurStockBox->Enabled = true;
 				this->seuilStockBox->Enabled = true;
 				this->quantiteStockBox->Enabled = true;
+				this->tvaStockBox->Enabled = true;
 
 				name = L"Modification";
 				break;
@@ -1299,7 +1360,7 @@ namespace ProjetPOO
 	private: System::Void afficherTable()
 	{
 		if(isActive(tabPersonnel))
-			sqlHandler->fillGrid(Table::PERSONNELS);
+			sqlHandler->fillGrid("SELECT TOP (1000) Personnels.[Id_personnel], Personnes.[Nom], Personnes.[Prenom], [Date_embauche], [Id_adresse], [Id_superieur] FROM [Projet].[dbo].[Personnels] AS Personnels INNER JOIN [Projet].[dbo].[Personnes] AS Personnes ON Personnels.Id_personnel = Personnes.Id_personne;", "Personnel");
 		else if(isActive(tabStocks))
 			sqlHandler->fillGrid(Table::ARTICLES);
 		else if(isActive(tabCommandes))
@@ -1322,10 +1383,21 @@ namespace ProjetPOO
 	{
 		if(isActive(tabPersonnel))
 		{
-			idPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value;
-			nomPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[1]->Value;
-			idPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value;
-			idPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value;
+			this->idPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString();
+			this->nomPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[1]->Value->ToString();
+			this->prenomPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[2]->Value->ToString();
+			this->dateEmbauchePersonnelPicker->Text = this->dataGridView->Rows[e->RowIndex]->Cells[3]->Value->ToString();
+		}
+		else if(isActive(tabStocks))
+		{
+			this->idStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString();
+			this->nomStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[1]->Value->ToString();
+			this->prixStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[2]->Value->ToString();
+			this->natureStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[3]->Value->ToString();
+			this->couleurStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString();
+			this->seuilStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[5]->Value->ToString();
+			this->quantiteStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[6]->Value->ToString();
+			this->tvaStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[7]->Value->ToString();
 		}
 	}
 
@@ -1341,5 +1413,13 @@ namespace ProjetPOO
 		this->rechercheColonnesBox->Items->AddRange(list);
 		this->rechercheColonnesBox->SelectedItem = list[0];
 	}
+
+		  public: System::Void updateAriclesCommande(ArrayList^ list)
+		  {
+			  articlesCommande = list;
+			  this->articlesCommandeLabel->Text = "Articles de la commande (" + list->Count + ")";
+		  }
 	};
 }
+
+#pragma endregion

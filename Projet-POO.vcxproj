@@ -123,23 +123,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AdresseMap.cpp" />
+    <ClCompile Include="ArticleMap.cpp" />
     <ClCompile Include="ArticlePopup.cpp" />
+    <ClCompile Include="PersonnelMap.cpp" />
     <ClCompile Include="SqlManager.cpp" />
     <ClCompile Include="SqlQuery.cpp" />
     <ClCompile Include="SqlHandler.cpp" />
     <ClCompile Include="Projet.cpp" />
+    <ClCompile Include="VilleMap.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdresseMap.h" />
+    <ClInclude Include="ArticleMap.h" />
     <ClInclude Include="ArticlePopup.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="PersonnelMappage.h" />
+    <ClInclude Include="PersonnelMap.h" />
     <ClInclude Include="SqlManager.h" />
     <ClInclude Include="SqlQuery.h" />
     <ClInclude Include="SqlHandler.h" />
     <ClInclude Include="Projet.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="VilleMap.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ArticlePopup.resx">

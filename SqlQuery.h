@@ -28,7 +28,7 @@ namespace ProjetPOOMappage
 	ref class SqlQuery
 	{
 	private:
-		static String^ DATABASE_NAME = "bdd";
+		static String^ DATABASE_NAME = "Projet";
 		bool isTransaction;
 		System::Collections::ArrayList^ queries;
 	public:
