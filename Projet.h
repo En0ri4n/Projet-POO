@@ -29,8 +29,11 @@ namespace ProjetPOO
 	public ref class Projet : public System::Windows::Forms::Form
 	{
 	public:
+		static Projet^ instance;
+
 		Projet(void)
 		{
+			instance = this;
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
@@ -68,7 +71,7 @@ namespace ProjetPOO
 	private: System::Windows::Forms::TabPage^ tabPersonnel;
 	private: System::Windows::Forms::NumericUpDown^ idPersonnelBox;
 	private: System::Windows::Forms::Button^ boutonValider;
-	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Label^ personnelTitreLabel;
 	private: System::Windows::Forms::TabPage^ tabAccueil;
 	private: System::Windows::Forms::Button^ button8;
 	private: System::Windows::Forms::Label^ passwordLabel;
@@ -152,8 +155,9 @@ namespace ProjetPOO
 	private: System::Windows::Forms::Label^ label9;
 	private: System::Windows::Forms::Label^ label5;
 	private: System::Windows::Forms::Button^ boutonAfficherTout;
-private: System::Windows::Forms::Button^ boutonChercher;
-private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
+	private: System::Windows::Forms::Button^ boutonChercher;
+	private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
+	private: System::Windows::Forms::TextBox^ textBox1;
 
 
 
@@ -217,7 +221,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   this->idPersonnelLabel = (gcnew System::Windows::Forms::Label());
 			   this->nomPersonnelBox = (gcnew System::Windows::Forms::TextBox());
 			   this->idPersonnelBox = (gcnew System::Windows::Forms::NumericUpDown());
-			   this->label1 = (gcnew System::Windows::Forms::Label());
+			   this->personnelTitreLabel = (gcnew System::Windows::Forms::Label());
 			   this->boutonValider = (gcnew System::Windows::Forms::Button());
 			   this->tabAccueil = (gcnew System::Windows::Forms::TabPage());
 			   this->button8 = (gcnew System::Windows::Forms::Button());
@@ -231,6 +235,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   this->boutonAfficherTout = (gcnew System::Windows::Forms::Button());
 			   this->boutonChercher = (gcnew System::Windows::Forms::Button());
 			   this->rechercheColonnesBox = (gcnew System::Windows::Forms::ComboBox());
+			   this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabCommandes->SuspendLayout();
 			   this->tabStocks->SuspendLayout();
@@ -255,6 +260,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   this->dataGridView->ReadOnly = true;
 			   this->dataGridView->Size = System::Drawing::Size(581, 551);
 			   this->dataGridView->TabIndex = 3;
+			   this->dataGridView->CellClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &ProjetPOO::Projet::clickOnCellule);
 			   // 
 			   // boutonAfficher
 			   // 
@@ -289,7 +295,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   this->boutonModifier->Location = System::Drawing::Point(454, 400);
 			   this->boutonModifier->Margin = System::Windows::Forms::Padding(2);
 			   this->boutonModifier->Name = L"boutonModifier";
-			   this->boutonModifier->Size = System::Drawing::Size(136, 38);
+			   this->boutonModifier->Size = System::Drawing::Size(140, 38);
 			   this->boutonModifier->TabIndex = 6;
 			   this->boutonModifier->Text = L"Modifier";
 			   this->boutonModifier->UseVisualStyleBackColor = true;
@@ -747,7 +753,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   this->tabPersonnel->Controls->Add(this->idPersonnelLabel);
 			   this->tabPersonnel->Controls->Add(this->nomPersonnelBox);
 			   this->tabPersonnel->Controls->Add(this->idPersonnelBox);
-			   this->tabPersonnel->Controls->Add(this->label1);
+			   this->tabPersonnel->Controls->Add(this->personnelTitreLabel);
 			   this->tabPersonnel->Location = System::Drawing::Point(4, 22);
 			   this->tabPersonnel->Margin = System::Windows::Forms::Padding(2);
 			   this->tabPersonnel->Name = L"tabPersonnel";
@@ -854,22 +860,22 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   // 
 			   // label1
 			   // 
-			   this->label1->AutoSize = true;
-			   this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			   this->personnelTitreLabel->AutoSize = true;
+			   this->personnelTitreLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->label1->Location = System::Drawing::Point(208, 3);
-			   this->label1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label1->Name = L"label1";
-			   this->label1->Size = System::Drawing::Size(179, 42);
-			   this->label1->TabIndex = 2;
-			   this->label1->Text = L"Personnel";
+			   this->personnelTitreLabel->Location = System::Drawing::Point(208, 3);
+			   this->personnelTitreLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->personnelTitreLabel->Name = L"label1";
+			   this->personnelTitreLabel->Size = System::Drawing::Size(179, 42);
+			   this->personnelTitreLabel->TabIndex = 2;
+			   this->personnelTitreLabel->Text = L"Personnel";
 			   // 
 			   // boutonValider
 			   // 
 			   this->boutonValider->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 14.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->boutonValider->ForeColor = System::Drawing::Color::Green;
-			   this->boutonValider->Location = System::Drawing::Point(228, 364);
+			   this->boutonValider->Location = System::Drawing::Point(454, 364);
 			   this->boutonValider->Margin = System::Windows::Forms::Padding(2);
 			   this->boutonValider->Name = L"boutonValider";
 			   this->boutonValider->Size = System::Drawing::Size(140, 32);
@@ -998,9 +1004,9 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   // 
 			   // boutonAfficherTout
 			   // 
-			   this->boutonAfficherTout->Location = System::Drawing::Point(13, 373);
+			   this->boutonAfficherTout->Location = System::Drawing::Point(13, 367);
 			   this->boutonAfficherTout->Name = L"boutonAfficherTout";
-			   this->boutonAfficherTout->Size = System::Drawing::Size(143, 23);
+			   this->boutonAfficherTout->Size = System::Drawing::Size(143, 26);
 			   this->boutonAfficherTout->TabIndex = 9;
 			   this->boutonAfficherTout->Text = L"Afficher tout";
 			   this->boutonAfficherTout->UseVisualStyleBackColor = true;
@@ -1008,9 +1014,11 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   // 
 			   // boutonChercher
 			   // 
-			   this->boutonChercher->Location = System::Drawing::Point(569, 361);
+			   this->boutonChercher->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->boutonChercher->Location = System::Drawing::Point(423, 368);
 			   this->boutonChercher->Name = L"boutonChercher";
-			   this->boutonChercher->Size = System::Drawing::Size(26, 23);
+			   this->boutonChercher->Size = System::Drawing::Size(27, 26);
 			   this->boutonChercher->TabIndex = 10;
 			   this->boutonChercher->Text = L"🔍";
 			   this->boutonChercher->UseVisualStyleBackColor = true;
@@ -1018,15 +1026,23 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   // 
 			   // rechercheColonnesBox
 			   // 
+			   this->rechercheColonnesBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
 			   this->rechercheColonnesBox->FormattingEnabled = true;
-			   this->rechercheColonnesBox->Items->AddRange(gcnew cli::array< System::Object^  >(1)
-			   {
-				   L"a"
-			   });
-			   this->rechercheColonnesBox->Location = System::Drawing::Point(447, 362);
+			   this->rechercheColonnesBox->Location = System::Drawing::Point(307, 368);
 			   this->rechercheColonnesBox->Name = L"rechercheColonnesBox";
-			   this->rechercheColonnesBox->Size = System::Drawing::Size(121, 21);
+			   this->rechercheColonnesBox->Size = System::Drawing::Size(112, 25);
+			   this->rechercheColonnesBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			   this->rechercheColonnesBox->TabIndex = 11;
+			   // 
+			   // textBox1
+			   // 
+			   this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->textBox1->Location = System::Drawing::Point(162, 369);
+			   this->textBox1->Name = L"textBox1";
+			   this->textBox1->Size = System::Drawing::Size(141, 23);
+			   this->textBox1->TabIndex = 12;
 			   // 
 			   // Projet
 			   // 
@@ -1035,6 +1051,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			   this->AutoSize = true;
 			   this->BackColor = System::Drawing::SystemColors::ScrollBar;
 			   this->ClientSize = System::Drawing::Size(1190, 573);
+			   this->Controls->Add(this->textBox1);
 			   this->Controls->Add(this->rechercheColonnesBox);
 			   this->Controls->Add(this->boutonChercher);
 			   this->Controls->Add(this->boutonAfficherTout);
@@ -1131,7 +1148,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 			}
 		}
 	}
-	private: bool isActive(System::Windows::Forms::TabPage^ tab)
+	private: System::Boolean isActive(System::Windows::Forms::TabPage^ tab)
 	{
 		return this->tabController->SelectedTab == tab;
 	}
@@ -1268,8 +1285,8 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 	}
 	private: System::Void clickOnBoutonArticlesCommandes(System::Object^ sender, System::EventArgs^ e)
 	{
-		// ArticlePopup^ popup = gcnew ArticlePopup(this);
-		// popup->Show();
+		ArticlePopup^ popup = gcnew ArticlePopup();
+		popup->Show();
 	}
 	private: System::Void clickOnBoutonAfficherTout(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -1301,6 +1318,16 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 		else if(isActive(tabCommandes))
 			sqlHandler->searchByColumn(Table::COMMANDES, "Reference_commande", this->idCommandeBox->Text, false);
 	}
+	private: System::Void clickOnCellule(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e)
+	{
+		if(isActive(tabPersonnel))
+		{
+			idPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value;
+			nomPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[1]->Value;
+			idPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value;
+			idPersonnelBox->Text = L"" + this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value;
+		}
+	}
 
 	public: System::Void updateRechercheColonneBox()
 	{
@@ -1312,6 +1339,7 @@ private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 
 		this->rechercheColonnesBox->Items->Clear();
 		this->rechercheColonnesBox->Items->AddRange(list);
+		this->rechercheColonnesBox->SelectedItem = list[0];
 	}
-};
+	};
 }

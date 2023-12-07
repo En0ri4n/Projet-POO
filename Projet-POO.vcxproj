@@ -133,6 +133,7 @@
     <ClInclude Include="ArticlePopup.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="PersonnelMappage.h" />
     <ClInclude Include="SqlManager.h" />
     <ClInclude Include="SqlQuery.h" />
     <ClInclude Include="SqlHandler.h" />

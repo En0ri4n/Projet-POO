@@ -3,7 +3,7 @@
 
 SqlManager::SqlManager()
 {
-	this->connectionCmd = "Data Source=ENO-LAPTOP;Initial Catalog=bdd;Integrated Security=True;User ID=sa;Password=a";
+	this->connectionCmd = "Data Source=localhost;Initial Catalog=Projet;Integrated Security=True;User ID=Utilisateur_projet;Password=EVAL2023";
 
 	this->connection = gcnew Data::SqlClient::SqlConnection(this->connectionCmd);
 	this->command = gcnew Data::SqlClient::SqlCommand(L"EMPTY", this->connection);

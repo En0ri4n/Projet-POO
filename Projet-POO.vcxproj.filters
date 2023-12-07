@@ -30,6 +30,9 @@
     <ClInclude Include="ArticlePopup.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="PersonnelMappage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Projet.cpp">
