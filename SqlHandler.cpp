@@ -72,7 +72,7 @@ void ProjetPOOServices::SqlHandler::SupprimerPersonnel(PersonnelMap^ personnel)
 	action(Table::PERSONNELS);
 }
 
-void ProjetPOOServices::SqlHandler::AfficherCommande()
+void ProjetPOOServices::SqlHandler::AfficherCommandes()
 {
 	this->query->newQuery(false, SqlQueries::listeCommande());
 	fill(Table::COMMANDES);
@@ -96,7 +96,7 @@ void ProjetPOOServices::SqlHandler::SupprimerCommande(CommandeMap^ commande)
 	action(Table::COMMANDES);
 }
 
-void ProjetPOOServices::SqlHandler::AfficherArticle()
+void ProjetPOOServices::SqlHandler::AfficherArticles()
 {
 	this->query->newQuery(false, SqlQueries::listeArticles());
 	fill(Table::ARTICLES);
@@ -118,6 +118,30 @@ void ProjetPOOServices::SqlHandler::SupprimerArticle(ArticleMap^ article)
 {
 	this->query->newQuery(false, SqlQueries::SupprimerArticle(article));
 	action(Table::ARTICLES);
+}
+
+void ProjetPOOServices::SqlHandler::AfficherClients()
+{
+	this->query->newQuery(false, SqlQueries::listeClients());
+	fill(Table::CLIENTS);
+}
+
+void ProjetPOOServices::SqlHandler::AjouterClient(ClientMap^ client)
+{
+	this->query->newQuery(false, SqlQueries::AjouterClient(client));
+	action(Table::CLIENTS);
+}
+
+void ProjetPOOServices::SqlHandler::ModifierClient(ClientMap^ client)
+{
+	this->query->newQuery(false, SqlQueries::ModifierClient(client));
+	action(Table::CLIENTS);
+}
+
+void ProjetPOOServices::SqlHandler::SupprimerClient(ClientMap^ client)
+{
+	this->query->newQuery(false, SqlQueries::SupprimerClient(client));
+	action(Table::CLIENTS);
 }
 
 

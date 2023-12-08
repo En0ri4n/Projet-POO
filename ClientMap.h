@@ -29,5 +29,3 @@ namespace ProjetPOOMappage
 		void setAdresseFacturation(AdresseMap^ adresseFacturation);
 	};
 }
-
-using namespace ProjetPOOMappage;

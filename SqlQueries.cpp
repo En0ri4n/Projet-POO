@@ -393,37 +393,166 @@ String^ ProjetPOOServices::SqlQueries::listeArticles()
 	return String::Format("SELECT * FROM {0}", Table::ARTICLES->getName());
 }
 
-String^ ProjetPOOServices::SqlQueries::AjouterArticle(ArticleMap^)
+String^ ProjetPOOServices::SqlQueries::AjouterArticle(ArticleMap^ article)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: insert return statement here
+	return String::Format("DECLARE @Reference_article VARCHAR(30); " +
+		"DECLARE @Nom_article VARCHAR(50); " +
+		"DECLARE @Prix_article_HT MONEY; " +
+		"DECLARE @Nature_article VARCHAR(20); " +
+		"DECLARE @Couleur_article VARCHAR(20); " +
+		"DECLARE @Seuil_reapprovisionnement INT; " +
+		"DECLARE @Quantite_article INT; " +
+		"DECLARE @Pourcentage_taxe INT; " +
+		" " +
+		"SET @Reference_article = '{0}' " +
+		"SET @Nom_article = '{1}' " +
+		"SET @Prix_article_HT = {2} " +
+		"SET @Nature_article = '{3}' " +
+		"SET @Couleur_article = '{4}' " +
+		"SET @Seuil_reapprovisionnement = {5} " +
+		"SET @Quantite_article = {6} " +
+		"SET @Pourcentage_taxe = {7} " +
+		" " +
+		"BEGIN TRANSACTION; " +
+		" " +
+		"IF @Quantite_article < 0  " +
+		"BEGIN  " +
+		"    ROLLBACK; " +
+		"    PRINT 'Ajout de l''article impossible, car la quantite est inférieure à 0' " +
+		"END " +
+		" " +
+		"ELSE IF @Pourcentage_taxe < 0 " +
+		"BEGIN " +
+		"    ROLLBACK; " +
+		"    PRINT 'Ajout de l''article impossible, car la taxe est inférieure à 0' " +
+		"END " +
+		" " +
+		"INSERT INTO [Projet].[dbo].[Articles]  " +
+		"(Reference_article, Nom_article, Prix_article_HT, Nature_article, Couleur_article, Seuil_reapprovisionnement, Quantite_article, Pourcentage_taxe) " +
+		"VALUES (@Reference_article, @Nom_article, @Prix_article_HT, @Nature_article, @Couleur_article, @Seuil_reapprovisionnement, @Quantite_article, @Pourcentage_taxe) " +
+		" " +
+		"COMMIT; ",
+		article->getIdArticle(),
+		article->getNom(),
+		article->getPrix().ToString(),
+		article->getNature(),
+		article->getCouleur(),
+		article->getSeuilReapprovisionnement().ToString(),
+		article->getQuantite().ToString(),
+		article->getTaxe().ToString());
 }
 
-String^ ProjetPOOServices::SqlQueries::ModifierArticle(ArticleMap^)
+String^ ProjetPOOServices::SqlQueries::ModifierArticle(ArticleMap^ article)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: insert return statement here
+	return String::Format("DECLARE @Reference_article_modif VARCHAR(30); " +
+		"DECLARE @Nom_article VARCHAR(50); " +
+		"DECLARE @Prix_article_HT MONEY; " +
+		"DECLARE @Nature_article VARCHAR(20); " +
+		"DECLARE @Couleur_article VARCHAR(20); " +
+		"DECLARE @Seuil_reapprovisionnement INT; " +
+		"DECLARE @Quantite_article INT; " +
+		"DECLARE @Pourcentage_taxe INT; " +
+		" " +
+		"SET @Reference_article_modif = '{0}' " +
+		"SET @Nom_article = '{1}' " +
+		"SET @Prix_article_HT = {2} " +
+		"SET @Nature_article = '{3}' " +
+		"SET @Couleur_article = '{4}' " +
+		"SET @Seuil_reapprovisionnement = {5} " +
+		"SET @Quantite_article = {6} " +
+		"SET @Pourcentage_taxe = {7} " +
+		" " +
+		"BEGIN TRANSACTION; " +
+		" " +
+		"IF NOT EXISTS (SELECT 1 FROM Articles WHERE Reference_article = @Reference_article_modif) " +
+		"BEGIN " +
+		"    ROLLBACK; " +
+		"    PRINT 'Modification annulée car la personne n''existe pas'; " +
+		"END " +
+		" " +
+		"IF @Quantite_article < 0  " +
+		"BEGIN  " +
+		"    ROLLBACK; " +
+		"    PRINT 'Ajout de l''article impossible, car la quantite est inférieure à 0' " +
+		"END " +
+		" " +
+		"ELSE IF @Pourcentage_taxe < 0 " +
+		"BEGIN " +
+		"    ROLLBACK; " +
+		"    PRINT 'Ajout de l''article impossible, car la taxe est inférieure à 0' " +
+		"END " +
+		" " +
+		"UPDATE Articles  " +
+		"    SET  " +
+		"        Nom_article = @Nom_article, " +
+		"        Prix_article_HT = @Prix_article_HT, " +
+		"        Nature_article = @Nature_article, " +
+		"        Couleur_article = @Couleur_article, " +
+		"        Seuil_reapprovisionnement = @Seuil_reapprovisionnement, " +
+		"        Quantite_article = @Quantite_article, " +
+		"        Pourcentage_taxe = @Pourcentage_taxe " +
+		" " +
+		"WHERE Articles.Reference_article = @Reference_article_modif " +
+		" " +
+		"COMMIT; ",
+		article->getIdArticle(),
+		article->getNom(),
+		article->getPrix().ToString(),
+		article->getNature(),
+		article->getCouleur(),
+		article->getSeuilReapprovisionnement().ToString(),
+		article->getQuantite().ToString(),
+		article->getTaxe().ToString());
 }
 
-String^ ProjetPOOServices::SqlQueries::SupprimerArticle(ArticleMap^)
+String^ ProjetPOOServices::SqlQueries::SupprimerArticle(ArticleMap^ article)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: insert return statement here
+	return String::Format("DECLARE @Reference_article_suppr VARCHAR(30); " +
+		" " +
+		"SET @Reference_article_suppr = '{0}'; " +
+		" " +
+		"BEGIN TRANSACTION; " +
+		" " +
+		"IF NOT EXISTS (SELECT 1 FROM Articles WHERE Reference_article = @Reference_article_suppr) " +
+		"BEGIN " +
+		"    ROLLBACK; " +
+		"    PRINT 'Suppression annulée car l''article n''existe pas'; " +
+		"END " +
+		" " +
+		"ELSE IF EXISTS (SELECT 1 FROM constituer WHERE Reference_article = @Reference_article_suppr) " +
+		"BEGIN " +
+		"    UPDATE Articles  " +
+		"    SET  " +
+		"        Quantite_article = -1, " +
+		"        Seuil_reapprovisionnement = -1 " +
+		"    WHERE Reference_article = @Reference_article_suppr; " +
+		"    COMMIT; " +
+		"END " +
+		" " +
+		"ELSE IF NOT EXISTS (SELECT 1 FROM constituer WHERE Reference_article = @Reference_article_suppr) " +
+		"BEGIN " +
+		"    DELETE FROM Articles  " +
+		"    WHERE Articles.Reference_article = @Reference_article_suppr " +
+		"    COMMIT; " +
+		"END ",
+		article->getIdArticle());
 }
 
-String^ ProjetPOOServices::SqlQueries::listeClient()
+String^ ProjetPOOServices::SqlQueries::listeClients()
 {
-	return "SELECT " +
-		"    Clients.Id_client, " +
-		"    Clients.Id_adresse_livraison, " +
-		"    AdressesLivraison.Nom_rue AS Nom_rue_livraison, " +
-		"    AdressesLivraison.Numero_rue AS Numero_rue_livraison, " +
-		"    Clients.Id_adresse_facturation, " +
-		"    AdressesFacturation.Nom_rue AS Nom_rue_facturation, " +
-		"    AdressesFacturation.Numero_rue AS Numero_rue_facturation " +
-		"FROM [Projet].[dbo].[Clients] " +
-		"LEFT JOIN [Projet].[dbo].[Adresses] AS AdressesLivraison ON Clients.Id_adresse_livraison = AdressesLivraison.Id_adresse " +
-		"LEFT JOIN [Projet].[dbo].[Adresses] AS AdressesFacturation ON Clients.Id_adresse_facturation = AdressesFacturation.Id_adresse; ";
+	return "SELECT Id_client AS ID, Nom, Prenom, Date_naissance, Date_premier_achat,  " +
+		"" +
+		"Id_adresse_facturation, AdressesFacturation.Numero_rue, AdressesFacturation.Nom_rue, AdressesFacturation.Id_ville,  " +
+		"VilleFacturation.Nom_ville, VilleFacturation.Code_postal, " +
+		"" +
+		"Id_adresse_livraison, AdressesLivraison.Numero_rue, AdressesLivraison.Nom_rue, AdressesLivraison.Id_ville,  " +
+		"VilleLivraison.Nom_ville, VilleLivraison.Code_postal " +
+		" " +
+		"FROM [Projet].[dbo].[Clients] INNER JOIN [Projet].[dbo].[Personnes] ON Clients.Id_client = Personnes.Id_personne " +
+		"LEFT JOIN Adresses AS AdressesFacturation ON Clients.Id_adresse_facturation = AdressesFacturation.Id_adresse " +
+		"LEFT JOIN Adresses AS AdressesLivraison ON Clients.Id_adresse_livraison = AdressesLivraison.Id_adresse " +
+		"LEFT JOIN Villes AS VilleFacturation ON AdressesFacturation.Id_ville = VilleFacturation.Id_ville " +
+		"LEFT JOIN Villes AS VilleLivraison ON AdressesLivraison.Id_ville = VilleLivraison.Id_ville ";
 }
 
 String^ ProjetPOOServices::SqlQueries::AjouterClient(ClientMap^ client)
@@ -493,7 +622,7 @@ String^ ProjetPOOServices::SqlQueries::AjouterClient(ClientMap^ client)
 		client->getAdresseLivraison()->getRue(),
 		client->getAdresseLivraison()->getVille()->getNom(),
 		client->getAdresseLivraison()->getVille()->getCodePostal(),
-		
+
 		client->getAdresseFacturation()->getNumero(),
 		client->getAdresseFacturation()->getRue(),
 		client->getAdresseFacturation()->getVille()->getNom(),
@@ -614,4 +743,81 @@ String^ ProjetPOOServices::SqlQueries::SupprimerClient(ClientMap^ client)
 		"    COMMIT; " +
 		"END; ",
 		client->getId());
+}
+
+String^ ProjetPOOServices::SqlQueries::listeCommandeArticles(CommandeMap^ commande)
+{
+	return String::Format("SELECT * FROM {0}", Table::CONSITUTER_LIEN_COMMANDES_ARTICLES);
+}
+
+String^ ProjetPOOServices::SqlQueries::AjouterCommandeArticle(CommandeMap^ commande)
+{
+	String^ query = "";
+
+	for each(ArticleMap ^ article in commande->getListeArticles())
+	{
+		query->Concat(String::Format("DECLARE @Reference_commande VARCHAR(30); " +
+			"DECLARE @Reference_article VARCHAR(30); " +
+			"DECLARE @Quantite_article_commande INT; " +
+			"DECLARE @Pourcentage_remise_article INT; " +
+			" " +
+			"SET @Reference_commande = '{0}'; " +
+			"SET @Reference_article = '{1}'; " +
+			"SET @Quantite_article_commande = {2}; " +
+			"SET @Pourcentage_remise_article = {3}; " +
+			" " +
+			"BEGIN TRANSACTION; " +
+			" " +
+			"IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].[Commandes] WHERE Reference_commande = @Reference_commande) " +
+			"BEGIN     " +
+			"    ROLLBACK; " +
+			"    PRINT 'Erreur d''ajout car la commande n''existe pas'; " +
+			"END " +
+			" " +
+			"ELSE IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].[Articles] WHERE Reference_article = @Reference_article) " +
+			"BEGIN  " +
+			"    ROLLBACK; " +
+			"    PRINT 'Erreur d''ajout car l''article n''existe pas'; " +
+			"END " +
+			" " +
+			"ELSE IF ((SELECT Quantite_article FROM [Projet].[dbo].[Articles] WHERE Reference_article = @Reference_article) - @Quantite_article_commande) < 0 " +
+			"BEGIN " +
+			"    ROLLBACK; " +
+			"    PRINT 'Erreur d''ajout de l''article car le nombre commandé est supérieur au stock'; " +
+			"END " +
+			" " +
+			"ELSE IF @Pourcentage_remise_article < 0 " +
+			"BEGIN " +
+			"    ROLLBACK; " +
+			"    PRINT 'Erreur d''ajout de la remise car celle-ci est inférieure à 0'; " +
+			"END " +
+			" " +
+			"ELSE  " +
+			"BEGIN " +
+			"    INSERT INTO [Projet].[dbo].constituer (Reference_commande, Reference_article, Quantite_article_commande, Pourcentage_remise_article) " +
+			"    VALUES (@Reference_commande, @Reference_article, @Quantite_article_commande, @Pourcentage_remise_article); " +
+			" " +
+			"    UPDATE [Projet].[dbo].[Articles]  " +
+			"    SET Quantite_article = (Quantite_article - @Quantite_article_commande) " +
+			"    WHERE Reference_article = @Reference_article; " +
+			"    COMMIT; " +
+			"END ",
+			commande->getIdCommande(),
+			article->getIdArticle(),
+			article->getQuantite()));
+	}
+
+	return query;
+}
+
+String^ ProjetPOOServices::SqlQueries::ModifierCommandeArticle(CommandeMap^ commande)
+{
+	throw gcnew System::NotImplementedException();
+	// TODO: insert return statement here
+}
+
+String^ ProjetPOOServices::SqlQueries::SupprimerCommandeArticle(CommandeMap^ commande)
+{
+	throw gcnew System::NotImplementedException();
+	// TODO: insert return statement here
 }

@@ -27,10 +27,15 @@ namespace ProjetPOOServices
 		static String^ ModifierArticle(ArticleMap^);
 		static String^ SupprimerArticle(ArticleMap^);
 
-		static String^ listeClient();
+		static String^ listeClients();
 		static String^ AjouterClient(ClientMap^);
 		static String^ ModifierClient(ClientMap^);
 		static String^ SupprimerClient(ClientMap^);
+
+		static String^ listeCommandeArticles(CommandeMap^);
+		static String^ AjouterCommandeArticle(CommandeMap^);
+		static String^ ModifierCommandeArticle(CommandeMap^);
+		static String^ SupprimerCommandeArticle(CommandeMap^);
 
 	};
 }

@@ -42,10 +42,11 @@ System::Void ProjetPOO::ArticlePopup::clickOnAjouter(System::Object^ sender, Sys
 		double prix = Convert::ToDouble(row->Cells[2]->Value);
 		prix += prix * taxe / 100.0;
 		int quantite = Convert::ToInt32(this->quantiteArticleBox->Value);
+		int remise = 0;
 		double total = prix * quantite;
-		listeArticlesVouluDataGridView->Rows->Add(reference, nom, prix, couleur, quantite, total);
+		listeArticlesVouluDataGridView->Rows->Add(reference, nom, prix, couleur, quantite, remise, total);
 
-		articles->Add(ArticleMap::from(reference, quantite));
+		articles->Add(ArticleMap::from(reference, quantite, remise));
 	}
 }
 System::Void ProjetPOO::ArticlePopup::clickOnRetirer(System::Object^ sender, System::EventArgs^ e)
@@ -91,5 +92,6 @@ System::Void ProjetPOO::ArticlePopup::addColumns()
 	listeArticlesVouluDataGridView->Columns->Add("prix", "Prix");
 	listeArticlesVouluDataGridView->Columns->Add("couleur", "Couleur");
 	listeArticlesVouluDataGridView->Columns->Add("quantite", "Quantite");
+	listeArticlesVouluDataGridView->Columns->Add("remise", "Remise");
 	listeArticlesVouluDataGridView->Columns->Add("total", "Total");
 }

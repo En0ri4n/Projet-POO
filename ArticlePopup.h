@@ -1,5 +1,6 @@
 #pragma once
 #include "SqlHandler.h"
+#include "Projet.h"
 
 namespace ProjetPOO
 {

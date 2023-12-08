@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include "SqlHandler.h"
 #include "AdresseMap.h"
+#include "AdressePopup.h"
 
 
 namespace ProjetPOO
 {
-
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -14,6 +14,7 @@ namespace ProjetPOO
 	using namespace System::Drawing;
 	using namespace ProjetPOO;
 
+	enum TypeAdresse;
 
 	public enum SqlMode
 	{
@@ -174,20 +175,37 @@ private: System::Windows::Forms::Label^ idClientCommandeLabel;
 
 private: System::Windows::Forms::NumericUpDown^ idClientCommandeBox;
 private: System::Windows::Forms::Label^ label8;
-private: System::Windows::Forms::Label^ label1;
-private: System::Windows::Forms::TextBox^ textBox1;
-private: System::Windows::Forms::NumericUpDown^ numericUpDown1;
-private: System::Windows::Forms::TextBox^ textBox2;
-private: System::Windows::Forms::Label^ label4;
-private: System::Windows::Forms::Label^ label3;
-private: System::Windows::Forms::DateTimePicker^ dateTimePicker2;
-private: System::Windows::Forms::Label^ label11;
-private: System::Windows::Forms::DateTimePicker^ dateTimePicker1;
-private: System::Windows::Forms::Label^ label10;
-private: System::Windows::Forms::Label^ label13;
-private: System::Windows::Forms::Button^ button3;
-private: System::Windows::Forms::Label^ label12;
-private: System::Windows::Forms::Button^ button2;
+private: System::Windows::Forms::Label^ prenomClientLabel;
+
+private: System::Windows::Forms::TextBox^ prenomClientBox;
+
+private: System::Windows::Forms::NumericUpDown^ idClientBox;
+private: System::Windows::Forms::TextBox^ nomClientBox;
+private: System::Windows::Forms::Label^ idClientLabel;
+private: System::Windows::Forms::Label^ nomClientLabel;
+
+
+
+
+private: System::Windows::Forms::DateTimePicker^ datePremierAchatClientPicker;
+private: System::Windows::Forms::Label^ datePremierAchatClientLabel;
+
+
+private: System::Windows::Forms::DateTimePicker^ dateNaissanceClientPicker;
+private: System::Windows::Forms::Label^ dateNaissanceClientLabel;
+private: System::Windows::Forms::Label^ adresseFacturationClientLabel;
+
+
+
+
+private: System::Windows::Forms::Button^ adresseFacturationClientBouton;
+private: System::Windows::Forms::Label^ adresseLivraisonClientLabel;
+
+
+private: System::Windows::Forms::Button^ adresseLivraisonClientBouton;
+
+private: System::Windows::Forms::CheckBox^ voirRequetesCheckBox;
+private: System::Windows::Forms::Button^ clearBouton;
 
 
 private: System::Windows::Forms::Label^ adressePersonnelLabel;
@@ -210,21 +228,21 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
 			   this->tabStatistiques = (gcnew System::Windows::Forms::TabPage());
 			   this->tabClients = (gcnew System::Windows::Forms::TabPage());
-			   this->label13 = (gcnew System::Windows::Forms::Label());
-			   this->button3 = (gcnew System::Windows::Forms::Button());
-			   this->label12 = (gcnew System::Windows::Forms::Label());
-			   this->dateTimePicker2 = (gcnew System::Windows::Forms::DateTimePicker());
-			   this->label11 = (gcnew System::Windows::Forms::Label());
-			   this->button2 = (gcnew System::Windows::Forms::Button());
-			   this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
-			   this->label10 = (gcnew System::Windows::Forms::Label());
+			   this->adresseFacturationClientLabel = (gcnew System::Windows::Forms::Label());
+			   this->adresseFacturationClientBouton = (gcnew System::Windows::Forms::Button());
+			   this->adresseLivraisonClientLabel = (gcnew System::Windows::Forms::Label());
+			   this->datePremierAchatClientPicker = (gcnew System::Windows::Forms::DateTimePicker());
+			   this->datePremierAchatClientLabel = (gcnew System::Windows::Forms::Label());
+			   this->adresseLivraisonClientBouton = (gcnew System::Windows::Forms::Button());
+			   this->dateNaissanceClientPicker = (gcnew System::Windows::Forms::DateTimePicker());
+			   this->dateNaissanceClientLabel = (gcnew System::Windows::Forms::Label());
 			   this->label8 = (gcnew System::Windows::Forms::Label());
-			   this->label1 = (gcnew System::Windows::Forms::Label());
-			   this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			   this->numericUpDown1 = (gcnew System::Windows::Forms::NumericUpDown());
-			   this->textBox2 = (gcnew System::Windows::Forms::TextBox());
-			   this->label4 = (gcnew System::Windows::Forms::Label());
-			   this->label3 = (gcnew System::Windows::Forms::Label());
+			   this->prenomClientLabel = (gcnew System::Windows::Forms::Label());
+			   this->prenomClientBox = (gcnew System::Windows::Forms::TextBox());
+			   this->idClientBox = (gcnew System::Windows::Forms::NumericUpDown());
+			   this->nomClientBox = (gcnew System::Windows::Forms::TextBox());
+			   this->idClientLabel = (gcnew System::Windows::Forms::Label());
+			   this->nomClientLabel = (gcnew System::Windows::Forms::Label());
 			   this->tabCommandes = (gcnew System::Windows::Forms::TabPage());
 			   this->idClientCommandeLabel = (gcnew System::Windows::Forms::Label());
 			   this->idClientCommandeBox = (gcnew System::Windows::Forms::NumericUpDown());
@@ -287,9 +305,11 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->boutonChercher = (gcnew System::Windows::Forms::Button());
 			   this->rechercheColonnesBox = (gcnew System::Windows::Forms::ComboBox());
 			   this->rechercheBox = (gcnew System::Windows::Forms::TextBox());
+			   this->voirRequetesCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			   this->clearBouton = (gcnew System::Windows::Forms::Button());
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabClients->SuspendLayout();
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientBox))->BeginInit();
 			   this->tabCommandes->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientCommandeBox))->BeginInit();
 			   this->tabStocks->SuspendLayout();
@@ -408,21 +428,21 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   // 
 			   // tabClients
 			   // 
-			   this->tabClients->Controls->Add(this->label13);
-			   this->tabClients->Controls->Add(this->button3);
-			   this->tabClients->Controls->Add(this->label12);
-			   this->tabClients->Controls->Add(this->dateTimePicker2);
-			   this->tabClients->Controls->Add(this->label11);
-			   this->tabClients->Controls->Add(this->button2);
-			   this->tabClients->Controls->Add(this->dateTimePicker1);
-			   this->tabClients->Controls->Add(this->label10);
+			   this->tabClients->Controls->Add(this->adresseFacturationClientLabel);
+			   this->tabClients->Controls->Add(this->adresseFacturationClientBouton);
+			   this->tabClients->Controls->Add(this->adresseLivraisonClientLabel);
+			   this->tabClients->Controls->Add(this->datePremierAchatClientPicker);
+			   this->tabClients->Controls->Add(this->datePremierAchatClientLabel);
+			   this->tabClients->Controls->Add(this->adresseLivraisonClientBouton);
+			   this->tabClients->Controls->Add(this->dateNaissanceClientPicker);
+			   this->tabClients->Controls->Add(this->dateNaissanceClientLabel);
 			   this->tabClients->Controls->Add(this->label8);
-			   this->tabClients->Controls->Add(this->label1);
-			   this->tabClients->Controls->Add(this->textBox1);
-			   this->tabClients->Controls->Add(this->numericUpDown1);
-			   this->tabClients->Controls->Add(this->textBox2);
-			   this->tabClients->Controls->Add(this->label4);
-			   this->tabClients->Controls->Add(this->label3);
+			   this->tabClients->Controls->Add(this->prenomClientLabel);
+			   this->tabClients->Controls->Add(this->prenomClientBox);
+			   this->tabClients->Controls->Add(this->idClientBox);
+			   this->tabClients->Controls->Add(this->nomClientBox);
+			   this->tabClients->Controls->Add(this->idClientLabel);
+			   this->tabClients->Controls->Add(this->nomClientLabel);
 			   this->tabClients->Location = System::Drawing::Point(4, 22);
 			   this->tabClients->Margin = System::Windows::Forms::Padding(2);
 			   this->tabClients->Name = L"tabClients";
@@ -431,99 +451,99 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->tabClients->Text = L"Client";
 			   this->tabClients->UseVisualStyleBackColor = true;
 			   // 
-			   // label13
+			   // adresseFacturationClientLabel
 			   // 
-			   this->label13->AutoSize = true;
-			   this->label13->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label13->Location = System::Drawing::Point(16, 251);
-			   this->label13->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label13->Name = L"label13";
-			   this->label13->Size = System::Drawing::Size(162, 20);
-			   this->label13->TabIndex = 50;
-			   this->label13->Text = L"Adresse Facturation :";
-			   // 
-			   // button3
-			   // 
-			   this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->button3->Location = System::Drawing::Point(193, 248);
-			   this->button3->Name = L"button3";
-			   this->button3->Size = System::Drawing::Size(244, 27);
-			   this->button3->TabIndex = 49;
-			   this->button3->Text = L"Adresse";
-			   this->button3->UseVisualStyleBackColor = true;
-			   this->button3->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonAdresseFacturationClient);
-			   // 
-			   // label12
-			   // 
-			   this->label12->AutoSize = true;
-			   this->label12->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label12->Location = System::Drawing::Point(34, 218);
-			   this->label12->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label12->Name = L"label12";
-			   this->label12->Size = System::Drawing::Size(144, 20);
-			   this->label12->TabIndex = 17;
-			   this->label12->Text = L"Adresse Livraison :";
-			   // 
-			   // dateTimePicker2
-			   // 
-			   this->dateTimePicker2->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+			   this->adresseFacturationClientLabel->AutoSize = true;
+			   this->adresseFacturationClientLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->dateTimePicker2->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->dateTimePicker2->Location = System::Drawing::Point(193, 182);
-			   this->dateTimePicker2->Name = L"dateTimePicker2";
-			   this->dateTimePicker2->Size = System::Drawing::Size(244, 27);
-			   this->dateTimePicker2->TabIndex = 48;
+			   this->adresseFacturationClientLabel->Location = System::Drawing::Point(16, 251);
+			   this->adresseFacturationClientLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->adresseFacturationClientLabel->Name = L"adresseFacturationClientLabel";
+			   this->adresseFacturationClientLabel->Size = System::Drawing::Size(162, 20);
+			   this->adresseFacturationClientLabel->TabIndex = 50;
+			   this->adresseFacturationClientLabel->Text = L"Adresse Facturation :";
 			   // 
-			   // label11
+			   // adresseFacturationClientBouton
 			   // 
-			   this->label11->AutoSize = true;
-			   this->label11->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label11->Location = System::Drawing::Point(33, 187);
-			   this->label11->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label11->Name = L"label11";
-			   this->label11->Size = System::Drawing::Size(145, 20);
-			   this->label11->TabIndex = 47;
-			   this->label11->Text = L"Date livraison est. :";
-			   // 
-			   // button2
-			   // 
-			   this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->button2->Location = System::Drawing::Point(193, 215);
-			   this->button2->Name = L"button2";
-			   this->button2->Size = System::Drawing::Size(244, 27);
-			   this->button2->TabIndex = 16;
-			   this->button2->Text = L"Adresse";
-			   this->button2->UseVisualStyleBackColor = true;
-			   this->button2->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonAdresseLivraisonClient);
-			   // 
-			   // dateTimePicker1
-			   // 
-			   this->dateTimePicker1->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+			   this->adresseFacturationClientBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->dateTimePicker1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->dateTimePicker1->Location = System::Drawing::Point(193, 149);
-			   this->dateTimePicker1->Name = L"dateTimePicker1";
-			   this->dateTimePicker1->Size = System::Drawing::Size(244, 27);
-			   this->dateTimePicker1->TabIndex = 46;
+			   this->adresseFacturationClientBouton->Location = System::Drawing::Point(193, 248);
+			   this->adresseFacturationClientBouton->Name = L"adresseFacturationClientBouton";
+			   this->adresseFacturationClientBouton->Size = System::Drawing::Size(244, 27);
+			   this->adresseFacturationClientBouton->TabIndex = 49;
+			   this->adresseFacturationClientBouton->Text = L"Aucune Adresse";
+			   this->adresseFacturationClientBouton->UseVisualStyleBackColor = true;
+			   this->adresseFacturationClientBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonAdresseFacturationClient);
 			   // 
-			   // label10
+			   // adresseLivraisonClientLabel
 			   // 
-			   this->label10->AutoSize = true;
-			   this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label10->Location = System::Drawing::Point(33, 154);
-			   this->label10->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label10->Name = L"label10";
-			   this->label10->Size = System::Drawing::Size(145, 20);
-			   this->label10->TabIndex = 45;
-			   this->label10->Text = L"Date livraison est. :";
+			   this->adresseLivraisonClientLabel->AutoSize = true;
+			   this->adresseLivraisonClientLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->adresseLivraisonClientLabel->Location = System::Drawing::Point(34, 218);
+			   this->adresseLivraisonClientLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->adresseLivraisonClientLabel->Name = L"adresseLivraisonClientLabel";
+			   this->adresseLivraisonClientLabel->Size = System::Drawing::Size(144, 20);
+			   this->adresseLivraisonClientLabel->TabIndex = 17;
+			   this->adresseLivraisonClientLabel->Text = L"Adresse Livraison :";
+			   // 
+			   // datePremierAchatClientPicker
+			   // 
+			   this->datePremierAchatClientPicker->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->datePremierAchatClientPicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->datePremierAchatClientPicker->Location = System::Drawing::Point(193, 182);
+			   this->datePremierAchatClientPicker->Name = L"datePremierAchatClientPicker";
+			   this->datePremierAchatClientPicker->Size = System::Drawing::Size(244, 27);
+			   this->datePremierAchatClientPicker->TabIndex = 48;
+			   // 
+			   // datePremierAchatClientLabel
+			   // 
+			   this->datePremierAchatClientLabel->AutoSize = true;
+			   this->datePremierAchatClientLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->datePremierAchatClientLabel->Location = System::Drawing::Point(22, 187);
+			   this->datePremierAchatClientLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->datePremierAchatClientLabel->Name = L"datePremierAchatClientLabel";
+			   this->datePremierAchatClientLabel->Size = System::Drawing::Size(156, 20);
+			   this->datePremierAchatClientLabel->TabIndex = 47;
+			   this->datePremierAchatClientLabel->Text = L"Date premier achat :";
+			   // 
+			   // adresseLivraisonClientBouton
+			   // 
+			   this->adresseLivraisonClientBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->adresseLivraisonClientBouton->Location = System::Drawing::Point(193, 215);
+			   this->adresseLivraisonClientBouton->Name = L"adresseLivraisonClientBouton";
+			   this->adresseLivraisonClientBouton->Size = System::Drawing::Size(244, 27);
+			   this->adresseLivraisonClientBouton->TabIndex = 16;
+			   this->adresseLivraisonClientBouton->Text = L"Aucune Adresse";
+			   this->adresseLivraisonClientBouton->UseVisualStyleBackColor = true;
+			   this->adresseLivraisonClientBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonAdresseLivraisonClient);
+			   // 
+			   // dateNaissanceClientPicker
+			   // 
+			   this->dateNaissanceClientPicker->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateNaissanceClientPicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateNaissanceClientPicker->Location = System::Drawing::Point(193, 149);
+			   this->dateNaissanceClientPicker->Name = L"dateNaissanceClientPicker";
+			   this->dateNaissanceClientPicker->Size = System::Drawing::Size(244, 27);
+			   this->dateNaissanceClientPicker->TabIndex = 46;
+			   // 
+			   // dateNaissanceClientLabel
+			   // 
+			   this->dateNaissanceClientLabel->AutoSize = true;
+			   this->dateNaissanceClientLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateNaissanceClientLabel->Location = System::Drawing::Point(31, 154);
+			   this->dateNaissanceClientLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->dateNaissanceClientLabel->Name = L"dateNaissanceClientLabel";
+			   this->dateNaissanceClientLabel->Size = System::Drawing::Size(147, 20);
+			   this->dateNaissanceClientLabel->TabIndex = 45;
+			   this->dateNaissanceClientLabel->Text = L"Date de naissance :";
 			   // 
 			   // label8
 			   // 
@@ -537,76 +557,76 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->label8->TabIndex = 45;
 			   this->label8->Text = L"Clients";
 			   // 
-			   // label1
+			   // prenomClientLabel
 			   // 
-			   this->label1->AutoSize = true;
-			   this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->prenomClientLabel->AutoSize = true;
+			   this->prenomClientLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->prenomClientLabel->Location = System::Drawing::Point(104, 120);
+			   this->prenomClientLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->prenomClientLabel->Name = L"prenomClientLabel";
+			   this->prenomClientLabel->Size = System::Drawing::Size(74, 20);
+			   this->prenomClientLabel->TabIndex = 21;
+			   this->prenomClientLabel->Text = L"Prénom :";
+			   // 
+			   // prenomClientBox
+			   // 
+			   this->prenomClientBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->label1->Location = System::Drawing::Point(104, 120);
-			   this->label1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label1->Name = L"label1";
-			   this->label1->Size = System::Drawing::Size(74, 20);
-			   this->label1->TabIndex = 21;
-			   this->label1->Text = L"Prénom :";
+			   this->prenomClientBox->Location = System::Drawing::Point(193, 117);
+			   this->prenomClientBox->Margin = System::Windows::Forms::Padding(2);
+			   this->prenomClientBox->Name = L"prenomClientBox";
+			   this->prenomClientBox->Size = System::Drawing::Size(244, 27);
+			   this->prenomClientBox->TabIndex = 20;
 			   // 
-			   // textBox1
+			   // idClientBox
 			   // 
-			   this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->idClientBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->textBox1->Location = System::Drawing::Point(193, 117);
-			   this->textBox1->Margin = System::Windows::Forms::Padding(2);
-			   this->textBox1->Name = L"textBox1";
-			   this->textBox1->Size = System::Drawing::Size(244, 27);
-			   this->textBox1->TabIndex = 20;
-			   // 
-			   // numericUpDown1
-			   // 
-			   this->numericUpDown1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->numericUpDown1->Location = System::Drawing::Point(193, 55);
-			   this->numericUpDown1->Margin = System::Windows::Forms::Padding(2);
-			   this->numericUpDown1->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
+			   this->idClientBox->Location = System::Drawing::Point(193, 55);
+			   this->idClientBox->Margin = System::Windows::Forms::Padding(2);
+			   this->idClientBox->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
 			   {
 				   999999999, 0, 0, 0
 			   });
-			   this->numericUpDown1->Name = L"numericUpDown1";
-			   this->numericUpDown1->Size = System::Drawing::Size(243, 27);
-			   this->numericUpDown1->TabIndex = 16;
+			   this->idClientBox->Name = L"idClientBox";
+			   this->idClientBox->Size = System::Drawing::Size(243, 27);
+			   this->idClientBox->TabIndex = 16;
 			   // 
-			   // textBox2
+			   // nomClientBox
 			   // 
-			   this->textBox2->BackColor = System::Drawing::SystemColors::Window;
-			   this->textBox2->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->nomClientBox->BackColor = System::Drawing::SystemColors::Window;
+			   this->nomClientBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->textBox2->Location = System::Drawing::Point(193, 86);
-			   this->textBox2->Margin = System::Windows::Forms::Padding(2);
-			   this->textBox2->Name = L"textBox2";
-			   this->textBox2->Size = System::Drawing::Size(243, 27);
-			   this->textBox2->TabIndex = 17;
+			   this->nomClientBox->Location = System::Drawing::Point(193, 86);
+			   this->nomClientBox->Margin = System::Windows::Forms::Padding(2);
+			   this->nomClientBox->Name = L"nomClientBox";
+			   this->nomClientBox->Size = System::Drawing::Size(243, 27);
+			   this->nomClientBox->TabIndex = 17;
 			   // 
-			   // label4
+			   // idClientLabel
 			   // 
-			   this->label4->AutoSize = true;
-			   this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->idClientLabel->AutoSize = true;
+			   this->idClientLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->label4->Location = System::Drawing::Point(146, 57);
-			   this->label4->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label4->Name = L"label4";
-			   this->label4->Size = System::Drawing::Size(32, 20);
-			   this->label4->TabIndex = 18;
-			   this->label4->Text = L"ID :";
+			   this->idClientLabel->Location = System::Drawing::Point(146, 57);
+			   this->idClientLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->idClientLabel->Name = L"idClientLabel";
+			   this->idClientLabel->Size = System::Drawing::Size(32, 20);
+			   this->idClientLabel->TabIndex = 18;
+			   this->idClientLabel->Text = L"ID :";
 			   // 
-			   // label3
+			   // nomClientLabel
 			   // 
-			   this->label3->AutoSize = true;
-			   this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->nomClientLabel->AutoSize = true;
+			   this->nomClientLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->label3->Location = System::Drawing::Point(125, 89);
-			   this->label3->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label3->Name = L"label3";
-			   this->label3->Size = System::Drawing::Size(53, 20);
-			   this->label3->TabIndex = 19;
-			   this->label3->Text = L"Nom :";
+			   this->nomClientLabel->Location = System::Drawing::Point(125, 89);
+			   this->nomClientLabel->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->nomClientLabel->Name = L"nomClientLabel";
+			   this->nomClientLabel->Size = System::Drawing::Size(53, 20);
+			   this->nomClientLabel->TabIndex = 19;
+			   this->nomClientLabel->Text = L"Nom :";
 			   // 
 			   // tabCommandes
 			   // 
@@ -1017,7 +1037,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->label2->AutoSize = true;
 			   this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->label2->Location = System::Drawing::Point(217, 3);
+			   this->label2->Location = System::Drawing::Point(251, 3);
 			   this->label2->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
 			   this->label2->Name = L"label2";
 			   this->label2->Size = System::Drawing::Size(123, 42);
@@ -1105,7 +1125,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->adressePersonnelBouton->Name = L"adressePersonnelBouton";
 			   this->adressePersonnelBouton->Size = System::Drawing::Size(243, 27);
 			   this->adressePersonnelBouton->TabIndex = 12;
-			   this->adressePersonnelBouton->Text = L"Adresse";
+			   this->adressePersonnelBouton->Text = L"Aucune Adresse";
 			   this->adressePersonnelBouton->UseVisualStyleBackColor = true;
 			   this->adressePersonnelBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonAdressePersonnel);
 			   // 
@@ -1350,9 +1370,9 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   // 
 			   // boutonAfficherTout
 			   // 
-			   this->boutonAfficherTout->Location = System::Drawing::Point(13, 367);
+			   this->boutonAfficherTout->Location = System::Drawing::Point(42, 368);
 			   this->boutonAfficherTout->Name = L"boutonAfficherTout";
-			   this->boutonAfficherTout->Size = System::Drawing::Size(143, 26);
+			   this->boutonAfficherTout->Size = System::Drawing::Size(114, 26);
 			   this->boutonAfficherTout->TabIndex = 9;
 			   this->boutonAfficherTout->Text = L"Afficher tout";
 			   this->boutonAfficherTout->UseVisualStyleBackColor = true;
@@ -1389,6 +1409,26 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->rechercheBox->Size = System::Drawing::Size(141, 23);
 			   this->rechercheBox->TabIndex = 12;
 			   // 
+			   // voirRequetesCheckBox
+			   // 
+			   this->voirRequetesCheckBox->AutoSize = true;
+			   this->voirRequetesCheckBox->Location = System::Drawing::Point(506, 440);
+			   this->voirRequetesCheckBox->Name = L"voirRequetesCheckBox";
+			   this->voirRequetesCheckBox->Size = System::Drawing::Size(88, 17);
+			   this->voirRequetesCheckBox->TabIndex = 13;
+			   this->voirRequetesCheckBox->Text = L"Voir requêtes";
+			   this->voirRequetesCheckBox->UseVisualStyleBackColor = true;
+			   // 
+			   // clearBouton
+			   // 
+			   this->clearBouton->Location = System::Drawing::Point(15, 369);
+			   this->clearBouton->Name = L"clearBouton";
+			   this->clearBouton->Size = System::Drawing::Size(24, 24);
+			   this->clearBouton->TabIndex = 14;
+			   this->clearBouton->Text = L"✕";
+			   this->clearBouton->UseVisualStyleBackColor = true;
+			   this->clearBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnClearBouton);
+			   // 
 			   // Projet
 			   // 
 			   this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -1396,6 +1436,8 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->AutoSize = true;
 			   this->BackColor = System::Drawing::SystemColors::ScrollBar;
 			   this->ClientSize = System::Drawing::Size(1190, 573);
+			   this->Controls->Add(this->clearBouton);
+			   this->Controls->Add(this->voirRequetesCheckBox);
 			   this->Controls->Add(this->rechercheBox);
 			   this->Controls->Add(this->rechercheColonnesBox);
 			   this->Controls->Add(this->boutonChercher);
@@ -1419,7 +1461,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->EndInit();
 			   this->tabClients->ResumeLayout(false);
 			   this->tabClients->PerformLayout();
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientBox))->EndInit();
 			   this->tabCommandes->ResumeLayout(false);
 			   this->tabCommandes->PerformLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientCommandeBox))->EndInit();
@@ -1457,7 +1499,8 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 	private: System::Void clickOnConnexionBDD(System::Object^ sender, System::EventArgs^ e);
 
 		   // Function to add an entry to the history box
-	public: System::Void addHistorique(System::String^ historique);
+	private: System::Void addHistorique(System::String^ historique);
+	public: System::Void addQueryHistorique(System::String^ query);
 
 		   // Event handler for the "Afficher" button click
 	private: System::Void clickOnBoutonAfficher(System::Object^ sender, System::EventArgs^ e);
@@ -1499,11 +1542,13 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 		SqlMode getMode();
 		AdresseMap^ getPersonnelAdresse();
 	public:
-		void setAdresseValue(int, AdresseMap^);
+		System::Void setAdresseValue(TypeAdresse, AdresseMap^);
 
 	private: System::Void clickOnBoutonAdressePersonnel(System::Object^ sender, System::EventArgs^ e);
-private: System::Void clickOnBoutonAdresseLivraisonClient(System::Object^ sender, System::EventArgs^ e);
-private: System::Void clickOnBoutonAdresseFacturationClient(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void clickOnBoutonAdresseLivraisonClient(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void clickOnBoutonAdresseFacturationClient(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void updateAdresseBouton(TypeAdresse type);
+	private: System::Void clickOnClearBouton(System::Object^ sender, System::EventArgs^ e);
 };
 }
 #pragma endregion

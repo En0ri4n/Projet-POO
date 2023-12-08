@@ -1,5 +1,7 @@
 #include "ClientMap.h"
 
+using namespace ProjetPOOMappage;
+
 DateTime^ ProjetPOOMappage::ClientMap::getDateNaissance()
 {
     return this->dateNaissance;

@@ -24,6 +24,11 @@ System::Void ProjetPOO::AdressePopup::clickOnBoutonValider(System::Object^ sende
 	this->getAdresse()->setRue(this->rueAdresseBox->Text);
 	this->getAdresse()->getVille()->setCodePostal(this->codePostalAdresse->Text);
 	this->getAdresse()->getVille()->setNom(this->villeAdresseBox->Text);
-	Projet::instance->setAdresseValue(idType, getAdresse());
+	Projet::instance->setAdresseValue(typeAdresse, getAdresse());
 	this->Close();
+}
+
+AdresseMap^ ProjetPOO::AdressePopup::getAdresse()
+{
+	return this->adresse;
 }

@@ -32,15 +32,21 @@ namespace ProjetPOOServices
 		void ModifierPersonnel(PersonnelMap^);
 		void SupprimerPersonnel(PersonnelMap^);
 
-		void AfficherCommande();
+		void AfficherCommandes();
 		void AjouterCommande(CommandeMap^);
 		void ModifierCommande(CommandeMap^);
 		void SupprimerCommande(CommandeMap^);
 
-		void AfficherArticle();
+		void AfficherArticles();
 		void AjouterArticle(ArticleMap^);
 		void ModifierArticle(ArticleMap^);
 		void SupprimerArticle(ArticleMap^);
+
+		void AfficherClients();
+		void AjouterClient(ClientMap^);
+		void ModifierClient(ClientMap^);
+		void SupprimerClient(ClientMap^);
+
 
 
 		static void fillGrid(Table^, DataGridView^);

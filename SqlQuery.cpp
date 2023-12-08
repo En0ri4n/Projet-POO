@@ -22,7 +22,7 @@ void SqlQuery::newQuery(bool isTransaction, String^ query)
 void SqlQuery::addQuery(String^ query)
 {
 	this->queries->Add(query);
-	ProjetPOO::Projet::instance->addHistorique(query);
+	ProjetPOO::Projet::instance->addQueryHistorique(query);
 }
 
 void SqlQuery::useTransaction()

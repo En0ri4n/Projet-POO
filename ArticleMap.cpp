@@ -80,11 +80,22 @@ int ArticleMap::getTaxe()
 	return this->taxe;
 }
 
-ArticleMap^ ArticleMap::from(String^ id, int quantite)
+void ProjetPOOMappage::ArticleMap::setRemise(int)
+{
+	this->remise = remise;
+}
+
+int ProjetPOOMappage::ArticleMap::getRemise()
+{
+	return this->remise;
+}
+
+ArticleMap^ ArticleMap::from(String^ id, int quantite, int remise)
 {
 	ArticleMap^ article = gcnew ArticleMap();
 	article->setIdArticle(id);
 	article->setQuantite(quantite);
+	article->setRemise(remise);
 	return article;
 }
 
