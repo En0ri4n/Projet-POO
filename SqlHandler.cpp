@@ -82,18 +82,21 @@ void ProjetPOOServices::SqlHandler::AfficherCommandes()
 void ProjetPOOServices::SqlHandler::AjouterCommande(CommandeMap^ commande)
 {
 	this->query->newQuery(false, SqlQueries::AjouterCommande(commande));
+	this->query->addQuery(SqlQueries::AjouterCommandeArticle(commande));
 	action(Table::COMMANDES);
 }
 
 void ProjetPOOServices::SqlHandler::ModifierCommande(CommandeMap^ commande)
 {
 	this->query->newQuery(false, SqlQueries::ModifierCommande(commande));
+	this->query->addQuery(SqlQueries::ModifierCommandeArticle(commande));
 	action(Table::COMMANDES);
 }
 
 void ProjetPOOServices::SqlHandler::SupprimerCommande(CommandeMap^ commande)
 {
 	this->query->newQuery(false, SqlQueries::SupprimerCommande(commande));
+	this->query->addQuery(SqlQueries::SupprimerCommandeArticle(commande));
 	action(Table::COMMANDES);
 }
 
