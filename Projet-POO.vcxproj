@@ -124,9 +124,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdresseMap.cpp" />
+    <ClCompile Include="AdressePopup.cpp" />
     <ClCompile Include="ArticleMap.cpp" />
     <ClCompile Include="ArticlePopup.cpp" />
     <ClCompile Include="ClientMap.cpp" />
+    <ClCompile Include="CommandeMap.cpp" />
     <ClCompile Include="PersonnelMap.cpp" />
     <ClCompile Include="PersonneMap.cpp" />
     <ClCompile Include="Projet.cpp" />
@@ -139,11 +141,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdresseMap.h" />
+    <ClInclude Include="AdressePopup.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="ArticleMap.h" />
     <ClInclude Include="ArticlePopup.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="ClientMap.h" />
+    <ClInclude Include="CommandeMap.h" />
     <ClInclude Include="PersonnelMap.h" />
     <ClInclude Include="PersonneMap.h" />
     <ClInclude Include="SqlManager.h" />
@@ -156,6 +162,9 @@
     <ClInclude Include="VilleMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AdressePopup.resx">
+      <DependentUpon>AdressePopup.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ArticlePopup.resx">
       <DependentUpon>ArticlePopup.h</DependentUpon>
     </EmbeddedResource>

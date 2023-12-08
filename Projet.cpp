@@ -5,6 +5,7 @@
 #include "SqlQueries.h"
 #include "Projet.h"
 #include "ArticlePopup.h"
+#include "AdressePopup.h"
 
 using namespace System;
 
@@ -53,27 +54,105 @@ System::Void ProjetPOO::Projet::clickOnBoutonValider(System::Object^ sender, Sys
 {
 	if(isActive(tabPersonnel))
 	{
+		PersonnelMap^ personnel = gcnew PersonnelMap();
+		personnel->setId((int) idPersonnelBox->Value);
+		personnel->setNom(nomPersonnelBox->Text);
+		personnel->setPrenom(prenomPersonnelBox->Text);
+		personnel->setAdresse(currentPersonnelAdresse);
+		personnel->setDateEmbauche(dateEmbauchePersonnelPicker->Value);
+		personnel->setIdSuperviseur(Convert::ToInt32(idSuperviseurPersonnelBox->Value));
+
+
 		switch(currentMode)
 		{
 			case ProjetPOO::AFFICHER:
-			{
-				PersonnelMap^ personnel = gcnew PersonnelMap();
-				personnel->setId((int) idPersonnelBox->Value);
-				personnel->setNom(nomPersonnelBox->Text);
-				personnel->setPrenom(prenomPersonnelBox->Text);
-				personnel->setDateEmbauche(dateEmbauchePersonnelPicker->Value);
-			}
+				sqlHandler->AfficherPersonnel();
+				addHistorique("Affichage du personnel");
 			break;
 			case ProjetPOO::SUPPRIMER:
+				sqlHandler->SupprimerPersonnel(personnel);
+				addHistorique("Suppression du personnel " + personnel->getNom() + " " + personnel->getPrenom() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
 				break;
 			case ProjetPOO::AJOUTER:
+				sqlHandler->AjouterPersonnel(personnel);
+				addHistorique("Ajout du personnel " + personnel->getNom() + " " + personnel->getPrenom() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
 				break;
 			case ProjetPOO::MODIFIER:
+				sqlHandler->ModifierPersonnel(personnel);
+				addHistorique("Modification du personnel " + personnel->getNom() + " " + personnel->getPrenom() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
 				break;
 			default:
 				break;
 		}
 	}
+	else if(isActive(tabCommandes))
+	{
+		CommandeMap^ commande = gcnew CommandeMap();
+		commande->setIdCommande(idCommandeBox->Text);
+		commande->setDateLivraison(dateLivraisonCommandePicker->Value);
+		commande->setDateEmission(dateEmissionCommandePicker->Value);
+		commande->setMoyenPaiement(moyenPayementCommandeBox->Text);
+		commande->setDatePaiement(datePayementCommandePicker->Value);
+		commande->setIdClient(Convert::ToInt32(idClientCommandeBox->Value));
+
+		switch(currentMode)
+		{
+			case ProjetPOO::AFFICHER:
+				sqlHandler->AfficherCommande();
+				addHistorique("Affichage de la commande");
+				break;
+			case ProjetPOO::SUPPRIMER:
+				sqlHandler->SupprimerCommande(commande);
+				addHistorique("Suppression de la commande " + commande->getIdCommande() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
+				break;
+			case ProjetPOO::AJOUTER:
+				sqlHandler->AjouterCommande(commande);
+				addHistorique("Ajout de la commande " + commande->getIdCommande() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
+				break;
+			case ProjetPOO::MODIFIER:
+				sqlHandler->ModifierCommande(commande);
+				addHistorique("Modification de la commande " + commande->getIdCommande() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
+				break;
+			default:
+				break;
+		}
+	}
+	else if(isActive(tabStocks))
+	{
+		ArticleMap^ article = gcnew ArticleMap();
+		article->setIdArticle(idStockBox->Text);
+		article->setNom(nomStockBox->Text);
+		article->setPrix(Convert::ToDouble(prixStockBox->Text));
+		article->setNature(natureStockBox->Text);
+		article->setCouleur(couleurStockBox->Text);
+		article->setSeuilReapprovisionnement(Convert::ToInt32(seuilStockBox->Text));
+		article->setQuantite(Convert::ToInt32(quantiteStockBox->Text));
+		article->setTaxe(Convert::ToDouble(tvaStockBox->Text));
+
+		switch(currentMode)
+		{
+			case ProjetPOO::AFFICHER:
+				sqlHandler->AfficherArticle();
+				addHistorique("Affichage des articles");
+				break;
+			case ProjetPOO::SUPPRIMER:
+				sqlHandler->SupprimerArticle(article);
+				addHistorique("Suppression de l'article " + article->getIdArticle() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
+				break;
+			case ProjetPOO::AJOUTER:
+				sqlHandler->AjouterArticle(article);
+				addHistorique("Ajout de l'article " + article->getIdArticle() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
+				break;
+			case ProjetPOO::MODIFIER:
+				sqlHandler->ModifierArticle(article);
+				addHistorique("Modification de l'article " + article->getIdArticle() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
+				break;
+			default:
+				break;
+		}
+	}
+
+	afficherTable();
 }
 System::Boolean ProjetPOO::Projet::isActive(System::Windows::Forms::TabPage^ tab)
 {
@@ -131,6 +210,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->nomPersonnelBox->Enabled = false;
 			this->prenomPersonnelBox->Enabled = false;
 			this->dateEmbauchePersonnelPicker->Enabled = false;
+			this->idSuperviseurPersonnelBox->Enabled = false;
 
 			// Stocks
 			this->idStockBox->Enabled = true;
@@ -148,6 +228,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->dateEmissionCommandePicker->Enabled = false;
 			this->moyenPayementCommandeBox->Enabled = false;
 			this->datePayementCommandePicker->Enabled = false;
+			this->idClientCommandeBox->Enabled = false;
 
 
 			name = L"Affichage";
@@ -160,6 +241,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->nomPersonnelBox->Enabled = false;
 			this->prenomPersonnelBox->Enabled = false;
 			this->dateEmbauchePersonnelPicker->Enabled = false;
+			this->idSuperviseurPersonnelBox->Enabled = false;
 
 			// Stocks
 			this->idStockBox->Enabled = true;
@@ -177,6 +259,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->dateEmissionCommandePicker->Enabled = false;
 			this->moyenPayementCommandeBox->Enabled = false;
 			this->datePayementCommandePicker->Enabled = false;
+			this->idClientCommandeBox->Enabled = false;
 
 
 			name = L"Suppression";
@@ -189,6 +272,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->nomPersonnelBox->Enabled = true;
 			this->prenomPersonnelBox->Enabled = true;
 			this->dateEmbauchePersonnelPicker->Enabled = true;
+			this->idSuperviseurPersonnelBox->Enabled = true;
 
 			// Stocks
 			this->idStockBox->Enabled = false;
@@ -206,6 +290,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->dateEmissionCommandePicker->Enabled = true;
 			this->moyenPayementCommandeBox->Enabled = true;
 			this->datePayementCommandePicker->Enabled = true;
+			this->idClientCommandeBox->Enabled = true;
 
 			name = L"Ajout";
 			break;
@@ -217,6 +302,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->nomPersonnelBox->Enabled = true;
 			this->prenomPersonnelBox->Enabled = true;
 			this->dateEmbauchePersonnelPicker->Enabled = true;
+			this->idSuperviseurPersonnelBox->Enabled = true;
 
 			// Stocks
 			this->idStockBox->Enabled = true;
@@ -234,6 +320,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->dateEmissionCommandePicker->Enabled = true;
 			this->moyenPayementCommandeBox->Enabled = true;
 			this->datePayementCommandePicker->Enabled = true;
+			this->idClientCommandeBox->Enabled = true;
 
 			name = L"Modification";
 			break;
@@ -260,7 +347,7 @@ System::Void ProjetPOO::Projet::onChangeTab(System::Object^ sender, System::Wind
 System::Void ProjetPOO::Projet::afficherTable()
 {
 	if(isActive(tabPersonnel))
-		sqlHandler->SelectPersonnel();
+		sqlHandler->AfficherPersonnel();
 	else if(isActive(tabStocks))
 		sqlHandler->fillGrid(Table::ARTICLES);
 	else if(isActive(tabCommandes))
@@ -272,13 +359,6 @@ System::Void ProjetPOO::Projet::afficherTable()
 
 	updateRechercheColonneBox();
 }
-System::Void ProjetPOO::Projet::clickOnBoutonChercher(System::Object^ sender, System::EventArgs^ e)
-{
-	if(isActive(tabPersonnel))
-		sqlHandler->searchByColumn(Table::PERSONNELS, "Id_personne", this->idPersonnelBox->Text, true);
-	else if(isActive(tabCommandes))
-		sqlHandler->searchByColumn(Table::COMMANDES, "Reference_commande", this->idCommandeBox->Text, false);
-}
 System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e)
 {
 	if(isActive(tabPersonnel))
@@ -287,6 +367,12 @@ System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::W
 		this->nomPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[1]->Value->ToString();
 		this->prenomPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[2]->Value->ToString();
 		this->dateEmbauchePersonnelPicker->Text = this->dataGridView->Rows[e->RowIndex]->Cells[3]->Value->ToString();
+		currentPersonnelAdresse->setIdAdresse((int) this->dataGridView->Rows[e->RowIndex]->Cells[5]->Value);
+		currentPersonnelAdresse->setNumero(Convert::ToInt32(this->dataGridView->Rows[e->RowIndex]->Cells[6]->Value->ToString()));
+		currentPersonnelAdresse->setRue(this->dataGridView->Rows[e->RowIndex]->Cells[7]->Value->ToString());
+		currentPersonnelAdresse->getVille()->setIdVille(Convert::ToInt32(this->dataGridView->Rows[e->RowIndex]->Cells[8]->Value->ToString()));
+		currentPersonnelAdresse->getVille()->setNom(this->dataGridView->Rows[e->RowIndex]->Cells[9]->Value->ToString());
+		currentPersonnelAdresse->getVille()->setCodePostal(this->dataGridView->Rows[e->RowIndex]->Cells[10]->Value->ToString());
 
 		addHistorique(SqlQueries::AjouterPersonnel(gcnew PersonnelMap(5, "Rajo", "Eno", gcnew AdresseMap(8, gcnew VilleMap(6, "Obernai", "67210"), "Rue du landsberg", 152), DateTime::Now, 9)));
 	}
@@ -331,4 +417,50 @@ System::Void ProjetPOO::Projet::updateArticlesCommande(ArrayList^ list)
 Collections::ArrayList^ ProjetPOO::Projet::getArticlesCommande()
 {
 	return articlesCommande;
+}
+
+ProjetPOO::SqlMode ProjetPOO::Projet::getMode()
+{
+	return currentMode;
+}
+
+AdresseMap^ ProjetPOO::Projet::getPersonnelAdresse()
+{
+	return currentPersonnelAdresse;
+}
+
+void ProjetPOO::Projet::setAdresseValue(int id, AdresseMap^ adresse)
+{
+	switch(id)
+	{
+		case 0:
+			currentPersonnelAdresse = adresse;
+			break;
+		case 1:
+			currentClientAdresseLivraison = adresse;
+			break;
+		case 2:
+			currentClientAdresseFacturation = adresse;
+			break;
+		default:
+			break;
+	}
+}
+
+System::Void ProjetPOO::Projet::clickOnBoutonAdressePersonnel(System::Object^ sender, System::EventArgs^ e)
+{
+	AdressePopup^ popup = gcnew AdressePopup(currentPersonnelAdresse, 0);
+	popup->Show();
+}
+
+System::Void ProjetPOO::Projet::clickOnBoutonAdresseLivraisonClient(System::Object^ sender, System::EventArgs^ e)
+{
+	AdressePopup^ popup = gcnew AdressePopup(currentClientAdresseLivraison, 1);
+	popup->Show();
+}
+
+System::Void ProjetPOO::Projet::clickOnBoutonAdresseFacturationClient(System::Object^ sender, System::EventArgs^ e)
+{
+	AdressePopup^ popup = gcnew AdressePopup(currentClientAdresseFacturation, 2);
+	popup->Show();
 }

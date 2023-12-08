@@ -1,4 +1,5 @@
 #include "SqlQuery.h"
+#include "Projet.h"
 
 SqlQuery::SqlQuery()
 {
@@ -21,6 +22,7 @@ void SqlQuery::newQuery(bool isTransaction, String^ query)
 void SqlQuery::addQuery(String^ query)
 {
 	this->queries->Add(query);
+	ProjetPOO::Projet::instance->addHistorique(query);
 }
 
 void SqlQuery::useTransaction()

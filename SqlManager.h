@@ -18,7 +18,7 @@ namespace ProjetPOOServices
 		SqlManager();
 		Data::DataSet^ getRows(SqlQuery^, Table^);
 		Data::DataSet^ getRows(SqlQuery^, String^);
-		int actionRows(SqlQuery^);
+		void actionRows(SqlQuery^);
 		int getLastCount() { return lastCount; }
 	};
 }

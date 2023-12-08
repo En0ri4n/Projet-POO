@@ -1,5 +1,4 @@
 #include "SqlHandler.h"
-#include "SqlQueries.h"
 
 using namespace ProjetPOOServices;
 
@@ -39,21 +38,88 @@ void ProjetPOOServices::SqlHandler::fillGrid(String^ query, String^ tableName)
 	fill(tableName);
 }
 
-void ProjetPOOServices::SqlHandler::searchByColumn(Table^ table, String^ columnName, String^ value, bool isNumeric)
+void ProjetPOOServices::SqlHandler::action(String^)
 {
-	if(isNumeric)
-		this->query->newQuery(false, String::Format("SELECT * FROM {0} WHERE {1}={2}", table->getName(), columnName, value));
-	else
-		this->query->newQuery(false, String::Format("SELECT * FROM {0} WHERE {1} LIKE '%{2}%'", table->getName(), columnName, value));
-	
-	fill(table);
+	this->manager->actionRows(this->query);
 }
 
-void ProjetPOOServices::SqlHandler::SelectPersonnel()
+void ProjetPOOServices::SqlHandler::action(Table^ table)
+{
+	action(table->getName());
+}
+
+void ProjetPOOServices::SqlHandler::AfficherPersonnel()
 {
 	this->query->newQuery(false, SqlQueries::listePersonnel());
-	fill("Personnel");
+	fill(Table::PERSONNELS);
 }
+
+void ProjetPOOServices::SqlHandler::AjouterPersonnel(PersonnelMap^ personnel)
+{
+	this->query->newQuery(false, SqlQueries::AjouterPersonnel(personnel));
+	action(Table::PERSONNELS);
+}
+
+void ProjetPOOServices::SqlHandler::ModifierPersonnel(PersonnelMap^ personnel)
+{
+	this->query->newQuery(false, SqlQueries::ModifierPersonnel(personnel));
+	action(Table::PERSONNELS);
+}
+
+void ProjetPOOServices::SqlHandler::SupprimerPersonnel(PersonnelMap^ personnel)
+{
+	this->query->newQuery(false, SqlQueries::SupprimerPersonnel(personnel));
+	action(Table::PERSONNELS);
+}
+
+void ProjetPOOServices::SqlHandler::AfficherCommande()
+{
+	this->query->newQuery(false, SqlQueries::listeCommande());
+	fill(Table::COMMANDES);
+}
+
+void ProjetPOOServices::SqlHandler::AjouterCommande(CommandeMap^ commande)
+{
+	this->query->newQuery(false, SqlQueries::AjouterCommande(commande));
+	action(Table::COMMANDES);
+}
+
+void ProjetPOOServices::SqlHandler::ModifierCommande(CommandeMap^ commande)
+{
+	this->query->newQuery(false, SqlQueries::ModifierCommande(commande));
+	action(Table::COMMANDES);
+}
+
+void ProjetPOOServices::SqlHandler::SupprimerCommande(CommandeMap^ commande)
+{
+	this->query->newQuery(false, SqlQueries::SupprimerCommande(commande));
+	action(Table::COMMANDES);
+}
+
+void ProjetPOOServices::SqlHandler::AfficherArticle()
+{
+	this->query->newQuery(false, SqlQueries::listeArticles());
+	fill(Table::ARTICLES);
+}
+
+void ProjetPOOServices::SqlHandler::AjouterArticle(ArticleMap^ article)
+{
+	this->query->newQuery(false, SqlQueries::AjouterArticle(article));
+	action(Table::ARTICLES);
+}
+
+void ProjetPOOServices::SqlHandler::ModifierArticle(ArticleMap^ article)
+{
+	this->query->newQuery(false, SqlQueries::ModifierArticle(article));
+	action(Table::ARTICLES);
+}
+
+void ProjetPOOServices::SqlHandler::SupprimerArticle(ArticleMap^ article)
+{
+	this->query->newQuery(false, SqlQueries::SupprimerArticle(article));
+	action(Table::ARTICLES);
+}
+
 
 void ProjetPOOServices::SqlHandler::fillGrid(Table^ table, DataGridView^ grid)
 {

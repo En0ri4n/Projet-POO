@@ -18,7 +18,7 @@ System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, String^ table)
 	this->dataSet->Clear();
 	this->command->CommandText = query->toQuery();
 	this->dataAdapter->SelectCommand = this->command;
-	lastCount = this->dataAdapter->Fill(this->dataSet, table);
+	this->dataAdapter->Fill(this->dataSet, table);
 
 	return this->dataSet;
 }
@@ -28,12 +28,11 @@ System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, Table^ table)
 	return getRows(query, table->getName());
 }
 
-int SqlManager::actionRows(SqlQuery^ query)
+void SqlManager::actionRows(SqlQuery^ query)
 {
 	this->command->CommandText = query->toQuery();
 	this->dataAdapter->SelectCommand = this->command;
 	this->connection->Open();
-	int action = this->command->ExecuteNonQuery();
+	lastCount = this->command->ExecuteNonQuery();
 	this->connection->Close();
-	return action;
 }
