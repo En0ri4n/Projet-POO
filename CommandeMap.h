@@ -32,5 +32,7 @@ namespace ProjetPOOMappage
 		int getIdClient();
 		void setListeArticles(Collections::ArrayList^);
 		Collections::ArrayList^ getListeArticles();
+
+		static CommandeMap^ from(String^);
 	};
 }

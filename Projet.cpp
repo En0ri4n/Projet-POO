@@ -283,8 +283,6 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			break;
 		case ProjetPOO::AJOUTER:
 		case ProjetPOO::MODIFIER:
-			this->boutonModifier->Enabled = false;
-
 			// Personnel
 			this->nomPersonnelBox->Enabled = true;
 			this->prenomPersonnelBox->Enabled = true;
@@ -404,6 +402,7 @@ System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::W
 		this->moyenPayementCommandeBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[3]->Value->ToString();
 		this->datePayementCommandePicker->Text = this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString();
 		this->idClientCommandeBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[6]->Value->ToString();
+		sqlHandler->remplirArticlesCommande(CommandeMap::from(this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString()));
 	}
 	else if(isActive(tabClients))
 	{

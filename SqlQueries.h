@@ -37,6 +37,14 @@ namespace ProjetPOOServices
 		static String^ ModifierCommandeArticle(CommandeMap^);
 		static String^ SupprimerCommandeArticle(CommandeMap^);
 
+		static String^ getPanierMoyen();
+		static String^ getChiffreAffaire(DateTime^);
+		static String^ getProduitSousSeuilReapprovisionnement();
+		static String^ getMontantTotalClient(ClientMap^);
+		static String^ getProduitPlusVendu();
+		static String^ getProduitMoinsVendu();
+		static String^ getValeurCommercialStock();
+		static String^ getValeurAchatStock();
 	};
 }
 
