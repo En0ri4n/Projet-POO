@@ -158,6 +158,12 @@ void ProjetPOOServices::SqlHandler::remplirArticlesCommande(CommandeMap^ command
 	{
 		ArticleMap^ article = gcnew ArticleMap();
 		article->setIdArticle(row["Reference_article"]->ToString());
+		article->setNom(row["Nom_article"]->ToString());
+		article->setPrix(Convert::ToDouble(row["Prix_article_HT"]));
+		article->setCouleur(row["Couleur_article"]->ToString());
+		article->setTaxe(Convert::ToInt32(row["Pourcentage_taxe"]));
+		article->setNature(row["Nature_article"]->ToString());
+		article->setSeuilReapprovisionnement(Convert::ToInt32(row["Seuil_reapprovisionnement"]));
 		article->setQuantite(Convert::ToInt32(row["Quantite_article_commande"]));
 		article->setRemise(Convert::ToInt32(row["Pourcentage_remise_article"]));
 		articles->Add(article);

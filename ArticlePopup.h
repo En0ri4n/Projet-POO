@@ -97,7 +97,6 @@ namespace ProjetPOO
 			this->articlesDataGridView->Size = System::Drawing::Size(857, 285);
 			this->articlesDataGridView->TabIndex = 0;
 			this->articlesDataGridView->CellClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &ArticlePopup::clickOnCell);
-			this->articlesDataGridView->RowsAdded += gcnew System::Windows::Forms::DataGridViewRowsAddedEventHandler(this, &ArticlePopup::onRowAdded);
 			// 
 			// validerBouton
 			// 
@@ -130,10 +129,6 @@ namespace ProjetPOO
 			this->remiseArticleBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->remiseArticleBox->Location = System::Drawing::Point(174, 493);
-			this->remiseArticleBox->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4)
-			{
-				1, 0, 0, 0
-			});
 			this->remiseArticleBox->Name = L"remiseArticleBox";
 			this->remiseArticleBox->Size = System::Drawing::Size(156, 27);
 			this->remiseArticleBox->TabIndex = 3;
@@ -241,7 +236,6 @@ namespace ProjetPOO
 		System::Void clickOnRetirer(System::Object^ sender, System::EventArgs^ e);
 		System::Void clickOnCell(System::Object^, System::Windows::Forms::DataGridViewCellEventArgs^ e);
 		System::Void clickOnValider(System::Object^ sender, System::EventArgs^ e);
-		System::Void onRowAdded(System::Object^ sender, System::Windows::Forms::DataGridViewRowsAddedEventArgs^ e);
 		System::Void addColumns();
 };
 }

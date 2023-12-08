@@ -74,7 +74,8 @@ namespace ProjetPOO
 	private: System::Windows::Forms::Button^ boutonValider;
 	private: System::Windows::Forms::Label^ personnelTitreLabel;
 	private: System::Windows::Forms::TabPage^ tabAccueil;
-	private: System::Windows::Forms::Button^ button8;
+	private: System::Windows::Forms::Button^ connexionBouton;
+
 	private: System::Windows::Forms::Label^ passwordLabel;
 	private: System::Windows::Forms::TextBox^ passwordBox;
 	private: System::Windows::Forms::TextBox^ usernameBox;
@@ -99,6 +100,7 @@ namespace ProjetPOO
 		AdresseMap^ currentClientAdresseLivraison = gcnew AdresseMap;
 		AdresseMap^ currentClientAdresseFacturation = gcnew AdresseMap;
 		SqlMode currentMode;
+		bool estSuperviseur;
 
 	protected:
 
@@ -215,6 +217,8 @@ private: System::Windows::Forms::Label^ moisStatistiquesPicker;
 private: System::Windows::Forms::Button^ calculerStatistiqueBouton;
 private: System::Windows::Forms::NumericUpDown^ idClientStatistiqueBox;
 private: System::Windows::Forms::Label^ label3;
+private: System::Windows::Forms::CheckBox^ superviseurCheckBox;
+
 
 
 
@@ -244,6 +248,13 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->historiqueLabel = (gcnew System::Windows::Forms::Label());
 			   this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
 			   this->tabStatistiques = (gcnew System::Windows::Forms::TabPage());
+			   this->idClientStatistiqueBox = (gcnew System::Windows::Forms::NumericUpDown());
+			   this->label3 = (gcnew System::Windows::Forms::Label());
+			   this->calculerStatistiqueBouton = (gcnew System::Windows::Forms::Button());
+			   this->moisStatistiquesPicker = (gcnew System::Windows::Forms::Label());
+			   this->label1 = (gcnew System::Windows::Forms::Label());
+			   this->statistiqueBox = (gcnew System::Windows::Forms::ComboBox());
+			   this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
 			   this->tabClients = (gcnew System::Windows::Forms::TabPage());
 			   this->adresseFacturationClientLabel = (gcnew System::Windows::Forms::Label());
 			   this->adresseFacturationClientBouton = (gcnew System::Windows::Forms::Button());
@@ -310,7 +321,8 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->personnelTitreLabel = (gcnew System::Windows::Forms::Label());
 			   this->boutonValider = (gcnew System::Windows::Forms::Button());
 			   this->tabAccueil = (gcnew System::Windows::Forms::TabPage());
-			   this->button8 = (gcnew System::Windows::Forms::Button());
+			   this->superviseurCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			   this->connexionBouton = (gcnew System::Windows::Forms::Button());
 			   this->passwordLabel = (gcnew System::Windows::Forms::Label());
 			   this->passwordBox = (gcnew System::Windows::Forms::TextBox());
 			   this->usernameBox = (gcnew System::Windows::Forms::TextBox());
@@ -324,15 +336,9 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->rechercheBox = (gcnew System::Windows::Forms::TextBox());
 			   this->voirRequetesCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			   this->clearBouton = (gcnew System::Windows::Forms::Button());
-			   this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
-			   this->statistiqueBox = (gcnew System::Windows::Forms::ComboBox());
-			   this->label1 = (gcnew System::Windows::Forms::Label());
-			   this->moisStatistiquesPicker = (gcnew System::Windows::Forms::Label());
-			   this->calculerStatistiqueBouton = (gcnew System::Windows::Forms::Button());
-			   this->label3 = (gcnew System::Windows::Forms::Label());
-			   this->idClientStatistiqueBox = (gcnew System::Windows::Forms::NumericUpDown());
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabStatistiques->SuspendLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientStatistiqueBox))->BeginInit();
 			   this->tabClients->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientBox))->BeginInit();
 			   this->tabCommandes->SuspendLayout();
@@ -347,7 +353,6 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idPersonnelBox))->BeginInit();
 			   this->tabAccueil->SuspendLayout();
 			   this->tabController->SuspendLayout();
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientStatistiqueBox))->BeginInit();
 			   this->SuspendLayout();
 			   // 
 			   // dataGridView
@@ -458,6 +463,94 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->tabStatistiques->TabIndex = 5;
 			   this->tabStatistiques->Text = L"Statistique";
 			   this->tabStatistiques->UseVisualStyleBackColor = true;
+			   // 
+			   // idClientStatistiqueBox
+			   // 
+			   this->idClientStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->idClientStatistiqueBox->Location = System::Drawing::Point(199, 162);
+			   this->idClientStatistiqueBox->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
+			   {
+				   999999999, 0, 0, 0
+			   });
+			   this->idClientStatistiqueBox->Name = L"idClientStatistiqueBox";
+			   this->idClientStatistiqueBox->Size = System::Drawing::Size(198, 27);
+			   this->idClientStatistiqueBox->TabIndex = 55;
+			   // 
+			   // label3
+			   // 
+			   this->label3->AutoSize = true;
+			   this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->label3->Location = System::Drawing::Point(115, 164);
+			   this->label3->Name = L"label3";
+			   this->label3->Size = System::Drawing::Size(78, 20);
+			   this->label3->TabIndex = 54;
+			   this->label3->Text = L"ID Client :";
+			   // 
+			   // calculerStatistiqueBouton
+			   // 
+			   this->calculerStatistiqueBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->calculerStatistiqueBouton->Location = System::Drawing::Point(221, 273);
+			   this->calculerStatistiqueBouton->Name = L"calculerStatistiqueBouton";
+			   this->calculerStatistiqueBouton->Size = System::Drawing::Size(142, 32);
+			   this->calculerStatistiqueBouton->TabIndex = 53;
+			   this->calculerStatistiqueBouton->Text = L"Calculer 🧮";
+			   this->calculerStatistiqueBouton->UseVisualStyleBackColor = true;
+			   // 
+			   // moisStatistiquesPicker
+			   // 
+			   this->moisStatistiquesPicker->AutoSize = true;
+			   this->moisStatistiquesPicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->moisStatistiquesPicker->Location = System::Drawing::Point(140, 126);
+			   this->moisStatistiquesPicker->Name = L"moisStatistiquesPicker";
+			   this->moisStatistiquesPicker->Size = System::Drawing::Size(53, 20);
+			   this->moisStatistiquesPicker->TabIndex = 52;
+			   this->moisStatistiquesPicker->Text = L"Mois :";
+			   // 
+			   // label1
+			   // 
+			   this->label1->AutoSize = true;
+			   this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->label1->Location = System::Drawing::Point(192, 3);
+			   this->label1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
+			   this->label1->Name = L"label1";
+			   this->label1->Size = System::Drawing::Size(205, 42);
+			   this->label1->TabIndex = 51;
+			   this->label1->Text = L"Statistiques";
+			   // 
+			   // statistiqueBox
+			   // 
+			   this->statistiqueBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			   this->statistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->statistiqueBox->FormattingEnabled = true;
+			   this->statistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(9)
+			   {
+				   L"Panier moyen (après remise)", L"Chiffre d’affaire sur un mois en particulier",
+					   L"Produits sous le seuil de réapprovisionnement", L"Montant total des achats pour un client", L"Les 10 articles les plus vendus",
+					   L"Les 10 articles les moins vendus", L"Valeur commerciale du stock", L"Valeur d’achat du stock", L"Valeur du stock"
+			   });
+			   this->statistiqueBox->Location = System::Drawing::Point(73, 62);
+			   this->statistiqueBox->Name = L"statistiqueBox";
+			   this->statistiqueBox->Size = System::Drawing::Size(414, 28);
+			   this->statistiqueBox->TabIndex = 9;
+			   // 
+			   // dateTimePicker1
+			   // 
+			   this->dateTimePicker1->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->dateTimePicker1->CustomFormat = L"MMMM yyyy";
+			   this->dateTimePicker1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->dateTimePicker1->Format = System::Windows::Forms::DateTimePickerFormat::Custom;
+			   this->dateTimePicker1->Location = System::Drawing::Point(199, 121);
+			   this->dateTimePicker1->Name = L"dateTimePicker1";
+			   this->dateTimePicker1->Size = System::Drawing::Size(198, 27);
+			   this->dateTimePicker1->TabIndex = 0;
 			   // 
 			   // tabClients
 			   // 
@@ -1286,7 +1379,8 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   // 
 			   // tabAccueil
 			   // 
-			   this->tabAccueil->Controls->Add(this->button8);
+			   this->tabAccueil->Controls->Add(this->superviseurCheckBox);
+			   this->tabAccueil->Controls->Add(this->connexionBouton);
 			   this->tabAccueil->Controls->Add(this->passwordLabel);
 			   this->tabAccueil->Controls->Add(this->passwordBox);
 			   this->tabAccueil->Controls->Add(this->usernameBox);
@@ -1302,18 +1396,28 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->tabAccueil->Text = L"Accueil";
 			   this->tabAccueil->UseVisualStyleBackColor = true;
 			   // 
-			   // button8
+			   // superviseurCheckBox
 			   // 
-			   this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->superviseurCheckBox->AutoSize = true;
+			   this->superviseurCheckBox->Location = System::Drawing::Point(401, 242);
+			   this->superviseurCheckBox->Name = L"superviseurCheckBox";
+			   this->superviseurCheckBox->Size = System::Drawing::Size(82, 17);
+			   this->superviseurCheckBox->TabIndex = 13;
+			   this->superviseurCheckBox->Text = L"Superviseur";
+			   this->superviseurCheckBox->UseVisualStyleBackColor = true;
+			   // 
+			   // connexionBouton
+			   // 
+			   this->connexionBouton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->button8->Location = System::Drawing::Point(186, 237);
-			   this->button8->Margin = System::Windows::Forms::Padding(2);
-			   this->button8->Name = L"button8";
-			   this->button8->Size = System::Drawing::Size(208, 24);
-			   this->button8->TabIndex = 12;
-			   this->button8->Text = L"Connexion";
-			   this->button8->UseVisualStyleBackColor = true;
-			   this->button8->Click += gcnew System::EventHandler(this, &Projet::clickOnConnexionBDD);
+			   this->connexionBouton->Location = System::Drawing::Point(186, 237);
+			   this->connexionBouton->Margin = System::Windows::Forms::Padding(2);
+			   this->connexionBouton->Name = L"connexionBouton";
+			   this->connexionBouton->Size = System::Drawing::Size(208, 24);
+			   this->connexionBouton->TabIndex = 12;
+			   this->connexionBouton->Text = L"Connexion";
+			   this->connexionBouton->UseVisualStyleBackColor = true;
+			   this->connexionBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnConnexionBDD);
 			   // 
 			   // passwordLabel
 			   // 
@@ -1463,94 +1567,6 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->clearBouton->UseVisualStyleBackColor = true;
 			   this->clearBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnClearBouton);
 			   // 
-			   // dateTimePicker1
-			   // 
-			   this->dateTimePicker1->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
-				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->dateTimePicker1->CustomFormat = L"MMMM yyyy";
-			   this->dateTimePicker1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->dateTimePicker1->Format = System::Windows::Forms::DateTimePickerFormat::Custom;
-			   this->dateTimePicker1->Location = System::Drawing::Point(199, 121);
-			   this->dateTimePicker1->Name = L"dateTimePicker1";
-			   this->dateTimePicker1->Size = System::Drawing::Size(198, 27);
-			   this->dateTimePicker1->TabIndex = 0;
-			   // 
-			   // statistiqueBox
-			   // 
-			   this->statistiqueBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
-			   this->statistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->statistiqueBox->FormattingEnabled = true;
-			   this->statistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(9)
-			   {
-				   L"Panier moyen (après remise)", L"Chiffre d’affaire sur un mois en particulier",
-					   L"Produits sous le seuil de réapprovisionnement", L"Montant total des achats pour un client", L"Les 10 articles les plus vendus",
-					   L"Les 10 articles les moins vendus", L"Valeur commerciale du stock", L"Valeur d’achat du stock", L"Valeur du stock"
-			   });
-			   this->statistiqueBox->Location = System::Drawing::Point(73, 62);
-			   this->statistiqueBox->Name = L"statistiqueBox";
-			   this->statistiqueBox->Size = System::Drawing::Size(414, 28);
-			   this->statistiqueBox->TabIndex = 9;
-			   // 
-			   // label1
-			   // 
-			   this->label1->AutoSize = true;
-			   this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label1->Location = System::Drawing::Point(192, 3);
-			   this->label1->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label1->Name = L"label1";
-			   this->label1->Size = System::Drawing::Size(205, 42);
-			   this->label1->TabIndex = 51;
-			   this->label1->Text = L"Statistiques";
-			   // 
-			   // moisStatistiquesPicker
-			   // 
-			   this->moisStatistiquesPicker->AutoSize = true;
-			   this->moisStatistiquesPicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
-				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->moisStatistiquesPicker->Location = System::Drawing::Point(140, 126);
-			   this->moisStatistiquesPicker->Name = L"moisStatistiquesPicker";
-			   this->moisStatistiquesPicker->Size = System::Drawing::Size(53, 20);
-			   this->moisStatistiquesPicker->TabIndex = 52;
-			   this->moisStatistiquesPicker->Text = L"Mois :";
-			   // 
-			   // calculerStatistiqueBouton
-			   // 
-			   this->calculerStatistiqueBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
-				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->calculerStatistiqueBouton->Location = System::Drawing::Point(221, 273);
-			   this->calculerStatistiqueBouton->Name = L"calculerStatistiqueBouton";
-			   this->calculerStatistiqueBouton->Size = System::Drawing::Size(142, 32);
-			   this->calculerStatistiqueBouton->TabIndex = 53;
-			   this->calculerStatistiqueBouton->Text = L"Calculer 🧮";
-			   this->calculerStatistiqueBouton->UseVisualStyleBackColor = true;
-			   // 
-			   // label3
-			   // 
-			   this->label3->AutoSize = true;
-			   this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label3->Location = System::Drawing::Point(115, 164);
-			   this->label3->Name = L"label3";
-			   this->label3->Size = System::Drawing::Size(78, 20);
-			   this->label3->TabIndex = 54;
-			   this->label3->Text = L"ID Client :";
-			   // 
-			   // idClientStatistiqueBox
-			   // 
-			   this->idClientStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
-				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->idClientStatistiqueBox->Location = System::Drawing::Point(199, 162);
-			   this->idClientStatistiqueBox->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
-			   {
-				   999999999, 0, 0, 0
-			   });
-			   this->idClientStatistiqueBox->Name = L"idClientStatistiqueBox";
-			   this->idClientStatistiqueBox->Size = System::Drawing::Size(198, 27);
-			   this->idClientStatistiqueBox->TabIndex = 55;
-			   // 
 			   // Projet
 			   // 
 			   this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -1583,6 +1599,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->EndInit();
 			   this->tabStatistiques->ResumeLayout(false);
 			   this->tabStatistiques->PerformLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientStatistiqueBox))->EndInit();
 			   this->tabClients->ResumeLayout(false);
 			   this->tabClients->PerformLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientBox))->EndInit();
@@ -1602,7 +1619,6 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->tabAccueil->ResumeLayout(false);
 			   this->tabAccueil->PerformLayout();
 			   this->tabController->ResumeLayout(false);
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientStatistiqueBox))->EndInit();
 			   this->ResumeLayout(false);
 			   this->PerformLayout();
 

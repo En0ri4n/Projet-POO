@@ -32,11 +32,23 @@ System::Void ProjetPOO::Projet::setConnected(bool connected)
 
 	if(connected)
 	{
-		this->tabController->Controls->Add(this->tabPersonnel);
+		if(tabController->TabPages->Count > 1)
+			return;
+
+		estSuperviseur = this->superviseurCheckBox->Checked;
+		if(estSuperviseur)
+			this->tabController->Controls->Add(this->tabPersonnel);
 		this->tabController->Controls->Add(this->tabStocks);
 		this->tabController->Controls->Add(this->tabCommandes);
 		this->tabController->Controls->Add(this->tabClients);
 		this->tabController->Controls->Add(this->tabStatistiques);
+
+		this->usernameLabel->Enabled = false;
+		this->usernameBox->Enabled = false;
+		this->passwordLabel->Enabled = false;
+		this->passwordBox->Enabled = false;
+		this->connexionBouton->Enabled = false;
+		this->superviseurCheckBox->Enabled = false;
 
 		boutonAfficher->Enabled = false;
 		currentMode = AFFICHER;
@@ -189,6 +201,9 @@ System::Void ProjetPOO::Projet::clickOnBoutonValider(System::Object^ sender, Sys
 }
 System::Void ProjetPOO::Projet::clickOnConnexionBDD(System::Object^ sender, System::EventArgs^ e)
 {
+	if(this->connected)
+		return;
+
 	addHistorique(L"Connexion en cours...");
 	setConnected(true);
 	changeMode(currentMode);
@@ -205,7 +220,7 @@ System::Void ProjetPOO::Projet::addHistorique(System::String^ historique)
 System::Void ProjetPOO::Projet::addQueryHistorique(System::String^ query)
 {
 	if(this->voirRequetesCheckBox->Checked)
-		addHistorique(query);
+		addHistorique("[@] " + query);
 }
 System::Void ProjetPOO::Projet::clickOnBoutonAfficher(System::Object^ sender, System::EventArgs^ e)
 {
@@ -301,7 +316,6 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			// Commandes
 			this->dateLivraisonCommandePicker->Enabled = true;
 			this->dateEmissionCommandePicker->Enabled = true;
-			this->moyenPayementCommandeBox->Enabled = true;
 			this->datePayementCommandePicker->Enabled = true;
 			this->idClientCommandeBox->Enabled = true;
 
@@ -315,6 +329,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 				this->idPersonnelBox->Enabled = false;
 				this->idStockBox->Enabled = false;
 				this->idCommandeBox->Enabled = false;
+				this->moyenPayementCommandeBox->Enabled = true;
 				this->idClientBox->Enabled = false;
 
 				this->boutonAjouter->Enabled = false;
@@ -325,6 +340,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 				this->idPersonnelBox->Enabled = true;
 				this->idStockBox->Enabled = true;
 				this->idCommandeBox->Enabled = true;
+				this->moyenPayementCommandeBox->Enabled = false;
 				this->idClientBox->Enabled = true;
 
 				this->boutonModifier->Enabled = false;

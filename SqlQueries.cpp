@@ -841,8 +841,46 @@ String^ ProjetPOOServices::SqlQueries::ModifierCommandeArticle(CommandeMap^ comm
 
 String^ ProjetPOOServices::SqlQueries::SupprimerCommandeArticle(CommandeMap^ commande)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: insert return statement here
+	String^ query = "";
+
+	for each(ArticleMap ^ article in commande->getListeArticles())
+	{
+		query->Concat(String::Format("DECLARE @Reference_commande VARCHAR(30); " +
+			"DECLARE @Reference_article VARCHAR(30); " +
+			"DECLARE @quantite_article INT; " +
+			" " +
+			"SET @Reference_commande = '{0}'; " +
+			"SET @Reference_article = '{1}'; " +
+			"BEGIN TRANSACTION " +
+			" " +
+			"IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].Commandes WHERE Commandes.Reference_commande = @Reference_commande) " +
+			"BEGIN  " +
+			"    ROLLBACK; " +
+			"    PRINT 'Impossible de supprimer une commande inexistante' " +
+			"END " +
+			" " +
+			"ELSE IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].constituer WHERE constituer.Reference_article = @Reference_article) " +
+			"BEGIN " +
+			"    ROLLBACK; " +
+			"    PRINT 'Impossible de supprimer un article inexistant' " +
+			"END " +
+			" " +
+			"ELSE  " +
+			"BEGIN " +
+			"    SET @quantite_article = (SELECT constituer.Quantite_article_commande FROM [Projet].[dbo].constituer WHERE constituer.Reference_article = @Reference_article AND constituer.Reference_commande = @Reference_commande); " +
+			"    UPDATE [Projet].[dbo].Articles " +
+			"        SET Quantite_article = Quantite_article + @quantite_article " +
+			"    WHERE Articles.Reference_article = @Reference_article; " +
+			" " +
+			"    DELETE FROM [Projet].[dbo].constituer " +
+			"    WHERE constituer.Reference_article = @Reference_article; " +
+			"END; " +
+			"COMMIT; ",
+			commande->getIdCommande(),
+			article->getIdArticle()));
+	}
+
+	return query;
 }
 
 String^ ProjetPOOServices::SqlQueries::getPanierMoyen()
