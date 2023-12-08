@@ -1,5 +1,4 @@
--- Utiliser la base de données 'Projet'
-USE bdd;
+USE Projet;
 
 
 CREATE TABLE Villes(
@@ -44,6 +43,8 @@ CREATE TABLE Clients(
    Id_adresse_livraison INT NOT NULL,
    Id_adresse_facturation INT NOT NULL,
    PRIMARY KEY(Id_client),
+   UNIQUE(Id_adresse_livraison),
+   UNIQUE(Id_adresse_facturation),
    FOREIGN KEY(Id_client) REFERENCES Personnes(Id_personne),
    FOREIGN KEY(Id_adresse_livraison) REFERENCES Adresses(Id_adresse),
    FOREIGN KEY(Id_adresse_facturation) REFERENCES Adresses(Id_adresse)
@@ -56,20 +57,20 @@ CREATE TABLE Commandes(
    Moyen_paiement VARCHAR(30)  NOT NULL,
    Date_paiement DATE NOT NULL,
    Pourcentage_remise TINYINT NOT NULL,
-   Id_client INT NOT NULL,
+   Id_client INT,
    PRIMARY KEY(Reference_commande),
    FOREIGN KEY(Id_client) REFERENCES Clients(Id_client)
 );
 
 CREATE TABLE Personnels(
-   Id_personne INT,
+   Id_personnel INT,
    Date_embauche DATE NOT NULL,
    Id_adresse INT NOT NULL,
    Id_superieur INT,
-   PRIMARY KEY(Id_personne),
-   FOREIGN KEY(Id_personne) REFERENCES Personnes(Id_personne),
+   PRIMARY KEY(Id_personnel),
+   FOREIGN KEY(Id_personnel) REFERENCES Personnes(Id_personne),
    FOREIGN KEY(Id_adresse) REFERENCES Adresses(Id_adresse),
-   FOREIGN KEY(Id_superieur) REFERENCES Personnels(Id_personne)
+   FOREIGN KEY(Id_superieur) REFERENCES Personnels(Id_personnel)
 );
 
 CREATE TABLE constituer(
@@ -590,56 +591,56 @@ insert into Personnes (Nom, Prenom) values ('Jaime', 'Rhea');
 insert into Personnes (Nom, Prenom) values ('Sail', 'Katalin');
 insert into Personnes (Nom, Prenom) values ('Varrow', 'Cobby');
 
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (1, '2020-05-18', 1, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (2, '2019-11-29', 2, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (3, '2015-12-30', 3, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (4, '2020-06-20', 4, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (5, '2018-09-10', 5, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (6, '2019-12-29', 6, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (7, '2018-02-12', 7, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (8, '2018-11-06', 8, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (9, '2022-08-19', 9, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (10, '2023-03-07', 10, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (11, '2016-10-07', 11, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (12, '2023-08-02', 12, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (13, '2020-04-9', 13, NULL);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (14, '2017-7-09', 14, 1);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (15, '2021-5-17', 15, 1);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (16, '2017-04-13', 16, 1);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (17, '2015-09-13', 17, 2);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (18, '2016-6-20', 18, 2);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (19, '2019-03-09', 19, 2);
-insert into Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (20, '2020-06-21', 20, 3);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (21, '2017-02-07', 21, 3);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (22, '2022-05-22', 22, 3);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (23, '2019-5-06', 23, 4);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (24, '2015-5-31', 24, 4);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (25, '2017-07-20', 25, 4);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (26, '2019-06-04', 26, 5);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (27, '2020-02-26', 27, 5);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (28, '2023-09-6', 28, 5);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (29, '2015-06-08', 29, 6);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (30, '2019-7-8', 30, 6);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (31, '2021-07-27', 31, 6);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (32, '2019-08-08', 32, 7);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (33, '2022-01-13', 33, 7);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (34, '2018-04-23', 34, 7);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (35, '2017-6-01', 35, 8);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (36, '2021-03-18', 36, 8);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (37, '2019-02-9', 37, 8);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (38, '2016-07-02', 38, 9);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (39, '2018-05-09', 39, 9);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (40, '2020-09-27', 40, 9);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (41, '2017-04-6', 41, 10);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (42, '2022-07-9', 42, 10);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (43, '2019-08-03', 43, 10);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (44, '2016-7-20', 44, 11);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (45, '2018-01-25', 45, 11);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (46, '2018-08-13', 46, 11);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (47, '2016-02-27', 47, 12);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (48, '2023-09-02', 48, 12);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (49, '2019-08-17', 49, 12);
-INSERT INTO Personnels (Id_personne, Date_embauche, Id_adresse, Id_superieur) VALUES (50, '2019-04-07', 50, 13);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (1, '2020-05-18', 1, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (2, '2019-11-29', 2, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (3, '2015-12-30', 3, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (4, '2020-06-20', 4, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (5, '2018-09-10', 5, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (6, '2019-12-29', 6, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (7, '2018-02-12', 7, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (8, '2018-11-06', 8, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (9, '2022-08-19', 9, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (10, '2023-03-07', 10, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (11, '2016-10-07', 11, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (12, '2023-08-02', 12, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (13, '2020-04-9', 13, NULL);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (14, '2017-7-09', 14, 1);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (15, '2021-5-17', 15, 1);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (16, '2017-04-13', 16, 1);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (17, '2015-09-13', 17, 2);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (18, '2016-6-20', 18, 2);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (19, '2019-03-09', 19, 2);
+insert into Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (20, '2020-06-21', 20, 3);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (21, '2017-02-07', 21, 3);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (22, '2022-05-22', 22, 3);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (23, '2019-5-06', 23, 4);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (24, '2015-5-31', 24, 4);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (25, '2017-07-20', 25, 4);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (26, '2019-06-04', 26, 5);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (27, '2020-02-26', 27, 5);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (28, '2023-09-6', 28, 5);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (29, '2015-06-08', 29, 6);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (30, '2019-7-8', 30, 6);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (31, '2021-07-27', 31, 6);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (32, '2019-08-08', 32, 7);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (33, '2022-01-13', 33, 7);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (34, '2018-04-23', 34, 7);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (35, '2017-6-01', 35, 8);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (36, '2021-03-18', 36, 8);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (37, '2019-02-9', 37, 8);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (38, '2016-07-02', 38, 9);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (39, '2018-05-09', 39, 9);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (40, '2020-09-27', 40, 9);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (41, '2017-04-6', 41, 10);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (42, '2022-07-9', 42, 10);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (43, '2019-08-03', 43, 10);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (44, '2016-7-20', 44, 11);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (45, '2018-01-25', 45, 11);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (46, '2018-08-13', 46, 11);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (47, '2016-02-27', 47, 12);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (48, '2023-09-02', 48, 12);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (49, '2019-08-17', 49, 12);
+INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) VALUES (50, '2019-04-07', 50, 13);
 
 insert into Clients (Id_client, Date_naissance, Date_premier_achat, Id_adresse_livraison, Id_adresse_facturation) values (51, '1984-04-22', '2022-05-02', 51, 52); 
 insert into Clients (Id_client, Date_naissance, Date_premier_achat, Id_adresse_livraison, Id_adresse_facturation) values (52, '1995-09-20', '2017-08-20', 53, 54);
