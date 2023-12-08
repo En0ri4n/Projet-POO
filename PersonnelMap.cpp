@@ -1,41 +1,13 @@
 #include "PersonnelMap.h"
 
-ProjetPOOMappage::PersonnelMap::PersonnelMap()
+void ProjetPOOMappage::PersonnelMap::setAdresse(AdresseMap^ adresse)
 {
-    this->idPersonnel = -1;
-    this->nom = "";
-    this->prenom = "";
-    this->dateEmbauche = DateTime::Now;
+	this->adresse = adresse;
 }
 
-void ProjetPOOMappage::PersonnelMap::setIdPersonnel(int idPersonne)
+ProjetPOOMappage::AdresseMap^ ProjetPOOMappage::PersonnelMap::getAdresse()
 {
-    this->idPersonnel = idPersonne;
-}
-
-int ProjetPOOMappage::PersonnelMap::getIdPersonnel()
-{
-    return this->idPersonnel;
-}
-
-void ProjetPOOMappage::PersonnelMap::setNom(String^ nom)
-{
-    this->nom = nom;
-}
-
-String^ ProjetPOOMappage::PersonnelMap::getNom()
-{
-    return this->nom;
-}
-
-void ProjetPOOMappage::PersonnelMap::setPrenom(String^ prenom)
-{
-    this->prenom = prenom;
-}
-
-String^ ProjetPOOMappage::PersonnelMap::getPrenom()
-{
-    return this->prenom;
+	return this->adresse;
 }
 
 void ProjetPOOMappage::PersonnelMap::setDateEmbauche(DateTime^ date)
@@ -46,4 +18,14 @@ void ProjetPOOMappage::PersonnelMap::setDateEmbauche(DateTime^ date)
 DateTime^ ProjetPOOMappage::PersonnelMap::getDateEmbauche()
 {
     return this->dateEmbauche;
+}
+
+void ProjetPOOMappage::PersonnelMap::setIdSuperviseur(int id)
+{
+    this->idSuperviseur = id;
+}
+
+int ProjetPOOMappage::PersonnelMap::getIdSuperviseur()
+{
+	return this->idSuperviseur;
 }

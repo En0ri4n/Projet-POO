@@ -36,7 +36,9 @@ namespace ProjetPOOMappage
 		void setTaxe(int);
 		int getTaxe();
 
-		static ArticleMap^ from(String^);
+		static ArticleMap^ from(String^, int);
+		static bool isInList(String^, System::Collections::ArrayList^);
+		static ArticleMap^ byId(String^, System::Collections::ArrayList^);
 	};
 }
 

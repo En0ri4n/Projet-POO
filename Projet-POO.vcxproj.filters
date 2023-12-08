@@ -19,16 +19,19 @@
     <Filter Include="Header Files\Mappage">
       <UniqueIdentifier>{8714f188-e8b8-42b9-a757-f893e7751c40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Forms">
+      <UniqueIdentifier>{4b29a6f9-dc87-4693-8059-15e470c2bcdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sql">
+      <UniqueIdentifier>{f4239f4c-a66f-4fa4-8b5a-b9333d9b40fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sql">
+      <UniqueIdentifier>{60e7107d-9666-49ff-afcf-0ad3bae009bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Projet.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SqlManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SqlHandler.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArticlePopup.h">
       <Filter>Resource Files</Filter>
@@ -48,19 +51,25 @@
     <ClInclude Include="ArticleMap.h">
       <Filter>Header Files\Mappage</Filter>
     </ClInclude>
+    <ClInclude Include="ClientMap.h">
+      <Filter>Header Files\Mappage</Filter>
+    </ClInclude>
+    <ClInclude Include="PersonneMap.h">
+      <Filter>Header Files\Mappage</Filter>
+    </ClInclude>
+    <ClInclude Include="SqlHandler.h">
+      <Filter>Header Files\Sql</Filter>
+    </ClInclude>
+    <ClInclude Include="SqlManager.h">
+      <Filter>Header Files\Sql</Filter>
+    </ClInclude>
+    <ClInclude Include="SqlQueries.h">
+      <Filter>Header Files\Sql</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Projet.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SqlManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SqlHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArticlePopup.cpp">
-      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="SqlQuery.cpp">
       <Filter>Source Files\Mappage</Filter>
@@ -74,7 +83,28 @@
     <ClCompile Include="VilleMap.cpp">
       <Filter>Source Files\Mappage</Filter>
     </ClCompile>
+    <ClCompile Include="Projet.cpp">
+      <Filter>Source Files\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="ArticlePopup.cpp">
+      <Filter>Source Files\Forms</Filter>
+    </ClCompile>
     <ClCompile Include="ArticleMap.cpp">
+      <Filter>Source Files\Mappage</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientMap.cpp">
+      <Filter>Source Files\Mappage</Filter>
+    </ClCompile>
+    <ClCompile Include="PersonneMap.cpp">
+      <Filter>Source Files\Mappage</Filter>
+    </ClCompile>
+    <ClCompile Include="SqlHandler.cpp">
+      <Filter>Source Files\Sql</Filter>
+    </ClCompile>
+    <ClCompile Include="SqlManager.cpp">
+      <Filter>Source Files\Sql</Filter>
+    </ClCompile>
+    <ClCompile Include="SqlQueries.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

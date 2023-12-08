@@ -3,7 +3,7 @@
 
 using namespace System;
 
-namespace ProjetPOO
+namespace ProjetPOOServices
 {
 	ref class SqlManager
 	{
@@ -23,4 +23,4 @@ namespace ProjetPOO
 	};
 }
 
-using namespace ProjetPOO;
+using namespace ProjetPOOServices;

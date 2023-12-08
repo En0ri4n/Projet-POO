@@ -1,10 +1,7 @@
 ﻿#pragma once
 #include "SqlHandler.h"
-#include "SqlQuery.h"
-#include "SqlManager.h"
-#include "PersonnelMap.h"
-#include "ArticleMap.h"
-#include "ArticlePopup.h"
+
+ref class ArticlePopup;
 
 namespace ProjetPOO
 {
@@ -96,7 +93,7 @@ namespace ProjetPOO
 	private:
 		bool connected;
 		SqlHandler^ sqlHandler;
-		ArrayList^ articlesCommande;
+		ArrayList^ articlesCommande = gcnew ArrayList;
 
 
 	protected:
@@ -151,8 +148,8 @@ namespace ProjetPOO
 
 	private: System::Windows::Forms::Label^ label7;
 	private: System::Windows::Forms::Button^ button1;
-	private: System::Windows::Forms::Label^ label10;
-	private: System::Windows::Forms::DateTimePicker^ dateSoldeCommandePicker;
+
+
 
 	private: System::Windows::Forms::DateTimePicker^ datePayementCommandePicker;
 
@@ -161,10 +158,11 @@ namespace ProjetPOO
 	private: System::Windows::Forms::Button^ boutonAfficherTout;
 	private: System::Windows::Forms::Button^ boutonChercher;
 	private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
-	private: System::Windows::Forms::TextBox^ textBox1;
-private: System::Windows::Forms::Label^ tvaStockLabel;
-private: System::Windows::Forms::NumericUpDown^ tvaStockBox;
-private: System::Windows::Forms::Label^ articlesCommandeLabel;
+private: System::Windows::Forms::TextBox^ rechercheBox;
+
+	private: System::Windows::Forms::Label^ tvaStockLabel;
+	private: System::Windows::Forms::NumericUpDown^ tvaStockBox;
+	private: System::Windows::Forms::Label^ articlesCommandeLabel;
 
 
 
@@ -192,8 +190,6 @@ private: System::Windows::Forms::Label^ articlesCommandeLabel;
 			   this->tabCommandes = (gcnew System::Windows::Forms::TabPage());
 			   this->articlesCommandeLabel = (gcnew System::Windows::Forms::Label());
 			   this->button1 = (gcnew System::Windows::Forms::Button());
-			   this->label10 = (gcnew System::Windows::Forms::Label());
-			   this->dateSoldeCommandePicker = (gcnew System::Windows::Forms::DateTimePicker());
 			   this->datePayementCommandePicker = (gcnew System::Windows::Forms::DateTimePicker());
 			   this->label9 = (gcnew System::Windows::Forms::Label());
 			   this->label5 = (gcnew System::Windows::Forms::Label());
@@ -246,7 +242,7 @@ private: System::Windows::Forms::Label^ articlesCommandeLabel;
 			   this->boutonAfficherTout = (gcnew System::Windows::Forms::Button());
 			   this->boutonChercher = (gcnew System::Windows::Forms::Button());
 			   this->rechercheColonnesBox = (gcnew System::Windows::Forms::ComboBox());
-			   this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			   this->rechercheBox = (gcnew System::Windows::Forms::TextBox());
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabCommandes->SuspendLayout();
 			   this->tabStocks->SuspendLayout();
@@ -376,8 +372,6 @@ private: System::Windows::Forms::Label^ articlesCommandeLabel;
 			   this->tabCommandes->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			   this->tabCommandes->Controls->Add(this->articlesCommandeLabel);
 			   this->tabCommandes->Controls->Add(this->button1);
-			   this->tabCommandes->Controls->Add(this->label10);
-			   this->tabCommandes->Controls->Add(this->dateSoldeCommandePicker);
 			   this->tabCommandes->Controls->Add(this->datePayementCommandePicker);
 			   this->tabCommandes->Controls->Add(this->label9);
 			   this->tabCommandes->Controls->Add(this->label5);
@@ -420,29 +414,6 @@ private: System::Windows::Forms::Label^ articlesCommandeLabel;
 			   this->button1->Text = L"Choisir articles";
 			   this->button1->UseVisualStyleBackColor = true;
 			   this->button1->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonArticlesCommandes);
-			   // 
-			   // label10
-			   // 
-			   this->label10->AutoSize = true;
-			   this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				   static_cast<System::Byte>(0)));
-			   this->label10->Location = System::Drawing::Point(32, 219);
-			   this->label10->Margin = System::Windows::Forms::Padding(2, 0, 2, 0);
-			   this->label10->Name = L"label10";
-			   this->label10->Size = System::Drawing::Size(146, 20);
-			   this->label10->TabIndex = 41;
-			   this->label10->Text = L"Date solde enreg. :";
-			   // 
-			   // dateSoldeCommandePicker
-			   // 
-			   this->dateSoldeCommandePicker->CalendarFont = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
-				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->dateSoldeCommandePicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
-				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->dateSoldeCommandePicker->Location = System::Drawing::Point(183, 214);
-			   this->dateSoldeCommandePicker->Name = L"dateSoldeCommandePicker";
-			   this->dateSoldeCommandePicker->Size = System::Drawing::Size(244, 27);
-			   this->dateSoldeCommandePicker->TabIndex = 40;
 			   // 
 			   // datePayementCommandePicker
 			   // 
@@ -1086,14 +1057,14 @@ private: System::Windows::Forms::Label^ articlesCommandeLabel;
 			   this->rechercheColonnesBox->Size = System::Drawing::Size(112, 25);
 			   this->rechercheColonnesBox->TabIndex = 11;
 			   // 
-			   // textBox1
+			   // rechercheBox
 			   // 
-			   this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->rechercheBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->textBox1->Location = System::Drawing::Point(162, 369);
-			   this->textBox1->Name = L"textBox1";
-			   this->textBox1->Size = System::Drawing::Size(141, 23);
-			   this->textBox1->TabIndex = 12;
+			   this->rechercheBox->Location = System::Drawing::Point(162, 369);
+			   this->rechercheBox->Name = L"rechercheBox";
+			   this->rechercheBox->Size = System::Drawing::Size(141, 23);
+			   this->rechercheBox->TabIndex = 12;
 			   // 
 			   // Projet
 			   // 
@@ -1102,7 +1073,7 @@ private: System::Windows::Forms::Label^ articlesCommandeLabel;
 			   this->AutoSize = true;
 			   this->BackColor = System::Drawing::SystemColors::ScrollBar;
 			   this->ClientSize = System::Drawing::Size(1190, 573);
-			   this->Controls->Add(this->textBox1);
+			   this->Controls->Add(this->rechercheBox);
 			   this->Controls->Add(this->rechercheColonnesBox);
 			   this->Controls->Add(this->boutonChercher);
 			   this->Controls->Add(this->boutonAfficherTout);
@@ -1142,284 +1113,65 @@ private: System::Windows::Forms::Label^ articlesCommandeLabel;
 
 		   }
 
-	private: System::Void onFormLoad(System::Object^ sender, System::EventArgs^ e)
-	{
-		sqlHandler = gcnew SqlHandler(this->dataGridView);
-		setConnected(false);
-	}
+		   // Constructor for the form, assuming it's within a Windows Forms class
+	private: System::Void onFormLoad(System::Object^ sender, System::EventArgs^ e);
 
-	private: System::Void setConnected(bool connected)
-	{
-		this->connected = connected;
+		   // Function to set the connected state and update UI elements accordingly
+	private: System::Void setConnected(bool connected);
 
-		this->boutonValider->Visible = connected;
-		this->boutonAfficher->Visible = connected;
-		this->boutonAfficherTout->Visible = connected;
-		this->boutonAjouter->Visible = connected;
-		this->boutonSupprimer->Visible = connected;
-		this->boutonModifier->Visible = connected;
+		   // Event handler for the "Valider" button click
+	private: System::Void clickOnBoutonValider(System::Object^ sender, System::EventArgs^ e);
 
-		if(connected)
-		{
-			this->tabController->Controls->Add(this->tabPersonnel);
-			this->tabController->Controls->Add(this->tabStocks);
-			this->tabController->Controls->Add(this->tabCommandes);
-			this->tabController->Controls->Add(this->tabClients);
-			this->tabController->Controls->Add(this->tabStatistiques);
+		   // Function to check if a specific tab is currently active
+	private: System::Boolean isActive(System::Windows::Forms::TabPage^ tab);
 
-			boutonAfficher->Enabled = false;
-			currentMode = AFFICHER;
-		}
-		else
-		{
-			this->tabController->Controls->Remove(this->tabPersonnel);
-			this->tabController->Controls->Remove(this->tabStocks);
-			this->tabController->Controls->Remove(this->tabCommandes);
-			this->tabController->Controls->Remove(this->tabClients);
-			this->tabController->Controls->Remove(this->tabStatistiques);
-		}
-	}
-	private: System::Void clickOnBoutonValider(System::Object^ sender, System::EventArgs^ e)
-	{
-		if(isActive(tabPersonnel))
-		{
-			switch(currentMode)
-			{
-				case ProjetPOO::AFFICHER:
-				{
-					PersonnelMap^ personnel = gcnew PersonnelMap();
-					personnel->setIdPersonnel((int)idPersonnelBox->Value);
-					personnel->setNom(nomPersonnelBox->Text);
-					personnel->setPrenom(prenomPersonnelBox->Text);
-					personnel->setDateEmbauche(dateEmbauchePersonnelPicker->Value);
-				}
-					break;
-				case ProjetPOO::SUPPRIMER:
-					break;
-				case ProjetPOO::AJOUTER:
-					break;
-				case ProjetPOO::MODIFIER:
-					break;
-				default:
-					break;
-			}
-		}
-	}
-	private: System::Boolean isActive(System::Windows::Forms::TabPage^ tab)
-	{
-		return this->tabController->SelectedTab == tab;
-	}
-	private: System::Void clickOnConnexionBDD(System::Object^ sender, System::EventArgs^ e)
-	{
-		addHistorique(L"Connexion en cours...");
-		setConnected(true);
-		changeMode(currentMode);
+		   // Event handler for the "Connexion BDD" button click
+	private: System::Void clickOnConnexionBDD(System::Object^ sender, System::EventArgs^ e);
 
-		sqlHandler->fillGrid(Table::PERSONNES);
-	}
-	private: System::Void addHistorique(System::String^ historique)
-	{
-		System::DateTime date = System::DateTime::Now;
-		this->historiqueBox->Text += "[" + date.ToLongTimeString() + "] " + historique + "\r\n";
-		this->historiqueBox->SelectionStart = this->historiqueBox->Text->Length - 1;
-		this->historiqueBox->ScrollToCaret();
-	}
-	private: System::Void clickOnBoutonAfficher(System::Object^ sender, System::EventArgs^ e)
-	{
-		changeMode(AFFICHER);
-	}
-	private: System::Void clickOnBoutonSupprimer(System::Object^ sender, System::EventArgs^ e)
-	{
-		changeMode(SUPPRIMER);
-	}
-	private: System::Void clickOnBoutonAjouter(System::Object^ sender, System::EventArgs^ e)
-	{
-		changeMode(AJOUTER);
-	}
-	private: System::Void clickOnBoutonModifier(System::Object^ sender, System::EventArgs^ e)
-	{
-		changeMode(MODIFIER);
-	}
-	private: System::Void changeMode(SqlMode mode)
-	{
-		currentMode = mode;
+		   // Function to add an entry to the history box
+	private: System::Void addHistorique(System::String^ historique);
 
-		this->boutonAfficher->Enabled = true;
-		this->boutonAjouter->Enabled = true;
-		this->boutonModifier->Enabled = true;
-		this->boutonSupprimer->Enabled = true;
+		   // Event handler for the "Afficher" button click
+	private: System::Void clickOnBoutonAfficher(System::Object^ sender, System::EventArgs^ e);
 
-		System::String^ name;
+		   // Event handler for the "Supprimer" button click
+	private: System::Void clickOnBoutonSupprimer(System::Object^ sender, System::EventArgs^ e);
 
-		switch(mode)
-		{
-			case ProjetPOO::AFFICHER:
-				this->boutonAfficher->Enabled = false;
+		   // Event handler for the "Ajouter" button click
+	private: System::Void clickOnBoutonAjouter(System::Object^ sender, System::EventArgs^ e);
 
-				// Personnel
-				this->idPersonnelBox->Enabled = true;
-				this->nomPersonnelBox->Enabled = false;
-				this->prenomPersonnelBox->Enabled = false;
-				this->dateEmbauchePersonnelPicker->Enabled = false;
+		   // Event handler for the "Modifier" button click
+	private: System::Void clickOnBoutonModifier(System::Object^ sender, System::EventArgs^ e);
 
-				// Stocks
-				this->idStockBox->Enabled = true;
-				this->nomStockBox->Enabled = false;
-				this->prixStockBox->Enabled = false;
-				this->natureStockBox->Enabled = false;
-				this->couleurStockBox->Enabled = false;
-				this->seuilStockBox->Enabled = false;
-				this->quantiteStockBox->Enabled = false;
-				this->tvaStockBox->Enabled = false;
+		   // Function to change the mode (AFFICHER, SUPPRIMER, AJOUTER, MODIFIER)
+	private: System::Void changeMode(SqlMode mode);
 
-				name = L"Affichage";
-				break;
-			case ProjetPOO::SUPPRIMER:
-				this->boutonSupprimer->Enabled = false;
+		   // Event handler for the "Articles Commandes" button click
+	private: System::Void clickOnBoutonArticlesCommandes(System::Object^ sender, System::EventArgs^ e);
 
-				// Personnel
-				this->idPersonnelBox->Enabled = true;
-				this->nomPersonnelBox->Enabled = false;
-				this->prenomPersonnelBox->Enabled = false;
-				this->dateEmbauchePersonnelPicker->Enabled = false;
+		   // Event handler for the "Afficher Tout" button click
+	private: System::Void clickOnBoutonAfficherTout(System::Object^ sender, System::EventArgs^ e);
 
-				// Stocks
-				this->idStockBox->Enabled = true;
-				this->nomStockBox->Enabled = false;
-				this->prixStockBox->Enabled = false;
-				this->natureStockBox->Enabled = false;
-				this->couleurStockBox->Enabled = false;
-				this->seuilStockBox->Enabled = false;
-				this->quantiteStockBox->Enabled = false;
-				this->tvaStockBox->Enabled = false;
+		   // Event handler for tab change
+	private: System::Void onChangeTab(System::Object^ sender, System::Windows::Forms::TabControlEventArgs^ e);
 
+		   // Function to fill the grid based on the active tab
+	private: System::Void afficherTable();
 
-				name = L"Suppression";
-				break;
-			case ProjetPOO::AJOUTER:
-				this->boutonAjouter->Enabled = false;
+		   // Event handler for the "Chercher" button click
+	private: System::Void clickOnBoutonChercher(System::Object^ sender, System::EventArgs^ e);
 
-				// Personnel
-				this->idPersonnelBox->Enabled = false;
-				this->nomPersonnelBox->Enabled = true;
-				this->prenomPersonnelBox->Enabled = true;
-				this->dateEmbauchePersonnelPicker->Enabled = true;
+		   // Event handler for cell click in the DataGridView
+	private: System::Void clickOnCellule(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e);
 
-				// Stocks
-				this->idStockBox->Enabled = false;
-				this->nomStockBox->Enabled = true;
-				this->prixStockBox->Enabled = true;
-				this->natureStockBox->Enabled = true;
-				this->couleurStockBox->Enabled = true;
-				this->seuilStockBox->Enabled = true;
-				this->quantiteStockBox->Enabled = true;
-				this->tvaStockBox->Enabled = true;
+		   // Function to update the search column box based on the active tab
+	public: System::Void updateRechercheColonneBox();
 
-				name = L"Ajout";
-				break;
-			case ProjetPOO::MODIFIER:
-				this->boutonModifier->Enabled = false;
+		  // Function to update the list of articles in a command
+	public: System::Void updateArticlesCommande(ArrayList^ list);
 
-				// Personnel
-				this->idPersonnelBox->Enabled = true;
-				this->nomPersonnelBox->Enabled = true;
-				this->prenomPersonnelBox->Enabled = true;
-				this->dateEmbauchePersonnelPicker->Enabled = true;
+	public: ArrayList^ getArticlesCommande();
 
-				// Stocks
-				this->idStockBox->Enabled = true;
-				this->nomStockBox->Enabled = true;
-				this->prixStockBox->Enabled = true;
-				this->natureStockBox->Enabled = true;
-				this->couleurStockBox->Enabled = true;
-				this->seuilStockBox->Enabled = true;
-				this->quantiteStockBox->Enabled = true;
-				this->tvaStockBox->Enabled = true;
-
-				name = L"Modification";
-				break;
-			default:
-				break;
-		}
-
-		addHistorique("Mode : " + name);
-	}
-	private: System::Void clickOnBoutonArticlesCommandes(System::Object^ sender, System::EventArgs^ e)
-	{
-		ArticlePopup^ popup = gcnew ArticlePopup();
-		popup->Show();
-	}
-	private: System::Void clickOnBoutonAfficherTout(System::Object^ sender, System::EventArgs^ e)
-	{
-		afficherTable();
-	}
-	private: System::Void onChangeTab(System::Object^ sender, System::Windows::Forms::TabControlEventArgs^ e)
-	{
-		afficherTable();
-	}
-	private: System::Void afficherTable()
-	{
-		if(isActive(tabPersonnel))
-			sqlHandler->fillGrid("SELECT TOP (1000) Personnels.[Id_personnel], Personnes.[Nom], Personnes.[Prenom], [Date_embauche], [Id_adresse], [Id_superieur] FROM [Projet].[dbo].[Personnels] AS Personnels INNER JOIN [Projet].[dbo].[Personnes] AS Personnes ON Personnels.Id_personnel = Personnes.Id_personne;", "Personnel");
-		else if(isActive(tabStocks))
-			sqlHandler->fillGrid(Table::ARTICLES);
-		else if(isActive(tabCommandes))
-			sqlHandler->fillGrid(Table::COMMANDES);
-		else if(isActive(tabClients))
-			sqlHandler->fillGrid(Table::CLIENTS);
-		else if(isActive(tabStatistiques))
-			sqlHandler->fillGrid(Table::ARTICLES);
-
-		updateRechercheColonneBox();
-	}
-	private: System::Void clickOnBoutonChercher(System::Object^ sender, System::EventArgs^ e)
-	{
-		if(isActive(tabPersonnel))
-			sqlHandler->searchByColumn(Table::PERSONNELS, "Id_personne", this->idPersonnelBox->Text, true);
-		else if(isActive(tabCommandes))
-			sqlHandler->searchByColumn(Table::COMMANDES, "Reference_commande", this->idCommandeBox->Text, false);
-	}
-	private: System::Void clickOnCellule(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e)
-	{
-		if(isActive(tabPersonnel))
-		{
-			this->idPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString();
-			this->nomPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[1]->Value->ToString();
-			this->prenomPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[2]->Value->ToString();
-			this->dateEmbauchePersonnelPicker->Text = this->dataGridView->Rows[e->RowIndex]->Cells[3]->Value->ToString();
-		}
-		else if(isActive(tabStocks))
-		{
-			this->idStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString();
-			this->nomStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[1]->Value->ToString();
-			this->prixStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[2]->Value->ToString();
-			this->natureStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[3]->Value->ToString();
-			this->couleurStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString();
-			this->seuilStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[5]->Value->ToString();
-			this->quantiteStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[6]->Value->ToString();
-			this->tvaStockBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[7]->Value->ToString();
-		}
-	}
-
-	public: System::Void updateRechercheColonneBox()
-	{
-		array<System::Object^>^ list = gcnew array<System::Object^>(this->dataGridView->ColumnCount);
-		for(int i = 0; i < this->dataGridView->ColumnCount; i++)
-		{
-			list[i] = this->dataGridView->Columns[i]->Name;
-		}
-
-		this->rechercheColonnesBox->Items->Clear();
-		this->rechercheColonnesBox->Items->AddRange(list);
-		this->rechercheColonnesBox->SelectedItem = list[0];
-	}
-
-		  public: System::Void updateAriclesCommande(ArrayList^ list)
-		  {
-			  articlesCommande = list;
-			  this->articlesCommandeLabel->Text = "Articles de la commande (" + list->Count + ")";
-		  }
 	};
 }
-
 #pragma endregion

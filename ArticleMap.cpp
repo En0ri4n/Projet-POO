@@ -80,9 +80,28 @@ int ArticleMap::getTaxe()
 	return this->taxe;
 }
 
-ArticleMap^ ArticleMap::from(String^ id)
+ArticleMap^ ArticleMap::from(String^ id, int quantite)
 {
 	ArticleMap^ article = gcnew ArticleMap();
 	article->setIdArticle(id);
+	article->setQuantite(quantite);
 	return article;
+}
+
+bool ProjetPOOMappage::ArticleMap::isInList(String^ ref, System::Collections::ArrayList^ list)
+{
+	for each (ArticleMap^ article in list)
+		if (article->getIdArticle()->Equals(ref))
+			return true;
+
+	return false;
+}
+
+ArticleMap^ ProjetPOOMappage::ArticleMap::byId(String^ ref, System::Collections::ArrayList^ list)
+{
+	for each (ArticleMap^ article in list)
+		if (article->getIdArticle()->Equals(ref))
+			return article;
+
+	return nullptr;
 }

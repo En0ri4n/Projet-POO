@@ -1,8 +1,11 @@
 #include "SqlHandler.h"
+#include "SqlQueries.h"
+
+using namespace ProjetPOOServices;
 
 ProjetPOOServices::SqlHandler::SqlHandler(DataGridView^ dgv)
 {
-	this->manager = gcnew ProjetPOO::SqlManager();
+	this->manager = gcnew SqlManager();
 	this->query = gcnew ProjetPOOMappage::SqlQuery();
 	this->dataGridView = dgv;
 }
@@ -13,13 +16,18 @@ void ProjetPOOServices::SqlHandler::fill(String^ table)
 	dataGridView->DataMember = table;
 }
 
+void ProjetPOOServices::SqlHandler::fill(Table^ table)
+{
+	fill(table->getName());
+}
+
 /*
 * Remplis la DataGridView avec tous les éléments de la table donnée
 */
 void ProjetPOOServices::SqlHandler::fillGrid(Table^ table)
 {
 	this->query->newQuery(false, "SELECT * FROM " + table->getName());
-	fill(table->getName());
+	fill(table);
 }
 
 /*
@@ -37,7 +45,14 @@ void ProjetPOOServices::SqlHandler::searchByColumn(Table^ table, String^ columnN
 		this->query->newQuery(false, String::Format("SELECT * FROM {0} WHERE {1}={2}", table->getName(), columnName, value));
 	else
 		this->query->newQuery(false, String::Format("SELECT * FROM {0} WHERE {1} LIKE '%{2}%'", table->getName(), columnName, value));
-	fill(table->getName());
+	
+	fill(table);
+}
+
+void ProjetPOOServices::SqlHandler::SelectPersonnel()
+{
+	this->query->newQuery(false, SqlQueries::listePersonnel());
+	fill("Personnel");
 }
 
 void ProjetPOOServices::SqlHandler::fillGrid(Table^ table, DataGridView^ grid)
@@ -57,31 +72,3 @@ void ProjetPOOServices::SqlHandler::fillGrid(String^ query, String^ table, DataG
 	grid->DataSource = manager->getRows(sqlQuery, table);
 	grid->DataMember = table;
 }
-/*
-void ProjetPOOServices::SqlHandler::ajouterUnePersonne(String^ nom, String^ prenom)
-{
-	this->query->setNom(nom);
-	this->query->setPrenom(prenom);
-	String^ sql = this->query->addInsert();
-
-	this->manager->actionRows(sql);
-}
-
-void ProjetPOOServices::SqlHandler::supprimerUnePersonne(int id)
-{
-	this->query->setId(id);
-	String^ sql = this->query->addDelete();
-
-	this->manager->actionRows(sql);
-}
-
-void ProjetPOOServices::SqlHandler::mettreAJourUnePersonne(int id, String^ nom, String^ prenom)
-{
-	this->query->setId(id);
-	this->query->setNom(nom);
-	this->query->setPrenom(prenom);
-	String^ sql = this->query->addUpdate();
-
-	this->manager->actionRows(sql);
-}
-*/

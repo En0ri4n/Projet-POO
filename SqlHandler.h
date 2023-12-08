@@ -14,6 +14,7 @@ namespace ProjetPOOServices
 		DataGridView^ dataGridView;
 	private:
 		void fill(String^);
+		void fill(Table^);
 	public:
 		SqlHandler(DataGridView^);
 		void fillGrid(Table^);
@@ -21,9 +22,9 @@ namespace ProjetPOOServices
 		void searchByColumn(Table^, String^, String^, bool);
 		int getLastCount() { return manager->getLastCount(); }
 
+		void SelectPersonnel();
+
 		static void fillGrid(Table^, DataGridView^);
 		static void fillGrid(String^, String^, DataGridView^);
 	};
 }
-
-using namespace ProjetPOOServices;

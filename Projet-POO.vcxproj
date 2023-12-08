@@ -126,11 +126,15 @@
     <ClCompile Include="AdresseMap.cpp" />
     <ClCompile Include="ArticleMap.cpp" />
     <ClCompile Include="ArticlePopup.cpp" />
+    <ClCompile Include="ClientMap.cpp" />
     <ClCompile Include="PersonnelMap.cpp" />
+    <ClCompile Include="PersonneMap.cpp" />
+    <ClCompile Include="Projet.cpp" />
     <ClCompile Include="SqlManager.cpp" />
+    <ClCompile Include="SqlQueries.cpp" />
     <ClCompile Include="SqlQuery.cpp" />
     <ClCompile Include="SqlHandler.cpp" />
-    <ClCompile Include="Projet.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="VilleMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,8 +143,11 @@
     <ClInclude Include="ArticlePopup.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="ClientMap.h" />
     <ClInclude Include="PersonnelMap.h" />
+    <ClInclude Include="PersonneMap.h" />
     <ClInclude Include="SqlManager.h" />
+    <ClInclude Include="SqlQueries.h" />
     <ClInclude Include="SqlQuery.h" />
     <ClInclude Include="SqlHandler.h" />
     <ClInclude Include="Projet.h">

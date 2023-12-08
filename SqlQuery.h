@@ -14,6 +14,7 @@ namespace ProjetPOOMappage
 		static Table^ ARTICLES = gcnew Table(L"Articles");
 		static Table^ ADRESSES = gcnew Table(L"Adresses");
 		static Table^ VILLES = gcnew Table(L"Villes");
+		static Table^ CONSITUTER_LIEN_COMMANDES_ARTICLES = gcnew Table(L"constituer");
 	private:
 		String^ name;
 	private:
