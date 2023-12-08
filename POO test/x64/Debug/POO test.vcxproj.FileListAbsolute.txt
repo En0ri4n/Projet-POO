@@ -1,0 +1,3 @@
+C:\Users\leoho\OneDrive - Association Cesi Viacesi mail\Documents\Cesi - 2\2 - POO\Prosit 6 - Univers parallèle\Prosit6\POO test\x64\Debug\POO test.vcxproj.AssemblyReference.cache
+C:\Users\leoho\OneDrive - Association Cesi Viacesi mail\Documents\Cesi - 2\2 - POO\Prosit 6 - Univers parallèle\Prosit6\POO test\x64\Debug\POOtest.MyForm.resources
+C:\Users\leoho\OneDrive - Association Cesi Viacesi mail\Documents\Cesi - 2\2 - POO\Prosit 6 - Univers parallèle\Prosit6\POO test\x64\Debug\POO test.vcxproj.GenerateResource.cache
