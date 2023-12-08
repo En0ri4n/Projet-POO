@@ -1,4 +1,5 @@
 #include "SqlHandler.h"
+#include "Projet.h"
 
 using namespace ProjetPOOServices;
 
@@ -81,18 +82,21 @@ void ProjetPOOServices::SqlHandler::AfficherCommandes()
 void ProjetPOOServices::SqlHandler::AjouterCommande(CommandeMap^ commande)
 {
 	this->query->newQuery(false, SqlQueries::AjouterCommande(commande));
+	this->query->addQuery(SqlQueries::AjouterCommandeArticle(commande));
 	action(Table::COMMANDES);
 }
 
 void ProjetPOOServices::SqlHandler::ModifierCommande(CommandeMap^ commande)
 {
 	this->query->newQuery(false, SqlQueries::ModifierCommande(commande));
+	this->query->addQuery(SqlQueries::ModifierCommandeArticle(commande));
 	action(Table::COMMANDES);
 }
 
 void ProjetPOOServices::SqlHandler::SupprimerCommande(CommandeMap^ commande)
 {
 	this->query->newQuery(false, SqlQueries::SupprimerCommande(commande));
+	this->query->addQuery(SqlQueries::SupprimerCommandeArticle(commande));
 	action(Table::COMMANDES);
 }
 
@@ -144,6 +148,76 @@ void ProjetPOOServices::SqlHandler::SupprimerClient(ClientMap^ client)
 	action(Table::CLIENTS);
 }
 
+void ProjetPOOServices::SqlHandler::remplirArticlesCommande(CommandeMap^ commande)
+{
+	this->query->newQuery(false, SqlQueries::listeCommandeArticles(commande));
+	SqlManager^ manager = gcnew SqlManager();
+	System::Data::DataSet^ dataset = manager->getRows(query, Table::CONSITUTER_LIEN_COMMANDES_ARTICLES);
+	System::Collections::ArrayList^ articles = gcnew System::Collections::ArrayList();
+	for each(System::Data::DataRow ^ row in dataset->Tables[Table::CONSITUTER_LIEN_COMMANDES_ARTICLES->getName()]->Rows)
+	{
+		ArticleMap^ article = gcnew ArticleMap();
+		article->setIdArticle(row["Reference_article"]->ToString());
+		article->setNom(row["Nom_article"]->ToString());
+		article->setPrix(Convert::ToDouble(row["Prix_article_HT"]));
+		article->setCouleur(row["Couleur_article"]->ToString());
+		article->setTaxe(Convert::ToInt32(row["Pourcentage_taxe"]));
+		article->setNature(row["Nature_article"]->ToString());
+		article->setSeuilReapprovisionnement(Convert::ToInt32(row["Seuil_reapprovisionnement"]));
+		article->setQuantite(Convert::ToInt32(row["Quantite_article_commande"]));
+		article->setRemise(Convert::ToInt32(row["Pourcentage_remise_article"]));
+		articles->Add(article);
+	}
+	ProjetPOO::Projet::instance->updateArticlesCommande(articles); // TODO:
+}
+
+void ProjetPOOServices::SqlHandler::afficherPanierMoyen()
+{
+	this->query->newQuery(false, SqlQueries::getPanierMoyen());
+	fill("Statistiques");
+}
+
+void ProjetPOOServices::SqlHandler::afficherChiffreAffaire(DateTime^ date)
+{
+	this->query->newQuery(false, SqlQueries::getChiffreAffaire(date));
+	fill("Statistiques");
+}
+
+void ProjetPOOServices::SqlHandler::afficherProduitSousSeuilReapprovisionnement()
+{
+	this->query->newQuery(false, SqlQueries::getProduitSousSeuilReapprovisionnement());
+	fill("Statistiques");
+}
+
+void ProjetPOOServices::SqlHandler::afficherMontantTotalClient(ClientMap^ client)
+{
+	this->query->newQuery(false, SqlQueries::getMontantTotalClient(client));
+	fill("Statistiques");
+}
+
+void ProjetPOOServices::SqlHandler::afficherProduitPlusVendu()
+{
+	this->query->newQuery(false, SqlQueries::getProduitPlusVendu());
+	fill("Statistiques");
+}
+
+void ProjetPOOServices::SqlHandler::afficherProduitMoinsVendu()
+{
+	this->query->newQuery(false, SqlQueries::getProduitMoinsVendu());
+	fill("Statistiques");
+}
+
+void ProjetPOOServices::SqlHandler::afficherValeurCommercialStock()
+{
+	this->query->newQuery(false, SqlQueries::getValeurCommercialStock());
+	fill("Statistiques");
+}
+
+void ProjetPOOServices::SqlHandler::afficherValeurAchatStock()
+{
+	this->query->newQuery(false, SqlQueries::getValeurAchatStock());
+	fill("Statistiques");
+}
 
 void ProjetPOOServices::SqlHandler::fillGrid(Table^ table, DataGridView^ grid)
 {

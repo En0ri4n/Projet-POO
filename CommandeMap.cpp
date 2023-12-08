@@ -69,3 +69,10 @@ Collections::ArrayList^ ProjetPOOMappage::CommandeMap::getListeArticles()
 {
 	return this->listeArticles;
 }
+
+ProjetPOOMappage::CommandeMap^ ProjetPOOMappage::CommandeMap::from(String^ id)
+{
+	CommandeMap^ commande = gcnew CommandeMap();
+	commande->setIdCommande(id);
+	return commande;
+}

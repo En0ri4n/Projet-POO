@@ -8,27 +8,28 @@ System::Void ProjetPOO::ArticlePopup::OnFormLoad(System::Object^ sender, System:
 
 	addColumns();
 
-	for each(DataGridViewRow ^ row in this->articlesDataGridView->Rows)
+	for each(ArticleMap^ article in articles)
 	{
-		if(row->Cells[0]->Value == nullptr)
-			continue;
-
-		if(articles->Count > 0)
-			label1->Text = ((ArticleMap^) articles[0])->getIdArticle();
-
-		if(ArticleMap::isInList(row->Cells[0]->Value->ToString(), articles))
-		{
-			String^ reference = row->Cells[0]->Value->ToString();
-			String^ nom = row->Cells[1]->Value->ToString();
-			String^ couleur = row->Cells[4]->Value->ToString();
-			int taxe = Convert::ToInt32(row->Cells[7]->Value);
-			double prix = Convert::ToDouble(row->Cells[2]->Value);
-			prix += prix * taxe / 100.0;
-			int quantite = ArticleMap::byId(reference, articles)->getQuantite();
-			double total = prix * quantite;
-			listeArticlesVouluDataGridView->Rows->Add(reference, nom, prix, couleur, quantite, total);
-		}
+		String^ reference = article->getIdArticle();
+		String^ nom = article->getNom();
+		String^ couleur = article->getCouleur();
+		int taxe = article->getTaxe();
+		double prix = article->getPrix();
+		prix += prix * taxe / 100.0;
+		int quantite = article->getQuantite();
+		double total = prix * quantite;
+		int remise = article->getRemise();
+		listeArticlesVouluDataGridView->Rows->Add(reference, nom, prix, couleur, remise, quantite, total);
 	}
+
+	bool active = Projet::instance->getMode() == SqlMode::AFFICHER || Projet::instance->getMode() == SqlMode::SUPPRIMER;
+
+	this->ajouterArticleBouton->Enabled = !active;
+	this->retirerArticleBouton->Enabled = !active;
+	this->quantiteArticleLabel->Enabled = !active;
+	this->quantiteArticleBox->Enabled = !active;
+	this->remiseArticleLabel->Enabled = !active;
+	this->remiseArticleBox->Enabled = !active;
 }
 System::Void ProjetPOO::ArticlePopup::clickOnAjouter(System::Object^ sender, System::EventArgs^ e)
 {
@@ -42,7 +43,7 @@ System::Void ProjetPOO::ArticlePopup::clickOnAjouter(System::Object^ sender, Sys
 		double prix = Convert::ToDouble(row->Cells[2]->Value);
 		prix += prix * taxe / 100.0;
 		int quantite = Convert::ToInt32(this->quantiteArticleBox->Value);
-		int remise = 0;
+		int remise = Convert::ToInt32(this->remiseArticleBox->Value);
 		double total = prix * quantite;
 		listeArticlesVouluDataGridView->Rows->Add(reference, nom, prix, couleur, quantite, remise, total);
 
@@ -77,11 +78,6 @@ System::Void ProjetPOO::ArticlePopup::clickOnValider(System::Object^ sender, Sys
 	Projet::instance->updateArticlesCommande(articles);
 	this->Close();
 }
-
-System::Void ProjetPOO::ArticlePopup::onRowAdded(System::Object^ sender, System::Windows::Forms::DataGridViewRowsAddedEventArgs^ e)
-{
-}
-
 System::Void ProjetPOO::ArticlePopup::addColumns()
 {
 	if(listeArticlesVouluDataGridView->Columns->Count > 0)

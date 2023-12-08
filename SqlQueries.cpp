@@ -747,7 +747,30 @@ String^ ProjetPOOServices::SqlQueries::SupprimerClient(ClientMap^ client)
 
 String^ ProjetPOOServices::SqlQueries::listeCommandeArticles(CommandeMap^ commande)
 {
-	return String::Format("SELECT * FROM {0}", Table::CONSITUTER_LIEN_COMMANDES_ARTICLES);
+	return String::Format("DECLARE @Reference_commande VARCHAR(30); " +
+		"SET @Reference_commande = '{0}'; " +
+		" " +
+		"SELECT Commandes.Reference_commande " +
+		"      ,Date_livraison " +
+		"      ,Date_emission " +
+		"      ,Moyen_paiement " +
+		"      ,Date_paiement " +
+		"      ,Pourcentage_remise " +
+		"      ,Articles.Reference_article " +
+		"      ,Nom_article " +
+		"      ,Prix_article_HT " +
+		"      ,Nature_article " +
+		"      ,Couleur_article " +
+		"      ,Seuil_reapprovisionnement " +
+		"      ,Quantite_article " +
+		"      ,Articles.Pourcentage_taxe " +
+		"      ,Quantite_article_commande " +
+		"      ,Pourcentage_remise_article " +
+		"FROM [Projet].[dbo].Commandes INNER JOIN [Projet].[dbo].constituer ON Commandes.Reference_commande = constituer.Reference_commande " +
+		"INNER JOIN [Projet].[dbo].Articles ON constituer.Reference_article = Articles.Reference_article " +
+		" " +
+		"WHERE Commandes.Reference_commande = @Reference_commande;",
+		commande->getIdCommande());
 }
 
 String^ ProjetPOOServices::SqlQueries::AjouterCommandeArticle(CommandeMap^ commande)
@@ -818,6 +841,157 @@ String^ ProjetPOOServices::SqlQueries::ModifierCommandeArticle(CommandeMap^ comm
 
 String^ ProjetPOOServices::SqlQueries::SupprimerCommandeArticle(CommandeMap^ commande)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: insert return statement here
+	String^ query = "";
+
+	for each(ArticleMap ^ article in commande->getListeArticles())
+	{
+		query->Concat(String::Format("DECLARE @Reference_commande VARCHAR(30); " +
+			"DECLARE @Reference_article VARCHAR(30); " +
+			"DECLARE @quantite_article INT; " +
+			" " +
+			"SET @Reference_commande = '{0}'; " +
+			"SET @Reference_article = '{1}'; " +
+			"BEGIN TRANSACTION " +
+			" " +
+			"IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].Commandes WHERE Commandes.Reference_commande = @Reference_commande) " +
+			"BEGIN  " +
+			"    ROLLBACK; " +
+			"    PRINT 'Impossible de supprimer une commande inexistante' " +
+			"END " +
+			" " +
+			"ELSE IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].constituer WHERE constituer.Reference_article = @Reference_article) " +
+			"BEGIN " +
+			"    ROLLBACK; " +
+			"    PRINT 'Impossible de supprimer un article inexistant' " +
+			"END " +
+			" " +
+			"ELSE  " +
+			"BEGIN " +
+			"    SET @quantite_article = (SELECT constituer.Quantite_article_commande FROM [Projet].[dbo].constituer WHERE constituer.Reference_article = @Reference_article AND constituer.Reference_commande = @Reference_commande); " +
+			"    UPDATE [Projet].[dbo].Articles " +
+			"        SET Quantite_article = Quantite_article + @quantite_article " +
+			"    WHERE Articles.Reference_article = @Reference_article; " +
+			" " +
+			"    DELETE FROM [Projet].[dbo].constituer " +
+			"    WHERE constituer.Reference_article = @Reference_article; " +
+			"END; " +
+			"COMMIT; ",
+			commande->getIdCommande(),
+			article->getIdArticle()));
+	}
+
+	return query;
+}
+
+String^ ProjetPOOServices::SqlQueries::getPanierMoyen()
+{
+	return "SELECT CAST(ROUND(AVG(PanierMoyenApresRemise), 2) AS float) AS PanierMoyen " +
+		"FROM ( " +
+		"    SELECT  " +
+		"        SUM((a.Prix_article_HT * (1 + CAST(a.Pourcentage_taxe AS DECIMAL(2)) / 100)  " +
+		"            * (1 - CAST(co.Pourcentage_remise_article AS DECIMAL(2)) / 100)) * co.Quantite_article_commande) " +
+		"            * (1 - CAST(c.Pourcentage_remise AS DECIMAL(2)) / 100) AS PanierMoyenApresRemise " +
+		"    FROM  " +
+		"        [Projet].[dbo].[Commandes] c " +
+		"        INNER JOIN [Projet].[dbo].[constituer] co ON c.Reference_commande = co.Reference_commande " +
+		"        INNER JOIN [Projet].[dbo].[Articles] a ON co.Reference_article = a.Reference_article " +
+		"    GROUP BY  " +
+		"        co.Reference_commande, c.Pourcentage_remise " +
+		") AS Paniers;";
+}
+
+String^ ProjetPOOServices::SqlQueries::getChiffreAffaire(DateTime^ date)
+{
+	return String::Format("DECLARE @Mois DATE = '2023-05-01'; " +
+		" " +
+		"SELECT " +
+		"    CAST(ROUND(SUM(TotalPrix), 2) AS float) AS ChiffreAffaires " +
+		"FROM ( " +
+		"    SELECT " +
+		"        SUM((a.Prix_article_HT * (1 - CAST(co.Pourcentage_remise_article AS DECIMAL(2)) / 100))  " +
+		"        * co.Quantite_article_commande) " +
+		"        * (1 - CAST(c.Pourcentage_remise / 100 AS DECIMAL(2))) AS TotalPrix " +
+		"    FROM  " +
+		"        [Projet].[dbo].[Commandes] c " +
+		"        INNER JOIN [Projet].[dbo].[constituer] co ON c.Reference_commande = co.Reference_commande " +
+		"        INNER JOIN [Projet].[dbo].[Articles] a ON co.Reference_article = a.Reference_article " +
+		"    WHERE " +
+		"        MONTH(c.Date_paiement) = MONTH(@Mois) AND YEAR(c.Date_paiement) = YEAR(@Mois) " +
+		"    GROUP BY  " +
+		"        c.Reference_commande, c.Pourcentage_remise " +
+		") AS ChiffreAffairesMois;",
+		date->ToLongDateString());
+}
+
+String^ ProjetPOOServices::SqlQueries::getProduitSousSeuilReapprovisionnement()
+{
+	return "SELECT * FROM [Projet].[dbo].[Articles] AS A " +
+		"WHERE A.Quantite_article < A.Seuil_reapprovisionnement";
+}
+
+String^ ProjetPOOServices::SqlQueries::getMontantTotalClient(ClientMap^ client)
+{
+	return String::Format("SELECT  " +
+		"    c.Id_client, " +
+		"    CAST(ROUND(SUM((a.Prix_article_HT * (1 + CAST(a.Pourcentage_taxe AS DECIMAL(2)) / 100)  " +
+		"        * (1 - CAST(co.Pourcentage_remise_article AS DECIMAL(2)) / 100)) * co.Quantite_article_commande)  " +
+		"        * (1 - CAST(c.Pourcentage_remise AS DECIMAL(2)) / 100), 2) AS float) AS MontantTotalAchats " +
+		"FROM  " +
+		"    [Projet].[dbo].[Commandes] c " +
+		"    INNER JOIN [Projet].[dbo].[constituer] co ON c.Reference_commande = co.Reference_commande " +
+		"    INNER JOIN [Projet].[dbo].[Articles] a ON co.Reference_article = a.Reference_article " +
+		"WHERE " +
+		"    c.Id_client = '{0}' " +
+		"GROUP BY  " +
+		"    c.Id_client, c.Pourcentage_remise;",
+		client->getId());
+}
+
+String^ ProjetPOOServices::SqlQueries::getProduitPlusVendu()
+{
+	return "SELECT TOP 10 " +
+		"    a.Reference_article, " +
+		"    a.Nom_article, " +
+		"    COALESCE(SUM(co.Quantite_article_commande), 0) AS QuantiteVendue " +
+		"FROM  " +
+		"    [Projet].[dbo].[Articles] a " +
+		"    LEFT JOIN [Projet].[dbo].[constituer] co ON a.Reference_article = co.Reference_article  " +
+		"GROUP BY " +
+		"    a.Reference_article, a.Nom_article " +
+		"ORDER BY     " +
+		"    QuantiteVendue DESC, " +
+		"    a.Nom_article ASC;";
+}
+
+String^ ProjetPOOServices::SqlQueries::getProduitMoinsVendu()
+{
+	return "SELECT TOP 10 " +
+		"    a.Reference_article, " +
+		"    a.Nom_article, " +
+		"    COALESCE(SUM(co.Quantite_article_commande), 0) AS QuantiteVendue " +
+		"FROM  " +
+		"    [Projet].[dbo].[Articles] a " +
+		"    LEFT JOIN [Projet].[dbo].[constituer] co ON a.Reference_article = co.Reference_article  " +
+		"GROUP BY " +
+		"    a.Reference_article, a.Nom_article " +
+		"ORDER BY     " +
+		"    QuantiteVendue ASC, " +
+		"    a.Nom_article ASC;";
+}
+
+String^ ProjetPOOServices::SqlQueries::getValeurCommercialStock()
+{
+	return "SELECT " +
+		"SUM(a.Prix_article_HT * a.Quantite_article) AS ValeurCommercialeDuStock " +
+		"FROM " +
+		"[Projet].[dbo].[Articles] a;";
+}
+
+String^ ProjetPOOServices::SqlQueries::getValeurAchatStock()
+{
+	return "SELECT " +
+		"CAST(ROUND(SUM(a.Prix_article_HT * (1 + CAST(a.Pourcentage_taxe AS DECIMAL(2)) / 100) * " +
+		"	a.Quantite_article), 2) AS float) AS ValeurAchatDuStock " +
+		"FROM " +
+		"[Projet].[dbo].[Articles] a;";
 }
