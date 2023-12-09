@@ -9,7 +9,7 @@ namespace ProjetPOOMappage
 	ref class ClientMap : public PersonneMap
 	{
 	private:
-		DateTime^ dateNaissance;
+		DateTime^ dateNaissance; // Date de naissance
 		DateTime^ datePremierAchat;
 		AdresseMap^ adresseLivraison;
 		AdresseMap^ adresseFacturation;
