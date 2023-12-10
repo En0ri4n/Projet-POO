@@ -4,7 +4,7 @@ using namespace System;
 
 namespace ProjetPOOMappage
 {
-	ref class ArticleMap
+	public ref class ArticleMap
 	{
 	private:
 		String^ idArticle;

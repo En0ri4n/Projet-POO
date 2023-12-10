@@ -113,6 +113,7 @@ namespace ProjetPOO
 		AdresseMap^ currentClientAdresseFacturation = gcnew AdresseMap;
 		SqlMode currentMode;
 		bool estSuperviseur;
+		DataSet^ oldDataset;
 
 	protected:
 	public:
@@ -176,7 +177,8 @@ namespace ProjetPOO
 	private: System::Windows::Forms::Label^ label9;
 	private: System::Windows::Forms::Label^ label5;
 	private: System::Windows::Forms::Button^ boutonAfficherTout;
-	private: System::Windows::Forms::Button^ boutonChercher;
+	private: System::Windows::Forms::Button^ rechercheBouton;
+
 	private: System::Windows::Forms::ComboBox^ rechercheColonnesBox;
 private: System::Windows::Forms::TextBox^ rechercheBox;
 
@@ -236,6 +238,7 @@ private: System::Windows::Forms::Label^ idClientStatistiqueLabel;
 
 private: System::Windows::Forms::CheckBox^ superviseurCheckBox;
 private: System::Windows::Forms::CheckBox^ superviseurPersonnelCheckBox;
+private: System::Windows::Forms::Button^ factureCommandeBouton;
 
 
 
@@ -325,6 +328,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->label2 = (gcnew System::Windows::Forms::Label());
 			   this->idStockBox = (gcnew System::Windows::Forms::TextBox());
 			   this->tabPersonnel = (gcnew System::Windows::Forms::TabPage());
+			   this->superviseurPersonnelCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			   this->idSuperviseurPersonnelLabel = (gcnew System::Windows::Forms::Label());
 			   this->idSuperviseurPersonnelBox = (gcnew System::Windows::Forms::NumericUpDown());
 			   this->adressePersonnelLabel = (gcnew System::Windows::Forms::Label());
@@ -350,12 +354,12 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->welcomeTitleLabel = (gcnew System::Windows::Forms::Label());
 			   this->tabController = (gcnew System::Windows::Forms::TabControl());
 			   this->boutonAfficherTout = (gcnew System::Windows::Forms::Button());
-			   this->boutonChercher = (gcnew System::Windows::Forms::Button());
+			   this->rechercheBouton = (gcnew System::Windows::Forms::Button());
 			   this->rechercheColonnesBox = (gcnew System::Windows::Forms::ComboBox());
 			   this->rechercheBox = (gcnew System::Windows::Forms::TextBox());
 			   this->voirRequetesCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			   this->clearBouton = (gcnew System::Windows::Forms::Button());
-			   this->superviseurPersonnelCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			   this->factureCommandeBouton = (gcnew System::Windows::Forms::Button());
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabStatistiques->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientStatistiqueBox))->BeginInit();
@@ -466,6 +470,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->historiqueLabel->Size = System::Drawing::Size(73, 11);
 			   this->historiqueLabel->TabIndex = 6;
 			   this->historiqueLabel->Text = L"Historique";
+			   this->historiqueLabel->Click += gcnew System::EventHandler(this, &Projet::clickOnHistoriqueLabel);
 			   // 
 			   // tabStatistiques
 			   // 
@@ -560,7 +565,6 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->statistiqueBox->Size = System::Drawing::Size(414, 28);
 			   this->statistiqueBox->TabIndex = 9;
 			   this->statistiqueBox->SelectedIndexChanged += gcnew System::EventHandler(this, &Projet::clickOnStatistiqueBox);
-			   this->statistiqueBox->SelectedIndex = 0;
 			   // 
 			   // dateMoisStatistiquePicker
 			   // 
@@ -780,6 +784,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   // tabCommandes
 			   // 
 			   this->tabCommandes->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			   this->tabCommandes->Controls->Add(this->factureCommandeBouton);
 			   this->tabCommandes->Controls->Add(this->idClientCommandeLabel);
 			   this->tabCommandes->Controls->Add(this->idClientCommandeBox);
 			   this->tabCommandes->Controls->Add(this->articlesCommandeLabel);
@@ -1241,6 +1246,17 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->tabPersonnel->Text = L"Personnel";
 			   this->tabPersonnel->UseVisualStyleBackColor = true;
 			   // 
+			   // superviseurPersonnelCheckBox
+			   // 
+			   this->superviseurPersonnelCheckBox->AutoSize = true;
+			   this->superviseurPersonnelCheckBox->Location = System::Drawing::Point(205, 250);
+			   this->superviseurPersonnelCheckBox->Name = L"superviseurPersonnelCheckBox";
+			   this->superviseurPersonnelCheckBox->Size = System::Drawing::Size(130, 17);
+			   this->superviseurPersonnelCheckBox->TabIndex = 16;
+			   this->superviseurPersonnelCheckBox->Text = L"Personnel supervisé \?";
+			   this->superviseurPersonnelCheckBox->UseVisualStyleBackColor = true;
+			   this->superviseurPersonnelCheckBox->CheckedChanged += gcnew System::EventHandler(this, &Projet::clickOnSuperviseurPersonnelCheckBox);
+			   // 
 			   // idSuperviseurPersonnelLabel
 			   // 
 			   this->idSuperviseurPersonnelLabel->AutoSize = true;
@@ -1441,6 +1457,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->superviseurCheckBox->TabIndex = 13;
 			   this->superviseurCheckBox->Text = L"Superviseur";
 			   this->superviseurCheckBox->UseVisualStyleBackColor = true;
+			   this->superviseurCheckBox->CheckedChanged += gcnew System::EventHandler(this, &Projet::clickOnSuperviseurPersonnelCheckBox);
 			   // 
 			   // connexionBouton
 			   // 
@@ -1552,16 +1569,17 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->boutonAfficherTout->UseVisualStyleBackColor = true;
 			   this->boutonAfficherTout->Click += gcnew System::EventHandler(this, &Projet::clickOnBoutonAfficherTout);
 			   // 
-			   // boutonChercher
+			   // rechercheBouton
 			   // 
-			   this->boutonChercher->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->rechercheBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
-			   this->boutonChercher->Location = System::Drawing::Point(423, 368);
-			   this->boutonChercher->Name = L"boutonChercher";
-			   this->boutonChercher->Size = System::Drawing::Size(27, 26);
-			   this->boutonChercher->TabIndex = 10;
-			   this->boutonChercher->Text = L"🔍";
-			   this->boutonChercher->UseVisualStyleBackColor = true;
+			   this->rechercheBouton->Location = System::Drawing::Point(423, 368);
+			   this->rechercheBouton->Name = L"rechercheBouton";
+			   this->rechercheBouton->Size = System::Drawing::Size(27, 26);
+			   this->rechercheBouton->TabIndex = 10;
+			   this->rechercheBouton->Text = L"🔍";
+			   this->rechercheBouton->UseVisualStyleBackColor = true;
+			   this->rechercheBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnRechercheBouton);
 			   // 
 			   // rechercheColonnesBox
 			   // 
@@ -1603,16 +1621,15 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->clearBouton->UseVisualStyleBackColor = true;
 			   this->clearBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnClearBouton);
 			   // 
-			   // superviseurPersonnelCheckBox
+			   // factureCommandeBouton
 			   // 
-			   this->superviseurPersonnelCheckBox->AutoSize = true;
-			   this->superviseurPersonnelCheckBox->Location = System::Drawing::Point(205, 250);
-			   this->superviseurPersonnelCheckBox->Name = L"superviseurPersonnelCheckBox";
-			   this->superviseurPersonnelCheckBox->Size = System::Drawing::Size(130, 17);
-			   this->superviseurPersonnelCheckBox->TabIndex = 16;
-			   this->superviseurPersonnelCheckBox->Text = L"Personnel supervisé \?";
-			   this->superviseurPersonnelCheckBox->UseVisualStyleBackColor = true;this->superviseurCheckBox->CheckedChanged += gcnew System::EventHandler(this, &Projet::clickOnSuperviseurCheckBox);
-			   this->superviseurPersonnelCheckBox->CheckedChanged += gcnew System::EventHandler(this, &Projet::clickOnSuperviseurCheckBox);
+			   this->factureCommandeBouton->Location = System::Drawing::Point(3, 298);
+			   this->factureCommandeBouton->Name = L"factureCommandeBouton";
+			   this->factureCommandeBouton->Size = System::Drawing::Size(97, 23);
+			   this->factureCommandeBouton->TabIndex = 45;
+			   this->factureCommandeBouton->Text = L"Générer facture";
+			   this->factureCommandeBouton->UseVisualStyleBackColor = true;
+			   this->factureCommandeBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnFactureCommandeBouton);
 			   // 
 			   // Projet
 			   // 
@@ -1625,7 +1642,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->Controls->Add(this->voirRequetesCheckBox);
 			   this->Controls->Add(this->rechercheBox);
 			   this->Controls->Add(this->rechercheColonnesBox);
-			   this->Controls->Add(this->boutonChercher);
+			   this->Controls->Add(this->rechercheBouton);
 			   this->Controls->Add(this->boutonAfficherTout);
 			   this->Controls->Add(this->boutonAfficher);
 			   this->Controls->Add(this->historiqueLabel);
@@ -1693,9 +1710,13 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 	private: System::Void clickOnClearBouton(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void clickOnCalculerStatistiques(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void clickOnStatistiqueBox(System::Object^ sender, System::EventArgs^ e);
-	private: System::Void clickOnSuperviseurCheckBox(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void clickOnSuperviseurPersonnelCheckBox(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void clickOnRechercheBouton(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void resetBoxes();
+	private: System::Void clickOnHistoriqueLabel(System::Object^ sender, System::EventArgs^ e);
 	private: System::Boolean isActive(System::Windows::Forms::TabPage^ tab);
+	private: System::Void generatePdf(CommandeMap^, ClientMap^);
+private: System::Void clickOnFactureCommandeBouton(System::Object^ sender, System::EventArgs^ e);
 
 	public:
 		ArrayList^ getArticlesCommande();

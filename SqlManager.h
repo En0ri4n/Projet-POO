@@ -7,7 +7,11 @@ namespace ProjetPOOServices
 {
 	ref class SqlManager
 	{
+	public:
+		static String^ username;
+		static String^ password;
 	private:
+		bool connected;
 		int lastCount;
 		String^ connectionCmd;
 		Data::SqlClient::SqlConnection^ connection;
@@ -15,7 +19,10 @@ namespace ProjetPOOServices
 		Data::SqlClient::SqlDataAdapter^ dataAdapter;
 		Data::DataSet^ dataSet;
 	public:
-		SqlManager();
+		static String^ DATABASE_NAME = "Projet";
+	public:
+		SqlManager(String^, String^);
+		bool isConnected();
 		Data::DataSet^ getRows(SqlQuery^, Table^);
 		Data::DataSet^ getRows(SqlQuery^, String^);
 		void actionRows(SqlQuery^);

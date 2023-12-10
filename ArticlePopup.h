@@ -61,6 +61,7 @@ namespace ProjetPOO
 	private: System::Windows::Forms::NumericUpDown^ quantiteArticleBox;
 
 	private: System::Windows::Forms::Label^ remiseArticleLabel;
+	private: System::Windows::Forms::Button^ modifierArticleBouton;
 	private:
 		System::Windows::Forms::Button^ retirerArticleBouton;
 
@@ -80,6 +81,7 @@ namespace ProjetPOO
 			this->retirerArticleBouton = (gcnew System::Windows::Forms::Button());
 			this->quantiteArticleBox = (gcnew System::Windows::Forms::NumericUpDown());
 			this->remiseArticleLabel = (gcnew System::Windows::Forms::Label());
+			this->modifierArticleBouton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->articlesDataGridView))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->remiseArticleBox))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->listeArticlesVouluDataGridView))->BeginInit();
@@ -118,7 +120,7 @@ namespace ProjetPOO
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->ajouterArticleBouton->Location = System::Drawing::Point(334, 493);
 			this->ajouterArticleBouton->Name = L"ajouterArticleBouton";
-			this->ajouterArticleBouton->Size = System::Drawing::Size(172, 27);
+			this->ajouterArticleBouton->Size = System::Drawing::Size(121, 27);
 			this->ajouterArticleBouton->TabIndex = 2;
 			this->ajouterArticleBouton->Text = L"Ajouter article";
 			this->ajouterArticleBouton->UseVisualStyleBackColor = true;
@@ -132,10 +134,6 @@ namespace ProjetPOO
 			this->remiseArticleBox->Name = L"remiseArticleBox";
 			this->remiseArticleBox->Size = System::Drawing::Size(156, 27);
 			this->remiseArticleBox->TabIndex = 3;
-			this->remiseArticleBox->Value = System::Decimal(gcnew cli::array< System::Int32 >(4)
-			{
-				0, 0, 0, 0
-			});
 			// 
 			// listeArticlesVouluDataGridView
 			// 
@@ -164,9 +162,9 @@ namespace ProjetPOO
 			this->retirerArticleBouton->FlatStyle = System::Windows::Forms::FlatStyle::Popup;
 			this->retirerArticleBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->retirerArticleBouton->Location = System::Drawing::Point(512, 493);
+			this->retirerArticleBouton->Location = System::Drawing::Point(461, 494);
 			this->retirerArticleBouton->Name = L"retirerArticleBouton";
-			this->retirerArticleBouton->Size = System::Drawing::Size(172, 27);
+			this->retirerArticleBouton->Size = System::Drawing::Size(121, 27);
 			this->retirerArticleBouton->TabIndex = 6;
 			this->retirerArticleBouton->Text = L"Retirer article";
 			this->retirerArticleBouton->UseVisualStyleBackColor = true;
@@ -200,12 +198,25 @@ namespace ProjetPOO
 			this->remiseArticleLabel->TabIndex = 8;
 			this->remiseArticleLabel->Text = L"Remise (%) :";
 			// 
+			// modifierArticleBouton
+			// 
+			this->modifierArticleBouton->FlatStyle = System::Windows::Forms::FlatStyle::Popup;
+			this->modifierArticleBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 9.75F, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			this->modifierArticleBouton->Location = System::Drawing::Point(588, 493);
+			this->modifierArticleBouton->Name = L"modifierArticleBouton";
+			this->modifierArticleBouton->Size = System::Drawing::Size(121, 27);
+			this->modifierArticleBouton->TabIndex = 9;
+			this->modifierArticleBouton->Text = L"Modifier article";
+			this->modifierArticleBouton->UseVisualStyleBackColor = true;
+			// 
 			// ArticlePopup
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoSize = true;
 			this->ClientSize = System::Drawing::Size(881, 538);
+			this->Controls->Add(this->modifierArticleBouton);
 			this->Controls->Add(this->remiseArticleLabel);
 			this->Controls->Add(this->quantiteArticleBox);
 			this->Controls->Add(this->retirerArticleBouton);

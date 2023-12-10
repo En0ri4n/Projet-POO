@@ -72,6 +72,9 @@
     <ClInclude Include="CommandeMap.h">
       <Filter>Header Files\Mappage</Filter>
     </ClInclude>
+    <ClInclude Include="SocieteReference.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -110,14 +113,17 @@
     <ClCompile Include="SqlManager.cpp">
       <Filter>Source Files\Sql</Filter>
     </ClCompile>
-    <ClCompile Include="SqlQueries.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AdressePopup.cpp">
       <Filter>Source Files\Forms</Filter>
     </ClCompile>
     <ClCompile Include="CommandeMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SqlQueries.cpp">
+      <Filter>Source Files\Sql</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

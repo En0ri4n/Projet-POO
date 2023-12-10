@@ -2,9 +2,12 @@
 #include "Projet.h"
 #include <iostream>
 
-SqlManager::SqlManager()
+SqlManager::SqlManager(String^ user, String^ passw)
 {
-	this->connectionCmd = "Data Source=localhost;Initial Catalog=Projet;Integrated Security=True;User ID=Utilisateur_projet;Password=EVAL2023";
+	username = user;
+	password = passw;
+
+	this->connectionCmd = String::Format("Data Source=localhost;Initial Catalog={2};User ID={0};Password={1}", username, password, DATABASE_NAME);
 
 	this->connection = gcnew Data::SqlClient::SqlConnection(this->connectionCmd);
 	this->command = gcnew Data::SqlClient::SqlCommand(L"EMPTY", this->connection);
@@ -12,6 +15,20 @@ SqlManager::SqlManager()
 	this->dataSet = gcnew Data::DataSet();
 
 	this->command->CommandType = Data::CommandType::Text;
+}
+
+bool ProjetPOOServices::SqlManager::isConnected()
+{
+	try
+	{
+		this->connection->Open();
+		this->connection->Close();
+		return true;
+	}
+	catch(System::Exception^ e)
+	{
+		return false;
+	}
 }
 
 System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, String^ table)

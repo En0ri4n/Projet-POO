@@ -3,9 +3,9 @@
 
 using namespace ProjetPOOServices;
 
-ProjetPOOServices::SqlHandler::SqlHandler(DataGridView^ dgv)
+ProjetPOOServices::SqlHandler::SqlHandler(DataGridView^ dgv, String^ user, String^ password)
 {
-	this->manager = gcnew SqlManager();
+	this->manager = gcnew SqlManager(user, password);
 	this->query = gcnew ProjetPOOMappage::SqlQuery();
 	this->dataGridView = dgv;
 }
@@ -51,7 +51,7 @@ void ProjetPOOServices::SqlHandler::action(Table^ table)
 
 void ProjetPOOServices::SqlHandler::AfficherPersonnel()
 {
-	this->query->newQuery(false, SqlQueries::listePersonnel());
+	this->query->newQuery(false, SqlQueries::listePersonnels());
 	fill(Table::PERSONNELS);
 }
 
@@ -75,7 +75,7 @@ void ProjetPOOServices::SqlHandler::SupprimerPersonnel(PersonnelMap^ personnel)
 
 void ProjetPOOServices::SqlHandler::AfficherCommandes()
 {
-	this->query->newQuery(false, SqlQueries::listeCommande());
+	this->query->newQuery(false, SqlQueries::listeCommandes());
 	fill(Table::COMMANDES);
 }
 
@@ -152,7 +152,7 @@ void ProjetPOOServices::SqlHandler::remplirArticlesCommande(CommandeMap^ command
 {
 	liste->Clear();
 	this->query->newQuery(false, SqlQueries::listeCommandeArticles(commande));
-	SqlManager^ manager = gcnew SqlManager();
+	SqlManager^ manager = gcnew SqlManager(SqlManager::username, SqlManager::password);
 	System::Data::DataSet^ dataset = manager->getRows(query, Table::CONSITUTER_LIEN_COMMANDES_ARTICLES);
 	for each(System::Data::DataRow ^ row in dataset->Tables[Table::CONSITUTER_LIEN_COMMANDES_ARTICLES->getName()]->Rows)
 	{
@@ -218,10 +218,22 @@ void ProjetPOOServices::SqlHandler::afficherValeurAchatStock()
 	fill(Table::STATISTIQUES);
 }
 
+void ProjetPOOServices::SqlHandler::filtre(Table^ table, String^ column, String^ value)
+{
+	this->query->newQuery(false, SqlQueries::filtre(table, column, value));
+	fill(table);
+}
+
+void ProjetPOOServices::SqlHandler::filtreClients(String^ column, String^ value)
+{
+	this->query->newQuery(false, SqlQueries::filtreClients(column, value));
+	fill(Table::PERSONNELS);
+}
+
 void ProjetPOOServices::SqlHandler::fillGrid(Table^ table, DataGridView^ grid)
 {
 	SqlQuery^ query = gcnew SqlQuery();
-	SqlManager^ manager = gcnew SqlManager();
+	SqlManager^ manager = gcnew SqlManager(SqlManager::username, SqlManager::password);
 	query->newQuery(false, "SELECT * FROM " + table->getName());
 	grid->DataSource = manager->getRows(query, table->getName());
 	grid->DataMember = table->getName();
@@ -230,7 +242,7 @@ void ProjetPOOServices::SqlHandler::fillGrid(Table^ table, DataGridView^ grid)
 void ProjetPOOServices::SqlHandler::fillGrid(String^ query, String^ table, DataGridView^ grid)
 {
 	SqlQuery^ sqlQuery = gcnew SqlQuery();
-	SqlManager^ manager = gcnew SqlManager();
+	SqlManager^ manager = gcnew SqlManager(SqlManager::username, SqlManager::password);
 	sqlQuery->newQuery(false, query);
 	grid->DataSource = manager->getRows(sqlQuery, table);
 	grid->DataMember = table;

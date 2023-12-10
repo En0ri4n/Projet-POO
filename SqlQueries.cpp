@@ -1,6 +1,7 @@
 #include "SqlQueries.h"
+#include "SqlManager.h"
 
-String^ ProjetPOOServices::SqlQueries::listePersonnel()
+String^ ProjetPOOServices::SqlQueries::listePersonnels()
 {
 	return "SELECT Personnels.Id_personnel, Personnes.Nom, Personnes.Prenom, Personnels.Date_embauche, Personnels.Id_superieur, Adresses.Id_adresse, Adresses.Numero_rue, Adresses.Nom_rue, Villes.Id_ville, Villes.Nom_ville, Villes.Code_postal FROM [Projet].[dbo].[Personnes] INNER JOIN [Projet].[dbo].[Personnels] ON Personnes.Id_personne = Personnels.Id_personnel INNER JOIN [Projet].[dbo].[Adresses] ON Personnels.Id_adresse = Adresses.Id_adresse INNER JOIN [Projet].[dbo].[Villes] ON Adresses.Id_ville = Villes.Id_ville";
 }
@@ -209,7 +210,7 @@ String^ ProjetPOOServices::SqlQueries::SupprimerPersonnel(PersonnelMap^ personne
 		personnel->getId());
 }
 
-String^ ProjetPOOServices::SqlQueries::listeCommande()
+String^ ProjetPOOServices::SqlQueries::listeCommandes()
 {
 	return String::Format("SELECT * FROM {0}", Table::COMMANDES->getName());
 }
@@ -551,19 +552,33 @@ String^ ProjetPOOServices::SqlQueries::SupprimerArticle(ArticleMap^ article)
 
 String^ ProjetPOOServices::SqlQueries::listeClients()
 {
-	return "SELECT Id_client AS ID, Nom, Prenom, Date_naissance, Date_premier_achat,  " +
-		"" +
-		"Id_adresse_facturation, AdressesFacturation.Numero_rue, AdressesFacturation.Nom_rue, AdressesFacturation.Id_ville,  " +
-		"VilleFacturation.Nom_ville, VilleFacturation.Code_postal, " +
-		"" +
-		"Id_adresse_livraison, AdressesLivraison.Numero_rue, AdressesLivraison.Nom_rue, AdressesLivraison.Id_ville,  " +
-		"VilleLivraison.Nom_ville, VilleLivraison.Code_postal " +
+	return "SELECT  " +
+		"    Id_client AS Id_client, " +
+		"    Nom AS Nom, " +
+		"    Prenom AS Prenom, " +
+		"    Date_naissance, " +
+		"    Date_premier_achat, " +
+		"     " +
+		"    Id_adresse_facturation AS ID_Adresse_Facturation, " +
+		"    AdressesFacturation.Numero_rue AS Numero_rue_Adresse_Facturation, " +
+		"    AdressesFacturation.Nom_rue AS Nom_rue_Adresse_Facturation, " +
+		"    AdressesFacturation.Id_ville AS ID_Ville_Facturation, " +
+		"    VilleFacturation.Nom_ville AS Nom_Ville_Facturation, " +
+		"    VilleFacturation.Code_postal AS Code_postal_Ville_Facturation, " +
+		"     " +
+		"    Id_adresse_livraison AS ID_Adresse_Livraison, " +
+		"    AdressesLivraison.Numero_rue AS Numero_rue_Adresse_Livraison, " +
+		"    AdressesLivraison.Nom_rue AS Nom_rue_Adresse_Livraison, " +
+		"    AdressesLivraison.Id_ville AS ID_Ville_Livraison, " +
+		"    VilleLivraison.Nom_ville AS Nom_Ville_Livraison, " +
+		"    VilleLivraison.Code_postal AS Code_postal_Ville_Livraison " +
 		" " +
-		"FROM [Projet].[dbo].[Clients] INNER JOIN [Projet].[dbo].[Personnes] ON Clients.Id_client = Personnes.Id_personne " +
+		"FROM [Projet].[dbo].[Clients]  " +
+		"INNER JOIN [Projet].[dbo].[Personnes] ON Clients.Id_client = Personnes.Id_personne " +
 		"LEFT JOIN Adresses AS AdressesFacturation ON Clients.Id_adresse_facturation = AdressesFacturation.Id_adresse " +
 		"LEFT JOIN Adresses AS AdressesLivraison ON Clients.Id_adresse_livraison = AdressesLivraison.Id_adresse " +
 		"LEFT JOIN Villes AS VilleFacturation ON AdressesFacturation.Id_ville = VilleFacturation.Id_ville " +
-		"LEFT JOIN Villes AS VilleLivraison ON AdressesLivraison.Id_ville = VilleLivraison.Id_ville ";
+		"LEFT JOIN Villes AS VilleLivraison ON AdressesLivraison.Id_ville = VilleLivraison.Id_ville";
 }
 
 String^ ProjetPOOServices::SqlQueries::AjouterClient(ClientMap^ client)
@@ -1087,4 +1102,90 @@ String^ ProjetPOOServices::SqlQueries::getValeurAchatStock()
 		"	a.Quantite_article), 2) AS float) AS ValeurAchatDuStock " +
 		"FROM " +
 		"[Projet].[dbo].[Articles] a;";
+}
+
+String^ ProjetPOOServices::SqlQueries::filtre(Table^ table, String^ column, String^ value)
+{
+	String^ query = "";
+	if(table == Table::PERSONNELS)
+		query += listePersonnels();
+	else if(table == Table::CLIENTS)
+		query += listeClients();
+	else if(table == Table::ARTICLES)
+		query += listeArticles();
+	else if(table == Table::COMMANDES)
+		query += listeCommandes();
+
+
+	query += String::Format(" WHERE {0} LIKE '%{1}%';", column, value);
+
+	return query;
+}
+
+String^ ProjetPOOServices::SqlQueries::filtreClients(String^ column, String^ value)
+{
+	String^ query = listeClients();
+
+	column = column->ToLower();
+	String^ table = "";
+	String^ attribut = "";
+
+	if(column->Contains("facturation"))
+	{
+		if(column->Contains("ville"))
+		{
+			table = "VilleFacturation";
+		}
+		else if(column->Contains("adresse"))
+		{
+			table = "AdressesFacturation";
+		}
+	}
+	else if(column->Contains("livraison"))
+	{
+		if(column->Contains("ville"))
+		{
+			table = "VilleLivraison";
+		}
+		else if(column->Contains("adresse"))
+		{
+			table = "AdressesLivraison";
+		}
+	}
+
+	if(column->Contains("facturation") || column->Contains("livraison"))
+	{
+		if(column->Contains("numero"))
+		{
+			attribut = "Numero_rue";
+		}
+		else if(column->Contains("rue"))
+		{
+			attribut = "Nom_rue";
+		}
+		else if(column->Contains("ville"))
+		{
+			attribut = "Nom_ville";
+		}
+		else if(column->Contains("code"))
+		{
+			attribut = "Code_postal";
+		}
+		else if(column->Contains("id"))
+		{
+			if(column->Contains("adresse"))
+			{
+				attribut = "Id_adresse";
+			}
+			else if(column->Contains("ville"))
+			{
+				attribut = "Id_ville";
+			}
+		}
+	}
+
+
+	query += String::Format(" WHERE [{0}].[{1}] LIKE '%{2}%';", table, attribut, value);
+
+	return query;
 }

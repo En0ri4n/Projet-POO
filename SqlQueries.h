@@ -12,12 +12,12 @@ namespace ProjetPOOServices
 	ref class SqlQueries
 	{
 	public:
-		static String^ listePersonnel();
+		static String^ listePersonnels();
 		static String^ AjouterPersonnel(PersonnelMap^);
 		static String^ ModifierPersonnel(PersonnelMap^);
 		static String^ SupprimerPersonnel(PersonnelMap^);
 
-		static String^ listeCommande();
+		static String^ listeCommandes();
 		static String^ AjouterCommande(CommandeMap^);
 		static String^ ModifierCommande(CommandeMap^);
 		static String^ SupprimerCommande(CommandeMap^);
@@ -45,6 +45,9 @@ namespace ProjetPOOServices
 		static String^ getProduitMoinsVendu();
 		static String^ getValeurCommercialStock();
 		static String^ getValeurAchatStock();
+
+		static String^ filtre(Table^, String^, String^);
+		static String^ filtreClients(String^, String^);
 	};
 }
 

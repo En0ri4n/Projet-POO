@@ -20,7 +20,10 @@ namespace ProjetPOOServices
 		void fill(String^);
 		void fill(Table^);
 	public:
-		SqlHandler(DataGridView^);
+		SqlHandler(DataGridView^, String^, String^);
+
+		SqlManager^ getManager() { return manager; }
+
 		void fillGrid(Table^);
 		void fillGrid(String^, String^);
 		void action(String^);
@@ -58,7 +61,8 @@ namespace ProjetPOOServices
 		void afficherValeurCommercialStock();
 		void afficherValeurAchatStock();
 
-
+		void filtre(Table^, String^, String^);
+		void filtreClients(String^, String^);
 
 		static void fillGrid(Table^, DataGridView^);
 		static void fillGrid(String^, String^, DataGridView^);

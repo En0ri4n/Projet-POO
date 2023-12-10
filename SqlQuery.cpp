@@ -36,7 +36,7 @@ System::Collections::ArrayList^ ProjetPOOMappage::SqlQuery::getQueries()
 
 String^ SqlQuery::toQuery()
 {
-	String^ query = String::Format("USE {0};", DATABASE_NAME);
+	String^ query = String::Format("USE {0};", SqlManager::DATABASE_NAME);
 
 	if(isTransaction)
 		query += "BEGIN TRANSACTION;";

@@ -6,12 +6,17 @@
 #include "Projet.h"
 #include "ArticlePopup.h"
 #include "AdressePopup.h"
+#include "SocieteReference.h"
+
+using namespace PdfSharp;
+using namespace PdfSharp::Drawing;
+using namespace PdfSharp::Pdf;
+using namespace PdfSharp::Pdf::AcroForms;
 
 using namespace System;
 
 System::Void ProjetPOO::Projet::onFormLoad(System::Object^ sender, System::EventArgs^ e)
 {
-	sqlHandler = gcnew SqlHandler(this->dataGridView);
 	setConnected(false);
 }
 System::Void ProjetPOO::Projet::setConnected(bool connected)
@@ -20,7 +25,7 @@ System::Void ProjetPOO::Projet::setConnected(bool connected)
 
 	this->clearBouton->Visible = connected;
 	this->rechercheColonnesBox->Visible = connected;
-	this->boutonChercher->Visible = connected;
+	this->rechercheBouton->Visible = connected;
 	this->rechercheBox->Visible = connected;
 
 	this->boutonValider->Visible = connected;
@@ -203,14 +208,32 @@ System::Void ProjetPOO::Projet::clickOnBoutonValider(System::Object^ sender, Sys
 }
 System::Void ProjetPOO::Projet::clickOnConnexionBDD(System::Object^ sender, System::EventArgs^ e)
 {
-	if(this->connected)
-		return;
+	if(!connected)
+	{
+		String^ username = this->usernameBox->Text;
+		String^ password = this->passwordBox->Text;
 
-	addHistorique(L"Connexion en cours...");
-	setConnected(true);
-	changeMode(currentMode);
+		if(username->Length == 0 || password->Length == 0)
+		{
+			addHistorique("Veuillez entrer un nom d'utilisateur et un mot de passe");
+			return;
+		}
 
-	sqlHandler->fillGrid(Table::PERSONNES);
+		sqlHandler = gcnew SqlHandler(this->dataGridView, username, password);
+
+		if(sqlHandler->getManager()->isConnected())
+		{
+			addHistorique("Connexion réussie");
+			setConnected(true);
+			changeMode(currentMode);
+			sqlHandler->fillGrid(Table::PERSONNES);
+		}
+		else
+		{
+			addHistorique("Connexion échouée");
+			setConnected(false);
+		}
+	}
 }
 System::Void ProjetPOO::Projet::addHistorique(System::String^ historique)
 {
@@ -290,11 +313,15 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 
 			if(mode == AFFICHER)
 			{
+				this->factureCommandeBouton->Enabled = true;
+
 				this->boutonAfficher->Enabled = false;
 				name = L"Affichage";
 			}
 			else if(mode == SUPPRIMER)
 			{
+				this->factureCommandeBouton->Enabled = false;
+
 				this->boutonSupprimer->Enabled = false;
 				name = L"Suppression";
 			}
@@ -317,6 +344,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->seuilStockBox->Enabled = true;
 			this->quantiteStockBox->Enabled = true;
 			this->tvaStockBox->Enabled = true;
+			this->factureCommandeBouton->Enabled = false;
 
 			// Commandes
 			this->dateLivraisonCommandePicker->Enabled = true;
@@ -608,9 +636,23 @@ System::Void ProjetPOO::Projet::clickOnStatistiqueBox(System::Object^ sender, Sy
 			break;
 	}
 }
-System::Void ProjetPOO::Projet::clickOnSuperviseurCheckBox(System::Object^ sender, System::EventArgs^ e)
+System::Void ProjetPOO::Projet::clickOnSuperviseurPersonnelCheckBox(System::Object^ sender, System::EventArgs^ e)
 {
 	this->idSuperviseurPersonnelBox->Enabled = this->superviseurPersonnelCheckBox->Checked;
+}
+System::Void ProjetPOO::Projet::clickOnRechercheBouton(System::Object^ sender, System::EventArgs^ e)
+{
+	String^ colonne = this->rechercheColonnesBox->SelectedItem->ToString();
+	String^ recherche = this->rechercheBox->Text;
+
+	if(isActive(tabPersonnel))
+		sqlHandler->filtre(Table::PERSONNELS, colonne, recherche);
+	else if(isActive(tabStocks))
+		sqlHandler->filtre(Table::ARTICLES, colonne, recherche);
+	else if(isActive(tabCommandes))
+		sqlHandler->filtre(Table::COMMANDES, colonne, recherche);
+	else if(isActive(tabClients))
+		sqlHandler->filtreClients(colonne, recherche);
 }
 System::Void ProjetPOO::Projet::resetBoxes()
 {
@@ -651,9 +693,141 @@ System::Void ProjetPOO::Projet::resetBoxes()
 	updateAdresseBouton(TypeAdresse::LIVRAISON);
 	updateAdresseBouton(TypeAdresse::FACTURATION);
 }
+System::Void ProjetPOO::Projet::clickOnHistoriqueLabel(System::Object^ sender, System::EventArgs^ e)
+{
+	/*
+	CommandeMap^ commande = gcnew CommandeMap();
+	commande->setIdCommande("AGGA2015SAD15");
+	commande->setDateLivraison(System::DateTime::Now);
+	commande->setDateEmission(System::DateTime::Now);
+	commande->setMoyenPaiement("CB");
+	commande->setDatePaiement(System::DateTime::Now);
+	commande->setIdClient(1);
+
+	ArrayList^ listeAleatoireArticles = gcnew ArrayList();
+	listeAleatoireArticles->Add(gcnew ArticleMap("JDU45", "Pantalon", 20, "Vetement", "Rouge", 10, 5, 20, 5));
+	listeAleatoireArticles->Add(gcnew ArticleMap("KDYU59", "Chemise", 20, "Vetement", "Bleu", 10, 5, 20, 33));
+	listeAleatoireArticles->Add(gcnew ArticleMap("NBCHCI32", "Chaussures", 20, "Vetement", "Noir", 10, 5, 20, 20));
+	listeAleatoireArticles->Add(gcnew ArticleMap("YEYEBD5", "Chaussettes", 20, "Vetement", "Blanc", 10, 5, 20));
+
+	commande->setListeArticles(listeAleatoireArticles);
+	commande->setDerniereListeArticles(derniersArticlesCommande);
+	ClientMap^ client = gcnew ClientMap();
+	client->setId(1);
+	client->setNom("DUPONT");
+	client->setPrenom("Jean");
+	client->setAdresseLivraison(currentClientAdresseLivraison);
+	client->setAdresseFacturation(gcnew AdresseMap(-1, gcnew VilleMap(-1, "Obernai", "67210"), "Rue du Landsberg", 26));
+	client->setDateNaissance(System::DateTime::Now);
+	client->setDatePremierAchat(System::DateTime::Now);
+	generatePdf(commande, client);
+	*/
+}
 System::Boolean ProjetPOO::Projet::isActive(System::Windows::Forms::TabPage^ tab)
 {
 	return this->tabController->SelectedTab == tab;
+}
+System::Void ProjetPOO::Projet::generatePdf(CommandeMap^ commande, ClientMap^ client)
+{
+	addHistorique("Génération de la facture de la commande " + commande->getIdCommande() + " pour le client " + client->getNom() + " " + client->getPrenom());
+
+	PdfDocument^ document = gcnew PdfDocument();
+	PdfSharp::Pdf::PdfPage^ page = document->AddPage();
+	XGraphics^ gfx = XGraphics::FromPdfPage(page);
+
+	const int pageWidth = 610;
+	int borderX = 17;
+	int outBorderX = pageWidth - borderX * 2;
+
+	gfx->DrawImage(XImage::FromFile("logo.png"), 10, 10, 120, 120);
+
+	gfx->DrawString("EVAL", gcnew XFont("Arial", 18), XBrushes::Black, borderX, 152);
+
+	// Draw facture below the logo
+	AdresseMap^ adresseSociete = SocieteReference::ADRESSE;
+	gfx->DrawString(adresseSociete->getNumero() + " " + adresseSociete->getRue(), gcnew XFont("Arial", 12), XBrushes::Black, borderX, 170);
+	gfx->DrawString(adresseSociete->getVille()->getCodePostal() + " " + adresseSociete->getVille()->getNom(), gcnew XFont("Arial", 12), XBrushes::Black, borderX, 186);
+	gfx->DrawString("FRANCE", gcnew XFont("Arial", 12), XBrushes::Black, borderX, 202);
+
+	gfx->DrawString(String::Format("Tél : {0}", SocieteReference::SERVICE_CLIENT), gcnew XFont("Arial", 10), XBrushes::Black, borderX, 230);
+	gfx->DrawString(SocieteReference::MAIL, gcnew XFont("Arial", 10), XBrushes::Black, borderX, 242);
+	gfx->DrawString(SocieteReference::SITE, gcnew XFont("Arial", 10), XBrushes::Black, borderX, 254);
+
+	gfx->DrawRectangle(XBrushes::Gray, outBorderX - 250, 10, 250, 30);
+	gfx->DrawRectangle(XBrushes::White, outBorderX - 250 + 1, 11, 248, 28);
+	gfx->DrawString("FACTURE", gcnew XFont("Arial", 20), XBrushes::Black, outBorderX - 250 + 125, 15, XStringFormat::TopCenter);
+
+	gfx->DrawString(String::Format("Référence : {0}", commande->getIdCommande()), gcnew XFont("Arial", 10, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Référence : {0}", commande->getIdCommande()), gcnew XFont("Arial", 10, XFontStyle::Bold)).Width, 58);
+	gfx->DrawString("Version : 1.0", gcnew XFont("Arial", 11), XBrushes::Black, outBorderX - gfx->MeasureString("Version : 1.0", gcnew XFont("Arial", 11)).Width, 72);
+	gfx->DrawString(String::Format("Date de facturation : {0}", commande->getDatePaiement()->ToShortDateString()), gcnew XFont("Arial", 11), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Date de facturation : {0}", commande->getDatePaiement()->ToShortDateString()), gcnew XFont("Arial", 11)).Width, 98);
+	gfx->DrawString(String::Format("Référence client : {0}", client->getId().ToString("D9")), gcnew XFont("Arial", 11), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Référence client : {0}", client->getId().ToString("D9")), gcnew XFont("Arial", 11)).Width, 112);
+
+	gfx->DrawRectangle(XBrushes::LightBlue, outBorderX - 260, 140, 260, 26);
+	gfx->DrawString(String::Format("{0} {1}", client->getNom(), client->getPrenom()), gcnew XFont("Arial", 14, XFontStyle::Bold), XBrushes::Black, outBorderX - 260 + 4, 158);
+
+	gfx->DrawRectangle(XBrushes::LightBlue, outBorderX - 260, 169, 260, 65);
+	gfx->DrawString(String::Format("{0} {1}", client->getAdresseFacturation()->getNumero(), client->getAdresseFacturation()->getRue()), gcnew XFont("Arial", 13), XBrushes::Black, outBorderX - 260 + 4, 185);
+	gfx->DrawString(String::Format("{0} {1}", client->getAdresseFacturation()->getVille()->getCodePostal(), client->getAdresseFacturation()->getVille()->getNom()), gcnew XFont("Arial", 13), XBrushes::Black, outBorderX - 260 + 4, 205);
+	gfx->DrawString("France", gcnew XFont("Arial", 13), XBrushes::Black, outBorderX - 260 + 4, 225);
+	
+
+	int yPos = 270;
+	gfx->DrawLine(XPens::Gray, borderX, yPos, outBorderX, yPos);
+	gfx->DrawString("Description", gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, borderX, yPos += 15);
+	gfx->DrawString("Prix Unit. HT", gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, borderX + 225, yPos += 3, XStringFormat::BottomCenter);
+	gfx->DrawString("Quantité", gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, borderX + 305, yPos, XStringFormat::BottomCenter);
+	gfx->DrawString("Total HT", gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, borderX + 365, yPos, XStringFormat::BottomCenter);
+	gfx->DrawString("TVA", gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, borderX + 423, yPos, XStringFormat::BottomCenter);
+	gfx->DrawString("Remise", gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, borderX + 475, yPos, XStringFormat::BottomCenter);
+	gfx->DrawString("Total TTC", gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, borderX + 533, yPos, XStringFormat::BottomCenter);
+	gfx->DrawLine(XPens::Gray, borderX, yPos += 5, outBorderX, yPos);
+
+	double totalTTC = 0;
+	double totalHT = 0;
+
+	yPos += 15;
+	for each(ArticleMap ^ article in commande->getListeArticles())
+	{
+		gfx->DrawString(article->getNom(), gcnew XFont("Arial", 11), XBrushes::Black, borderX, yPos);
+		gfx->DrawString(String::Format("{0} | {1}", article->getNature(), article->getCouleur()), gcnew XFont("Arial", 9), XBrushes::Black, borderX, yPos + 10);
+		gfx->DrawString(article->getPrix().ToString("C"), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 225, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString(article->getQuantite().ToString(), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 305, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString((article->getQuantite() * article->getPrix()).ToString("C"), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 365, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString(String::Format("{0}%", article->getTaxe()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 423, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString(String::Format("{0}€", (article->getPrix() * article->getQuantite() * (article->getTaxe() / 100.0))), gcnew XFont("Arial", 9), XBrushes::Black, borderX + 423, yPos + 10, XStringFormat::BottomCenter);
+		gfx->DrawString(String::Format("{0}%", article->getRemise()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 475, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString(String::Format("{0}€", (article->getQuantite() * article->getPrix() * (1 + article->getTaxe() / 100.0) * (article->getRemise() / 100.0))), gcnew XFont("Arial", 9), XBrushes::Black, borderX + 475, yPos + 10, XStringFormat::BottomCenter);
+		gfx->DrawString((article->getQuantite() * article->getPrix() * (1 + article->getTaxe() / 100.0) * (1 - article->getRemise() / 100.0)).ToString("C"), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 533, yPos, XStringFormat::BottomCenter);
+
+		gfx->DrawLine(XPens::Gray, borderX, yPos += 15, outBorderX, yPos);
+		yPos += 20;
+
+		totalHT += article->getQuantite() * article->getPrix();
+		totalTTC += article->getQuantite() * article->getPrix() * (1 + article->getTaxe() / 100.0) * (1 - article->getRemise() / 100.0);
+	}
+
+	gfx->DrawString(String::Format("Total HT : {0}", totalHT.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Total HT : {0}", totalHT.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold)).Width, yPos);
+	gfx->DrawString(String::Format("Total TTC : {0}", totalTTC.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Total TTC : {0}", totalTTC.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold)).Width, yPos += 15);
+
+	gfx->DrawLine(XPens::Gray, borderX, yPos += 15, outBorderX, yPos);
+
+	gfx->DrawString("Net à Payer :", gcnew XFont("Arial", 14, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString("Net à Payer :", gcnew XFont("Arial", 14, XFontStyle::Bold)).Width, yPos += 30);
+	gfx->DrawString(totalTTC.ToString("C"), gcnew XFont("Arial", 14, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(totalTTC.ToString("C"), gcnew XFont("Arial", 14, XFontStyle::Bold)).Width, yPos += 20);
+
+	gfx->DrawString(String::Format("Moyen de paiement : {0}", commande->getMoyenPaiement()), gcnew XFont("Arial", 11), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Moyen de paiement : {0}", commande->getMoyenPaiement()), gcnew XFont("Arial", 11)).Width, yPos += 30);
+
+	yPos = 790;
+	gfx->DrawString("Les présentes conditions générales de vente régissent les relations contractuelles", gcnew XFont("Arial", 10), XBrushes::Black, pageWidth / 2, yPos, XStringFormat::Center);
+	gfx->DrawString("entre EVAL et son client, les deux parties les acceptant sans réserve.", gcnew XFont("Arial", 10), XBrushes::Black, pageWidth / 2, yPos += 12, XStringFormat::Center);
+	gfx->DrawString("Ces conditions générales de vente prévaudront sur toutes autres conditions", gcnew XFont("Arial", 10), XBrushes::Black, pageWidth / 2, yPos += 12, XStringFormat::Center);
+	gfx->DrawString("générales ou particulières non expressément agréées par EVAL.", gcnew XFont("Arial", 10), XBrushes::Black, pageWidth / 2, yPos += 12, XStringFormat::Center);
+
+
+	document->Save("test.pdf");
+}
+System::Void ProjetPOO::Projet::clickOnFactureCommandeBouton(System::Object^ sender, System::EventArgs^ e)
+{
+	// generatePdf();
 }
 Collections::ArrayList^ ProjetPOO::Projet::getArticlesCommande()
 {

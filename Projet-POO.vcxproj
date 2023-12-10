@@ -116,6 +116,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Reference Include="PdfSharp">
+      <HintPath>packages\PdfSharp.1.3\lib\PdfSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -152,6 +155,7 @@
     <ClInclude Include="CommandeMap.h" />
     <ClInclude Include="PersonnelMap.h" />
     <ClInclude Include="PersonneMap.h" />
+    <ClInclude Include="SocieteReference.h" />
     <ClInclude Include="SqlManager.h" />
     <ClInclude Include="SqlQueries.h" />
     <ClInclude Include="SqlQuery.h" />
@@ -172,6 +176,9 @@
       <DependentUpon>Projet.h</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
