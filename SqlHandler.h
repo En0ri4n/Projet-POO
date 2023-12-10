@@ -47,14 +47,14 @@ namespace ProjetPOOServices
 		void ModifierClient(ClientMap^);
 		void SupprimerClient(ClientMap^);
 
-		void remplirArticlesCommande(CommandeMap^);
+		void remplirArticlesCommande(CommandeMap^, System::Collections::ArrayList^);
 
 		void afficherPanierMoyen();
 		void afficherChiffreAffaire(DateTime^);
-		void afficherProduitSousSeuilReapprovisionnement();
+		void afficherArticlesSousSeuilReapprovisionnement();
 		void afficherMontantTotalClient(ClientMap^);
-		void afficherProduitPlusVendu();
-		void afficherProduitMoinsVendu();
+		void afficherArticlesPlusVendu();
+		void afficherArticlesMoinsVendu();
 		void afficherValeurCommercialStock();
 		void afficherValeurAchatStock();
 

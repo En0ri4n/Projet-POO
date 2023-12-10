@@ -80,7 +80,7 @@ int ArticleMap::getTaxe()
 	return this->taxe;
 }
 
-void ProjetPOOMappage::ArticleMap::setRemise(int)
+void ProjetPOOMappage::ArticleMap::setRemise(int remise)
 {
 	this->remise = remise;
 }

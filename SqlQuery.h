@@ -15,6 +15,9 @@ namespace ProjetPOOMappage
 		static Table^ ADRESSES = gcnew Table(L"Adresses");
 		static Table^ VILLES = gcnew Table(L"Villes");
 		static Table^ CONSITUTER_LIEN_COMMANDES_ARTICLES = gcnew Table(L"constituer");
+
+		// Tables pour l'affichage
+		static Table^ STATISTIQUES = gcnew Table(L"Statistiques");
 	private:
 		String^ name;
 	private:
@@ -38,6 +41,7 @@ namespace ProjetPOOMappage
 		void newQuery(bool, String^);
 		void addQuery(String^);
 		void useTransaction();
+		System::Collections::ArrayList^ getQueries();
 		String^ toQuery();
 	};
 }

@@ -41,3 +41,10 @@ void ProjetPOOMappage::ClientMap::setAdresseFacturation(AdresseMap^ adresseFactu
 {
 	this->adresseFacturation = adresseFacturation;
 }
+
+ClientMap^ ProjetPOOMappage::ClientMap::from(int id)
+{
+	ClientMap^ client = gcnew ClientMap();
+	client->setId(id);
+	return client;
+}

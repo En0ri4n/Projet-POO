@@ -1,4 +1,5 @@
 #include "SqlManager.h"
+#include "Projet.h"
 #include <iostream>
 
 SqlManager::SqlManager()
@@ -19,6 +20,7 @@ System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, String^ table)
 	this->command->CommandText = query->toQuery();
 	this->dataAdapter->SelectCommand = this->command;
 	this->dataAdapter->Fill(this->dataSet, table);
+	ProjetPOO::Projet::instance->addQueryHistorique(query->toQuery());
 
 	return this->dataSet;
 }
@@ -30,9 +32,24 @@ System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, Table^ table)
 
 void SqlManager::actionRows(SqlQuery^ query)
 {
-	this->command->CommandText = query->toQuery();
-	this->dataAdapter->SelectCommand = this->command;
 	this->connection->Open();
-	lastCount = this->command->ExecuteNonQuery();
+
+	lastCount = 0;
+
+	for each(String ^ strQuery in query->getQueries())
+	{
+		ProjetPOO::Projet::instance->addQueryHistorique(strQuery);
+		this->command->CommandText = strQuery;
+		this->dataAdapter->SelectCommand = this->command;
+		try
+		{
+			this->lastCount += this->command->ExecuteNonQuery();
+		}
+		catch(System::Exception^ e)
+		{
+			ProjetPOO::Projet::instance->addQueryHistorique(e->Message);
+		}
+	}
+
 	this->connection->Close();
 }

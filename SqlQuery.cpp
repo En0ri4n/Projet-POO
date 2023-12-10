@@ -29,6 +29,11 @@ void SqlQuery::useTransaction()
 	this->isTransaction = true;
 }
 
+System::Collections::ArrayList^ ProjetPOOMappage::SqlQuery::getQueries()
+{
+	return queries;
+}
+
 String^ SqlQuery::toQuery()
 {
 	String^ query = String::Format("USE {0};", DATABASE_NAME);
@@ -39,7 +44,6 @@ String^ SqlQuery::toQuery()
 	for each(String^ strQuery in queries)
 	{
 		query += String::Format("{0};", strQuery);
-		ProjetPOO::Projet::instance->addQueryHistorique(query);
 	}
 
 	if(isTransaction)

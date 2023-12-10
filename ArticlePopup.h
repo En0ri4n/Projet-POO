@@ -134,7 +134,7 @@ namespace ProjetPOO
 			this->remiseArticleBox->TabIndex = 3;
 			this->remiseArticleBox->Value = System::Decimal(gcnew cli::array< System::Int32 >(4)
 			{
-				1, 0, 0, 0
+				0, 0, 0, 0
 			});
 			// 
 			// listeArticlesVouluDataGridView
@@ -146,6 +146,7 @@ namespace ProjetPOO
 			this->listeArticlesVouluDataGridView->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->listeArticlesVouluDataGridView->Size = System::Drawing::Size(857, 164);
 			this->listeArticlesVouluDataGridView->TabIndex = 4;
+			this->listeArticlesVouluDataGridView->CellClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &ArticlePopup::clickOnCellPanier);
 			// 
 			// quantiteArticleLabel
 			// 
@@ -237,6 +238,8 @@ namespace ProjetPOO
 		System::Void clickOnCell(System::Object^, System::Windows::Forms::DataGridViewCellEventArgs^ e);
 		System::Void clickOnValider(System::Object^ sender, System::EventArgs^ e);
 		System::Void addColumns();
+		System::Void clickOnCellPanier(System::Object^, System::Windows::Forms::DataGridViewCellEventArgs^ e);
+
 };
 }
 #pragma endregion

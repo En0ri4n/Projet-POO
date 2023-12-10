@@ -70,6 +70,16 @@ Collections::ArrayList^ ProjetPOOMappage::CommandeMap::getListeArticles()
 	return this->listeArticles;
 }
 
+void ProjetPOOMappage::CommandeMap::setDerniereListeArticles(Collections::ArrayList^ list)
+{
+	this->derniereListeArticles = list;
+}
+
+Collections::ArrayList^ ProjetPOOMappage::CommandeMap::getDerniereListeArticles()
+{
+	return this->derniereListeArticles;
+}
+
 ProjetPOOMappage::CommandeMap^ ProjetPOOMappage::CommandeMap::from(String^ id)
 {
 	CommandeMap^ commande = gcnew CommandeMap();

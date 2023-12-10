@@ -106,6 +106,8 @@ System::Void ProjetPOO::Projet::clickOnBoutonValider(System::Object^ sender, Sys
 		commande->setMoyenPaiement(moyenPayementCommandeBox->Text);
 		commande->setDatePaiement(datePayementCommandePicker->Value);
 		commande->setIdClient(Convert::ToInt32(idClientCommandeBox->Value));
+		commande->setListeArticles(getArticlesCommande());
+		commande->setDerniereListeArticles(derniersArticlesCommande);
 
 		switch(currentMode)
 		{
@@ -153,7 +155,7 @@ System::Void ProjetPOO::Projet::clickOnBoutonValider(System::Object^ sender, Sys
 				break;
 			case ProjetPOO::AJOUTER:
 				sqlHandler->AjouterArticle(article);
-				addHistorique("Ajout de l'article " + article->getIdArticle() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
+				addHistorique("Ajout de l'article " + article->getNom() + " : " + Convert::ToInt32(sqlHandler->getLastCount()));
 				break;
 			case ProjetPOO::MODIFIER:
 				sqlHandler->ModifierArticle(article);
@@ -259,6 +261,7 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->prenomPersonnelBox->Enabled = false;
 			this->dateEmbauchePersonnelPicker->Enabled = false;
 			this->idSuperviseurPersonnelBox->Enabled = false;
+			this->superviseurPersonnelCheckBox->Enabled = false;
 
 			// Stocks
 			this->idStockBox->Enabled = true;
@@ -302,9 +305,11 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			this->nomPersonnelBox->Enabled = true;
 			this->prenomPersonnelBox->Enabled = true;
 			this->dateEmbauchePersonnelPicker->Enabled = true;
-			this->idSuperviseurPersonnelBox->Enabled = true;
+			this->idSuperviseurPersonnelBox->Enabled = this->superviseurPersonnelCheckBox->Checked;
+			this->superviseurPersonnelCheckBox->Enabled = true;
 
 			// Stocks
+			this->idStockBox->Enabled = true;
 			this->nomStockBox->Enabled = true;
 			this->prixStockBox->Enabled = true;
 			this->natureStockBox->Enabled = true;
@@ -327,7 +332,6 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			if(mode == AJOUTER)
 			{
 				this->idPersonnelBox->Enabled = false;
-				this->idStockBox->Enabled = false;
 				this->idCommandeBox->Enabled = false;
 				this->moyenPayementCommandeBox->Enabled = true;
 				this->idClientBox->Enabled = false;
@@ -338,7 +342,6 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 			else if(mode == MODIFIER)
 			{
 				this->idPersonnelBox->Enabled = true;
-				this->idStockBox->Enabled = true;
 				this->idCommandeBox->Enabled = true;
 				this->moyenPayementCommandeBox->Enabled = false;
 				this->idClientBox->Enabled = true;
@@ -350,6 +353,8 @@ System::Void ProjetPOO::Projet::changeMode(SqlMode mode)
 		default:
 			break;
 	}
+
+	resetBoxes();
 
 	addHistorique("Mode : " + name);
 }
@@ -396,6 +401,9 @@ System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::W
 		currentPersonnelAdresse->getVille()->setNom(this->dataGridView->Rows[e->RowIndex]->Cells[9]->Value->ToString());
 		currentPersonnelAdresse->getVille()->setCodePostal(this->dataGridView->Rows[e->RowIndex]->Cells[10]->Value->ToString());
 		this->idSuperviseurPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString();
+		bool superviseur = String::IsNullOrWhiteSpace(this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString());
+		this->superviseurPersonnelCheckBox->Checked = !superviseur;
+		this->idSuperviseurPersonnelBox->Enabled = superviseur;
 
 		updateAdresseBouton(TypeAdresse::PERSONNEL);
 	}
@@ -418,7 +426,9 @@ System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::W
 		this->moyenPayementCommandeBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[3]->Value->ToString();
 		this->datePayementCommandePicker->Text = this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString();
 		this->idClientCommandeBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[6]->Value->ToString();
-		sqlHandler->remplirArticlesCommande(CommandeMap::from(this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString()));
+		sqlHandler->remplirArticlesCommande(CommandeMap::from(this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString()), this->articlesCommande);
+		updateArticlesCommande(this->articlesCommande);
+		sqlHandler->remplirArticlesCommande(CommandeMap::from(this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString()), this->derniersArticlesCommande);
 	}
 	else if(isActive(tabClients))
 	{
@@ -500,19 +510,19 @@ System::Void ProjetPOO::Projet::updateAdresseBouton(TypeAdresse type)
 	switch(type)
 	{
 		case TypeAdresse::PERSONNEL:
-			if(currentPersonnelAdresse->getIdAdresse() != -1)
+			if(currentPersonnelAdresse->getNumero() != -1)
 				this->adressePersonnelBouton->Text = currentPersonnelAdresse->getNumero() + " " + currentPersonnelAdresse->getRue() + " " + currentPersonnelAdresse->getVille()->getNom();
 			else
 				this->adressePersonnelBouton->Text = "Aucune adresse";
 			break;
 		case TypeAdresse::LIVRAISON:
-			if(currentClientAdresseLivraison->getIdAdresse() != -1)
+			if(currentClientAdresseLivraison->getNumero() != -1)
 				this->adresseLivraisonClientBouton->Text = currentClientAdresseLivraison->getNumero() + " " + currentClientAdresseLivraison->getRue() + " " + currentClientAdresseLivraison->getVille()->getNom();
 			else
 				this->adresseLivraisonClientBouton->Text = "Aucune adresse";
 			break;
 		case TypeAdresse::FACTURATION:
-			if(currentClientAdresseFacturation->getIdAdresse() != -1)
+			if(currentClientAdresseFacturation->getNumero() != -1)
 				this->adresseFacturationClientBouton->Text = currentClientAdresseFacturation->getNumero() + " " + currentClientAdresseFacturation->getRue() + " " + currentClientAdresseFacturation->getVille()->getNom();
 			else
 				this->adresseFacturationClientBouton->Text = "Aucune adresse";
@@ -523,6 +533,88 @@ System::Void ProjetPOO::Projet::updateAdresseBouton(TypeAdresse type)
 }
 System::Void ProjetPOO::Projet::clickOnClearBouton(System::Object^ sender, System::EventArgs^ e)
 {
+	resetBoxes();
+}
+System::Void ProjetPOO::Projet::clickOnCalculerStatistiques(System::Object^ sender, System::EventArgs^ e)
+{
+	// Supprimes toutes les colonnes de la table statistiques, sinon elles s'ajoutent à la suite
+	// au lieu de remplacer les anciennes
+	System::Data::DataTableCollection^ tables = ((DataSet^) this->dataGridView->DataSource)->Tables;
+	if(tables->Contains(Table::STATISTIQUES->getName()))
+		tables[Table::STATISTIQUES->getName()]->Columns->Clear();
+
+	switch(this->statistiqueBox->SelectedIndex)
+	{
+		case PANIER_MOYEN:
+			sqlHandler->afficherPanierMoyen();
+			addHistorique("Affichage du panier moyen");
+			break;
+		case CHIFFRE_AFFAIRE:
+			sqlHandler->afficherChiffreAffaire(this->dateMoisStatistiquePicker->Value);
+			addHistorique("Affichage du chiffre d'affaire du " + this->dateMoisStatistiquePicker->Value.Month + "/" + this->dateMoisStatistiquePicker->Value.Year);
+			break;
+		case ARTICLES_SOUS_SEUIL_REAPPROVISIONNEMENT:
+			sqlHandler->afficherArticlesSousSeuilReapprovisionnement();
+			addHistorique("Affichage des articles sous le seuil de réapprovisionnement");
+			break;
+		case MONTANT_TOTAL_ACHAT_CLIENT:
+			sqlHandler->afficherMontantTotalClient(ClientMap::from(Convert::ToInt32(this->idClientStatistiqueBox->Value)));
+			addHistorique("Affichage du montant total des achats pour le client " + Convert::ToInt32(this->idClientStatistiqueBox->Value));
+			break;
+		case ARTICLES_PLUS_VENDUS:
+			sqlHandler->afficherArticlesPlusVendu();
+			addHistorique("Affichage des articles les plus vendus");
+			break;
+		case ARTICLES_MOINS_VENDUS:
+			sqlHandler->afficherArticlesMoinsVendu();
+			addHistorique("Affichage des articles les moins vendus");
+			break;
+		case STOCK_VALEUR_COMMERCIALE:
+			sqlHandler->afficherValeurCommercialStock();
+			addHistorique("Affichage de la valeur commerciale du stock");
+			break;
+		case STOCK_VALEUR_ACHAT:
+			sqlHandler->afficherValeurAchatStock();
+			addHistorique("Affichage de la valeur d'achat du stock");
+			break;
+		default:
+			break;
+	}
+}
+System::Void ProjetPOO::Projet::clickOnStatistiqueBox(System::Object^ sender, System::EventArgs^ e)
+{
+	this->moisStatistiquesLabel->Enabled = false;
+	this->dateMoisStatistiquePicker->Enabled = false;
+	this->idClientStatistiqueLabel->Enabled = false;
+	this->idClientStatistiqueBox->Enabled = false;
+
+	switch(this->statistiqueBox->SelectedIndex)
+	{
+		case CHIFFRE_AFFAIRE:
+			this->moisStatistiquesLabel->Enabled = true;
+			this->dateMoisStatistiquePicker->Enabled = true;
+			break;
+		case MONTANT_TOTAL_ACHAT_CLIENT:
+			this->idClientStatistiqueLabel->Enabled = true;
+			this->idClientStatistiqueBox->Enabled = true;
+			break;
+		case ARTICLES_SOUS_SEUIL_REAPPROVISIONNEMENT:
+		case PANIER_MOYEN:
+		case ARTICLES_PLUS_VENDUS:
+		case ARTICLES_MOINS_VENDUS:
+		case STOCK_VALEUR_COMMERCIALE:
+		case STOCK_VALEUR_ACHAT:
+		default:
+			break;
+	}
+}
+System::Void ProjetPOO::Projet::clickOnSuperviseurCheckBox(System::Object^ sender, System::EventArgs^ e)
+{
+	this->idSuperviseurPersonnelBox->Enabled = this->superviseurPersonnelCheckBox->Checked;
+}
+System::Void ProjetPOO::Projet::resetBoxes()
+{
+
 	this->idPersonnelBox->Value = 0;
 	this->nomPersonnelBox->Text = "";
 	this->prenomPersonnelBox->Text = "";

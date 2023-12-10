@@ -33,9 +33,9 @@ namespace ProjetPOOServices
 		static String^ SupprimerClient(ClientMap^);
 
 		static String^ listeCommandeArticles(CommandeMap^);
-		static String^ AjouterCommandeArticle(CommandeMap^);
-		static String^ ModifierCommandeArticle(CommandeMap^);
-		static String^ SupprimerCommandeArticle(CommandeMap^);
+		static String^ AjouterCommandeArticle(SqlQuery^, CommandeMap^);
+		static String^ ModifierCommandeArticle(SqlQuery^, CommandeMap^);
+		static String^ SupprimerCommandeArticle(SqlQuery^, CommandeMap^);
 
 		static String^ getPanierMoyen();
 		static String^ getChiffreAffaire(DateTime^);

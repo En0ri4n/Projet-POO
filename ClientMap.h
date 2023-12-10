@@ -27,5 +27,7 @@ namespace ProjetPOOMappage
 		void setAdresseLivraison(AdresseMap^ adresseLivraison);
 		AdresseMap^ getAdresseFacturation();
 		void setAdresseFacturation(AdresseMap^ adresseFacturation);
+
+		static ClientMap^ from(int);
 	};
 }

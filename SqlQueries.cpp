@@ -243,13 +243,13 @@ String^ ProjetPOOServices::SqlQueries::AjouterCommande(CommandeMap^ commande)
 		"DECLARE @ReferenceCommande VARCHAR(50); " +
 		" " +
 		"SET @ReferenceCommande = ( " +
-		"    SELECT UPPER(SUBSTRING(Prenom, 1, 2) + SUBSTRING(Nom, 1, 2) + " +
+		"    SELECT UPPER(REPLACE(SUBSTRING(Prenom, 1, 2) + SUBSTRING(Nom, 1, 2), ' ', '') + " +
 		"        CONVERT(VARCHAR, YEAR(@DateEmission)) + " +
 		"        CASE " +
 		"            WHEN (LEN((SELECT Nom_ville FROM [Projet].[dbo].[Villes] WHERE Id_ville = (SELECT Id_ville FROM [Projet].[dbo].[Adresses] WHERE Id_adresse = (SELECT Id_adresse_livraison FROM [Projet].[dbo].[Clients] WHERE Id_client = @IdClientCommande)))) >= 3) " +
-		"                THEN SUBSTRING((SELECT UPPER(LEFT(Nom_ville, 3)) FROM [Projet].[dbo].[Villes] WHERE Id_ville = (SELECT Id_ville FROM [Projet].[dbo].[Adresses] WHERE Id_adresse = (SELECT Id_adresse_livraison FROM [Projet].[dbo].[Clients] WHERE Id_client = @IdClientCommande))), 1, 3) " +
+		"                THEN LEFT(REPLACE((SELECT UPPER(LTRIM(Nom_ville, 3)) FROM [Projet].[dbo].[Villes] WHERE Id_ville = (SELECT Id_ville FROM [Projet].[dbo].[Adresses] WHERE Id_adresse = (SELECT Id_adresse_livraison FROM [Projet].[dbo].[Clients] WHERE Id_client = @IdClientCommande))), ' ', ''), 3) " +
 		"            ELSE " +
-		"                (SELECT UPPER(Nom_ville) FROM [Projet].[dbo].[Villes] WHERE Id_ville = (SELECT Id_ville FROM [Projet].[dbo].[Adresses] WHERE Id_adresse = (SELECT Id_adresse_livraison FROM [Projet].[dbo].[Clients] WHERE Id_client = @IdClientCommande))) " +
+		"                LEFT(REPLACE((SELECT UPPER(Nom_ville) FROM [Projet].[dbo].[Villes] WHERE Id_ville = (SELECT Id_ville FROM [Projet].[dbo].[Adresses] WHERE Id_adresse = (SELECT Id_adresse_livraison FROM [Projet].[dbo].[Clients] WHERE Id_client = @IdClientCommande))), ' ', ''), 3) " +
 		"        END + " +
 		"        CONVERT(VARCHAR, (SELECT COUNT(*) + 1 FROM [Projet].[dbo].[Commandes]))) " +
 		"    FROM [Projet].[dbo].[Personnes] WHERE Id_personne = @IdClientCommande " +
@@ -271,8 +271,8 @@ String^ ProjetPOOServices::SqlQueries::AjouterCommande(CommandeMap^ commande)
 		" " +
 		"ELSE IF @MoyenPaiement NOT IN ('Carte', 'Bitcoin', 'Paypal', 'Cash') " +
 		"BEGIN " +
-		"    ROLLBACK; " +
-		"    PRINT 'Ajout annulé car le moyen de paiement n''est pas disponible' " +
+		"	ROLLBACK; " +
+		"	PRINT 'Ajout annulé car le moyen de paiement n''est pas disponible' " +
 		"END " +
 		" " +
 		"ELSE " +
@@ -283,10 +283,10 @@ String^ ProjetPOOServices::SqlQueries::AjouterCommande(CommandeMap^ commande)
 		"    IF (SELECT COUNT(*) FROM [Projet].[dbo].[Commandes] WHERE Id_client = @IdClientCommande) = 1 " +
 		"    BEGIN " +
 		"        UPDATE [Projet].[dbo].[Clients]  " +
-		"            SET Date_premier_achat = @DatePaiement " +
+		"			SET Date_premier_achat = @DatePaiement " +
 		"        WHERE Id_client = @IdClientCommande; " +
 		"    END  " +
-		"    COMMIT; " +
+		"	COMMIT; " +
 		"END ",
 		commande->getIdClient(),
 		commande->getDateEmission()->ToShortDateString(),
@@ -371,20 +371,31 @@ String^ ProjetPOOServices::SqlQueries::SupprimerCommande(CommandeMap^ commande)
 		"    PRINT 'Suppression annulée car la commande n''existe pas'; " +
 		"END " +
 		" " +
-		"ELSE IF (SELECT Date_paiement FROM [Projet].[dbo].[Commandes] WHERE Commandes.Reference_commande = @ReferenceCommandeASuppr) >= DATEADD(YEAR, -10, GETDATE()) " +
+		"ELSE IF (SELECT COUNT(constituer.Reference_commande) FROM [Projet].[dbo].constituer WHERE constituer.Reference_commande = @ReferenceCommandeASuppr) <= 0 " +
 		"BEGIN " +
-		"    ROLLBACK; " +
-		"    PRINT 'Suppression annulée car la date de paiement est plus récente que 10 ans'; " +
-		"END " +
-		" " +
-		"ELSE " +
-		"BEGIN " +
-		"    DELETE FROM [Projet].[dbo].[constituer] WHERE constituer.Reference_commande = @ReferenceCommandeASuppr; " +
 		"    DELETE FROM [Projet].[dbo].[Commandes] WHERE Commandes.Reference_commande = @ReferenceCommandeASuppr; " +
 		" " +
 		"    COMMIT; " +
 		"    PRINT 'Suppression de la commande réussie'; " +
-		"END ",
+		"END " +
+		" " +
+		"ELSE " +
+		"BEGIN " +
+		"    IF (SELECT Date_paiement FROM [Projet].[dbo].[Commandes] WHERE Commandes.Reference_commande = @ReferenceCommandeASuppr) >= DATEADD(YEAR, -10, GETDATE()) " +
+		"    BEGIN " +
+		"        ROLLBACK; " +
+		"        PRINT 'Suppression annulée car la date de paiement est plus récente que 10 ans, nous nous devons de garder un historique de 10 ans'; " +
+		"    END " +
+		"     " +
+		"    ELSE  " +
+		"    BEGIN " +
+		"        DELETE FROM [Projet].[dbo].[constituer] WHERE constituer.Reference_commande = @ReferenceCommandeASuppr; " +
+		"        DELETE FROM [Projet].[dbo].[Commandes] WHERE Commandes.Reference_commande = @ReferenceCommandeASuppr; " +
+		"     " +
+		"        PRINT 'Suppression de la commande réussie'; " +
+		"        COMMIT; " +
+		"    END " +
+		"END",
 		commande->getIdCommande());
 }
 
@@ -773,13 +784,88 @@ String^ ProjetPOOServices::SqlQueries::listeCommandeArticles(CommandeMap^ comman
 		commande->getIdCommande());
 }
 
-String^ ProjetPOOServices::SqlQueries::AjouterCommandeArticle(CommandeMap^ commande)
+String^ ProjetPOOServices::SqlQueries::AjouterCommandeArticle(SqlQuery^ query, CommandeMap^ commande)
 {
-	String^ query = "";
+	for each(ArticleMap ^ article in commande->getListeArticles())
+	{
+		query->addQuery(String::Format("DECLARE @ReferenceNum INT; " +
+			"DECLARE @Reference_article VARCHAR(30); " +
+			"DECLARE @Quantite_article_commande INT; " +
+			"DECLARE @Pourcentage_remise_article INT; " +
+			" " +
+			"SET @Reference_article = '{0}'; " +
+			"SET @Quantite_article_commande = {1}; " +
+			"SET @Pourcentage_remise_article = {2}; " +
+			" " +
+			"SELECT " +
+			"    @ReferenceNum = MAX(CAST(SUBSTRING(SUBSTRING(Reference_commande, 10, LEN(Reference_commande)),  " +
+			"                            PATINDEX('%[0-9]%', SUBSTRING(Reference_commande, 10, LEN(Reference_commande))),  " +
+			"                            LEN(SUBSTRING(Reference_commande, 10, LEN(Reference_commande)))) AS INT)) " +
+			"FROM " +
+			"    [Projet].[dbo].Commandes; " +
+			" " +
+			"DECLARE @ReferenceAssociee VARCHAR(30); " +
+			" " +
+			"SET  " +
+			"    @ReferenceAssociee = (SELECT Reference_commande " +
+			"FROM  " +
+			"    [Projet].[dbo].Commandes " +
+			"WHERE  " +
+			"    CAST(SUBSTRING(SUBSTRING(Reference_commande, 10, LEN(Reference_commande)),  " +
+			"                PATINDEX('%[0-9]%', SUBSTRING(Reference_commande, 10, LEN(Reference_commande))),  " +
+			"                LEN(SUBSTRING(Reference_commande, 10, LEN(Reference_commande)))) AS INT) = @ReferenceNum); " +
+			" " +
+			" " +
+			" " +
+			"BEGIN TRANSACTION; " +
+			" " +
+			"IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].[Articles] WHERE Reference_article = @Reference_article) " +
+			"BEGIN  " +
+			"	ROLLBACK; " +
+			"	PRINT 'Erreur d''ajout car l''article n''existe pas'; " +
+			"END " +
+			" " +
+			"ELSE IF ((SELECT Quantite_article FROM [Projet].[dbo].[Articles] WHERE Reference_article = @Reference_article) - @Quantite_article_commande) < 0 " +
+			"BEGIN " +
+			"	ROLLBACK; " +
+			"	PRINT 'Erreur d''ajout de l''article car le nombre commandé est supérieur au stock'; " +
+			"END " +
+			" " +
+			"ELSE IF @Pourcentage_remise_article < 0 " +
+			"BEGIN " +
+			"	ROLLBACK; " +
+			"	PRINT 'Erreur d''ajout de la remise car celle-ci est inférieure à 0'; " +
+			"END " +
+			" " +
+			"ELSE  " +
+			"BEGIN " +
+			"	INSERT INTO [Projet].[dbo].constituer (Reference_commande, Reference_article, Quantite_article_commande, Pourcentage_remise_article) " +
+			"	VALUES (@ReferenceAssociee, @Reference_article, @Quantite_article_commande, @Pourcentage_remise_article); " +
+			" " +
+			"	UPDATE [Projet].[dbo].[Articles]  " +
+			"	SET Quantite_article = (Quantite_article - @Quantite_article_commande) " +
+			"	WHERE Reference_article = @Reference_article; " +
+			"	COMMIT; " +
+			"END",
+			article->getIdArticle(),
+			article->getQuantite(),
+			article->getRemise()));
+	}
+
+	return query->toQuery();
+}
+
+String^ ProjetPOOServices::SqlQueries::ModifierCommandeArticle(SqlQuery^ query, CommandeMap^ commande)
+{
+	CommandeMap^ cmdSuppr = gcnew CommandeMap();
+	cmdSuppr->setIdCommande(commande->getIdCommande());
+	cmdSuppr->setListeArticles(commande->getDerniereListeArticles());
+
+	SupprimerCommandeArticle(query, cmdSuppr);
 
 	for each(ArticleMap ^ article in commande->getListeArticles())
 	{
-		query->Concat(String::Format("DECLARE @Reference_commande VARCHAR(30); " +
+		query->addQuery(String::Format("DECLARE @Reference_commande VARCHAR(30); " +
 			"DECLARE @Reference_article VARCHAR(30); " +
 			"DECLARE @Quantite_article_commande INT; " +
 			"DECLARE @Pourcentage_remise_article INT; " +
@@ -809,6 +895,12 @@ String^ ProjetPOOServices::SqlQueries::AjouterCommandeArticle(CommandeMap^ comma
 			"    PRINT 'Erreur d''ajout de l''article car le nombre commandé est supérieur au stock'; " +
 			"END " +
 			" " +
+			"ELSE IF (SELECT Quantite_article FROM [Projet].[dbo].[Articles] WHERE Reference_article = @Reference_article) < 0 " +
+			"BEGIN " +
+			"    ROLLBACK; " +
+			"    PRINT 'Erreur d''ajout de l''article, car celui-ci n''est plus en stock' " +
+			"END " +
+			" " +
 			"ELSE IF @Pourcentage_remise_article < 0 " +
 			"BEGIN " +
 			"    ROLLBACK; " +
@@ -824,63 +916,64 @@ String^ ProjetPOOServices::SqlQueries::AjouterCommandeArticle(CommandeMap^ comma
 			"    SET Quantite_article = (Quantite_article - @Quantite_article_commande) " +
 			"    WHERE Reference_article = @Reference_article; " +
 			"    COMMIT; " +
-			"END ",
+			"END;",
 			commande->getIdCommande(),
 			article->getIdArticle(),
-			article->getQuantite()));
+			article->getQuantite(),
+			article->getRemise()));
 	}
 
-	return query;
+	return query->toQuery();
 }
 
-String^ ProjetPOOServices::SqlQueries::ModifierCommandeArticle(CommandeMap^ commande)
+String^ ProjetPOOServices::SqlQueries::SupprimerCommandeArticle(SqlQuery^ query, CommandeMap^ commande)
 {
-	throw gcnew System::NotImplementedException();
-	// TODO: insert return statement here
-}
-
-String^ ProjetPOOServices::SqlQueries::SupprimerCommandeArticle(CommandeMap^ commande)
-{
-	String^ query = "";
-
 	for each(ArticleMap ^ article in commande->getListeArticles())
 	{
-		query->Concat(String::Format("DECLARE @Reference_commande VARCHAR(30); " +
-			"DECLARE @Reference_article VARCHAR(30); " +
-			"DECLARE @quantite_article INT; " +
+		query->addQuery(String::Format("DECLARE @Reference_commande VARCHAR(30); " +
+			"DECLARE @Reference_article_suppr VARCHAR(30); " +
 			" " +
 			"SET @Reference_commande = '{0}'; " +
-			"SET @Reference_article = '{1}'; " +
-			"BEGIN TRANSACTION " +
+			"SET @Reference_article_suppr = '{1}'; " +
 			" " +
-			"IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].Commandes WHERE Commandes.Reference_commande = @Reference_commande) " +
+			"BEGIN TRANSACTION; " +
+			" " +
+			"IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].constituer WHERE Reference_commande = @Reference_commande) " +
 			"BEGIN  " +
 			"    ROLLBACK; " +
-			"    PRINT 'Impossible de supprimer une commande inexistante' " +
+			"    PRINT 'Impossible de supprimer un article d''une commande inexistante'; " +
 			"END " +
 			" " +
-			"ELSE IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].constituer WHERE constituer.Reference_article = @Reference_article) " +
+			"ELSE IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].constituer WHERE Reference_article = @Reference_article_suppr AND Reference_commande = @Reference_commande) " +
 			"BEGIN " +
 			"    ROLLBACK; " +
-			"    PRINT 'Impossible de supprimer un article inexistant' " +
+			"    PRINT 'Impossible de supprimer un article inexistant d''une commande'; " +
 			"END " +
 			" " +
-			"ELSE  " +
+			"ELSE " +
 			"BEGIN " +
-			"    SET @quantite_article = (SELECT constituer.Quantite_article_commande FROM [Projet].[dbo].constituer WHERE constituer.Reference_article = @Reference_article AND constituer.Reference_commande = @Reference_commande); " +
-			"    UPDATE [Projet].[dbo].Articles " +
-			"        SET Quantite_article = Quantite_article + @quantite_article " +
-			"    WHERE Articles.Reference_article = @Reference_article; " +
+			"    IF (SELECT Quantite_article FROM [Projet].[dbo].Articles WHERE Reference_article = @Reference_article_suppr)  < 0 " +
+			"    BEGIN " +
+			"        DELETE FROM [Projet].[dbo].constituer " +
+			"        WHERE constituer.Reference_article = @Reference_article_suppr AND constituer.Reference_commande = @Reference_commande; " +
+			"        COMMIT; " +
+			"    END " +
+			"    ELSE " +
+			"    BEGIN " +
+			"        UPDATE [Projet].[dbo].Articles " +
+			"        SET Quantite_article = Quantite_article + (SELECT quantite_article_commande FROM [Projet].[dbo].constituer WHERE constituer.Reference_article = @Reference_article_suppr AND constituer.Reference_commande = @Reference_commande) " +
+			"        WHERE Reference_article = @Reference_article_suppr; " +
 			" " +
-			"    DELETE FROM [Projet].[dbo].constituer " +
-			"    WHERE constituer.Reference_article = @Reference_article; " +
-			"END; " +
-			"COMMIT; ",
+			"        DELETE FROM [Projet].[dbo].constituer " +
+			"        WHERE constituer.Reference_article = @Reference_article_suppr AND constituer.Reference_commande = @Reference_commande; " +
+			"        COMMIT; " +
+			"    END; " +
+			"END;",
 			commande->getIdCommande(),
 			article->getIdArticle()));
 	}
 
-	return query;
+	return query->toQuery();
 }
 
 String^ ProjetPOOServices::SqlQueries::getPanierMoyen()
@@ -902,7 +995,7 @@ String^ ProjetPOOServices::SqlQueries::getPanierMoyen()
 
 String^ ProjetPOOServices::SqlQueries::getChiffreAffaire(DateTime^ date)
 {
-	return String::Format("DECLARE @Mois DATE = '2023-05-01'; " +
+	return String::Format("DECLARE @Mois DATE = '{0}'; " +
 		" " +
 		"SELECT " +
 		"    CAST(ROUND(SUM(TotalPrix), 2) AS float) AS ChiffreAffaires " +
@@ -920,7 +1013,7 @@ String^ ProjetPOOServices::SqlQueries::getChiffreAffaire(DateTime^ date)
 		"    GROUP BY  " +
 		"        c.Reference_commande, c.Pourcentage_remise " +
 		") AS ChiffreAffairesMois;",
-		date->ToLongDateString());
+		date->ToShortDateString());
 }
 
 String^ ProjetPOOServices::SqlQueries::getProduitSousSeuilReapprovisionnement()

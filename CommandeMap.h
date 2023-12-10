@@ -14,6 +14,8 @@ namespace ProjetPOOMappage
 		DateTime^ datePaiement;
 		int idClient;
 		Collections::ArrayList^ listeArticles;
+
+		Collections::ArrayList^ derniereListeArticles;
 	public:
 		CommandeMap(String^ idCommande, DateTime^ dateLivraison, DateTime^ dateEmission, String^ moyenPaiement, DateTime^ datePaiement, int idClient, Collections::ArrayList^ listeArticles) : idCommande(idCommande), dateLivraison(dateLivraison), dateEmission(dateEmission), moyenPaiement(moyenPaiement), datePaiement(datePaiement), idClient(idClient), listeArticles(listeArticles) {}
 		CommandeMap() : CommandeMap("", gcnew DateTime(), gcnew DateTime(), "", gcnew DateTime(), -1, gcnew Collections::ArrayList()) {}
@@ -32,6 +34,8 @@ namespace ProjetPOOMappage
 		int getIdClient();
 		void setListeArticles(Collections::ArrayList^);
 		Collections::ArrayList^ getListeArticles();
+		void setDerniereListeArticles(Collections::ArrayList^);
+		Collections::ArrayList^ getDerniereListeArticles();
 
 		static CommandeMap^ from(String^);
 	};
