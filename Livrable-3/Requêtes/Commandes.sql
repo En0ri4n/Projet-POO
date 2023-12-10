@@ -206,6 +206,12 @@ BEGIN
 	PRINT 'Erreur d''ajout de l''article car le nombre commandé est supérieur au stock';
 END
 
+ELSE IF (SELECT Quantite_article FROM [Projet].[dbo].[Articles] WHERE Reference_article = @Reference_article) < 0
+BEGIN
+	ROLLBACK;
+	PRINT 'Erreur d''ajout de l''article, car celui-ci n''est plus en stock'
+END
+
 ELSE IF @Pourcentage_remise_article < 0
 BEGIN
 	ROLLBACK;
@@ -221,7 +227,7 @@ BEGIN
 	SET Quantite_article = (Quantite_article - @Quantite_article_commande)
 	WHERE Reference_article = @Reference_article;
 	COMMIT;
-END
+END;
 
 
 -----------------Supprimer article de commande------------------
@@ -327,8 +333,6 @@ BEGIN
     WHERE Reference_article = @Reference_nouvel_article;
 	COMMIT;
 END;
-
-
 
 ------Ajout article automatique da dernière commande-------------
 
