@@ -130,8 +130,6 @@ String^ ProjetPOOServices::SqlQueries::ModifierPersonnel(PersonnelMap^ personnel
 		"SET @IdPersonne = {8}; " +
 		" " +
 		"BEGIN TRANSACTION; " +
-		" " +
-		"BEGIN TRANSACTION; " +
 		"DECLARE @IdVille INT; " +
 		"SET @IdVille = (SELECT Id_ville FROM Villes WHERE Nom_ville = @NomVille AND Code_postal = @CodePostal); " +
 		" " +
