@@ -116,11 +116,11 @@
     <ClCompile Include="AdressePopup.cpp">
       <Filter>Source Files\Forms</Filter>
     </ClCompile>
-    <ClCompile Include="CommandeMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SqlQueries.cpp">
       <Filter>Source Files\Sql</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandeMap.cpp">
+      <Filter>Source Files\Mappage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

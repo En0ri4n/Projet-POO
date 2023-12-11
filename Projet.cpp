@@ -695,33 +695,7 @@ System::Void ProjetPOO::Projet::resetBoxes()
 }
 System::Void ProjetPOO::Projet::clickOnHistoriqueLabel(System::Object^ sender, System::EventArgs^ e)
 {
-	/*
-	CommandeMap^ commande = gcnew CommandeMap();
-	commande->setIdCommande("AGGA2015SAD15");
-	commande->setDateLivraison(System::DateTime::Now);
-	commande->setDateEmission(System::DateTime::Now);
-	commande->setMoyenPaiement("CB");
-	commande->setDatePaiement(System::DateTime::Now);
-	commande->setIdClient(1);
 
-	ArrayList^ listeAleatoireArticles = gcnew ArrayList();
-	listeAleatoireArticles->Add(gcnew ArticleMap("JDU45", "Pantalon", 20, "Vetement", "Rouge", 10, 5, 20, 5));
-	listeAleatoireArticles->Add(gcnew ArticleMap("KDYU59", "Chemise", 20, "Vetement", "Bleu", 10, 5, 20, 33));
-	listeAleatoireArticles->Add(gcnew ArticleMap("NBCHCI32", "Chaussures", 20, "Vetement", "Noir", 10, 5, 20, 20));
-	listeAleatoireArticles->Add(gcnew ArticleMap("YEYEBD5", "Chaussettes", 20, "Vetement", "Blanc", 10, 5, 20));
-
-	commande->setListeArticles(listeAleatoireArticles);
-	commande->setDerniereListeArticles(derniersArticlesCommande);
-	ClientMap^ client = gcnew ClientMap();
-	client->setId(1);
-	client->setNom("DUPONT");
-	client->setPrenom("Jean");
-	client->setAdresseLivraison(currentClientAdresseLivraison);
-	client->setAdresseFacturation(gcnew AdresseMap(-1, gcnew VilleMap(-1, "Obernai", "67210"), "Rue du Landsberg", 26));
-	client->setDateNaissance(System::DateTime::Now);
-	client->setDatePremierAchat(System::DateTime::Now);
-	generatePdf(commande, client);
-	*/
 }
 System::Boolean ProjetPOO::Projet::isActive(System::Windows::Forms::TabPage^ tab)
 {
@@ -792,7 +766,7 @@ System::Void ProjetPOO::Projet::generatePdf(CommandeMap^ commande, ClientMap^ cl
 		gfx->DrawString(String::Format("{0} | {1}", article->getNature(), article->getCouleur()), gcnew XFont("Arial", 9), XBrushes::Black, borderX, yPos + 10);
 		gfx->DrawString(String::Format("{0:0.00}€", article->getPrix()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 225, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString(article->getQuantite().ToString(), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 305, yPos, XStringFormat::BottomCenter);
-		gfx->DrawString((article->getQuantite() * article->getPrix()).ToString("C"), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 365, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString(String::Format("{0:0.00}€", article->getQuantite() * article->getPrix()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 365, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString(String::Format("{0}%", article->getTaxe()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 423, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString(String::Format("{0}€", (article->getPrix() * article->getQuantite() * (article->getTaxe() / 100.0))), gcnew XFont("Arial", 9), XBrushes::Black, borderX + 423, yPos + 10, XStringFormat::BottomCenter);
 		gfx->DrawString(String::Format("{0}%", article->getRemise()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 475, yPos, XStringFormat::BottomCenter);

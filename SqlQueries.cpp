@@ -286,8 +286,8 @@ String^ ProjetPOOServices::SqlQueries::AjouterCommande(CommandeMap^ commande)
 		"        UPDATE [Projet].[dbo].[Clients]  " +
 		"			SET Date_premier_achat = @DatePaiement " +
 		"        WHERE Id_client = @IdClientCommande; " +
+		"	  COMMIT; " +
 		"    END  " +
-		"	COMMIT; " +
 		"END ",
 		commande->getIdClient(),
 		commande->getDateEmission()->ToShortDateString(),

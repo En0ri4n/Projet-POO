@@ -10,7 +10,7 @@ SqlManager::SqlManager(String^ user, String^ passw)
 	this->connectionCmd = String::Format("Data Source=localhost;Initial Catalog={2};User ID={0};Password={1}", username, password, DATABASE_NAME);
 
 	this->connection = gcnew Data::SqlClient::SqlConnection(this->connectionCmd);
-	this->command = gcnew Data::SqlClient::SqlCommand(L"EMPTY", this->connection);
+	this->command = gcnew Data::SqlClient::SqlCommand("EMPTY", this->connection);
 	this->dataAdapter = gcnew Data::SqlClient::SqlDataAdapter();
 	this->dataSet = gcnew Data::DataSet();
 
@@ -66,6 +66,8 @@ void SqlManager::actionRows(SqlQuery^ query)
 		{
 			ProjetPOO::Projet::instance->addQueryHistorique(e->Message);
 		}
+
+		ProjetPOO::Projet::instance->addQueryHistorique(query->toQuery());
 	}
 
 	this->connection->Close();

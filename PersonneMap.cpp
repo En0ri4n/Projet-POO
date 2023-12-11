@@ -1,5 +1,7 @@
 #include "PersonneMap.h"
 
+using namespace ProjetPOOMappage;
+
 void PersonneMap::setId(int id)
 {
 	this->id = id;
