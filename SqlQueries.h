@@ -50,6 +50,8 @@ namespace ProjetPOOServices
 		static String^ filtreClients(String^, String^);
 
 		static String^ getFullCommande(CommandeMap^);
+
+		static String^ getVariationPrixArticle(ArticleMap^);
 	};
 }
 

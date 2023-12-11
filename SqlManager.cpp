@@ -33,11 +33,18 @@ bool ProjetPOOServices::SqlManager::isConnected()
 
 System::Data::DataSet^ SqlManager::getRows(SqlQuery^ query, String^ table)
 {
-	this->dataSet->Clear();
-	this->command->CommandText = query->toQuery();
-	this->dataAdapter->SelectCommand = this->command;
-	this->dataAdapter->Fill(this->dataSet, table);
-	ProjetPOO::Projet::instance->addQueryHistorique(query->toQuery());
+	try
+	{
+		this->dataSet->Clear();
+		this->command->CommandText = query->toQuery();
+		this->dataAdapter->SelectCommand = this->command;
+		this->dataAdapter->Fill(this->dataSet, table);
+		ProjetPOO::Projet::instance->addQueryHistorique(query->toQuery());
+	}
+	catch(System::Exception^ e)
+	{
+		ProjetPOO::Projet::instance->addQueryHistorique(e->Message);
+	}
 
 	return this->dataSet;
 }

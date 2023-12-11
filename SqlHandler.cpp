@@ -218,6 +218,12 @@ void ProjetPOOServices::SqlHandler::afficherValeurAchatStock()
 	fill(Table::STATISTIQUES);
 }
 
+void ProjetPOOServices::SqlHandler::afficherVariationArticle(ArticleMap^ article)
+{
+	this->query->newQuery(false, SqlQueries::getVariationPrixArticle(article));
+	fill("Stats");
+}
+
 void ProjetPOOServices::SqlHandler::generatePdfFacture(CommandeMap^ commande)
 {
 	ClientMap^ clientOut = gcnew ClientMap();

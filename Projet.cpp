@@ -35,6 +35,12 @@ System::Void ProjetPOO::Projet::setConnected(bool connected)
 	this->boutonSupprimer->Visible = connected;
 	this->boutonModifier->Visible = connected;
 
+	this->statistiqueBox->SelectedIndex = 0;
+	this->tvaStatistiqueBox->SelectedIndex = 0;
+	this->margeCommercialeStatistiqueBox->SelectedIndex = 0;
+	this->remiseCommercialeStatistiqueBox->SelectedIndex = 0;
+	this->demarqueStatistiqueBox->SelectedIndex = 0;
+
 	if(connected)
 	{
 		if(tabController->TabPages->Count > 1)
@@ -410,8 +416,10 @@ System::Void ProjetPOO::Projet::afficherTable()
 	else if(isActive(tabClients))
 		sqlHandler->AfficherClients();
 	else if(isActive(tabStatistiques))
+	{
 		sqlHandler->fillGrid(Table::ARTICLES);
-
+		this->idArticleStatistiqueBox->Text = this->dataGridView->Rows[0]->Cells[0]->Value->ToString();
+	}
 	updateRechercheColonneBox();
 }
 System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e)
@@ -431,7 +439,7 @@ System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::W
 		this->idSuperviseurPersonnelBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString();
 		bool superviseur = String::IsNullOrWhiteSpace(this->dataGridView->Rows[e->RowIndex]->Cells[4]->Value->ToString());
 		this->superviseurPersonnelCheckBox->Checked = !superviseur;
-		this->idSuperviseurPersonnelBox->Enabled = superviseur;
+		this->idSuperviseurPersonnelBox->Enabled = !superviseur;
 
 		updateAdresseBouton(TypeAdresse::PERSONNEL);
 	}
@@ -480,6 +488,13 @@ System::Void ProjetPOO::Projet::clickOnCellule(System::Object^ sender, System::W
 
 		updateAdresseBouton(TypeAdresse::FACTURATION);
 		updateAdresseBouton(TypeAdresse::LIVRAISON);
+	}
+	else if(isActive(tabStatistiques))
+	{
+		if(this->statistiqueBox->SelectedIndex == VARIATION_PRIX_ARTICLE)
+		{
+			this->idArticleStatistiqueBox->Text = this->dataGridView->Rows[e->RowIndex]->Cells[0]->Value->ToString();
+		}
 	}
 }
 System::Void ProjetPOO::Projet::updateRechercheColonneBox()
@@ -571,6 +586,79 @@ System::Void ProjetPOO::Projet::clickOnCalculerStatistiques(System::Object^ send
 	if(tables->Contains(Table::STATISTIQUES->getName()))
 		tables[Table::STATISTIQUES->getName()]->Columns->Clear();
 
+	int tva = 0;
+	int remise = 0;
+
+	ArticleMap^ article = gcnew ArticleMap();
+	article->setIdArticle(this->idArticleStatistiqueBox->Text);
+	switch(this->tvaStatistiqueBox->SelectedIndex)
+	{
+		case 0:
+			tva += 0;
+			break;
+		case 1:
+			tva += 5.5;
+			break;
+		case 2:
+			tva += 10;
+			break;
+		case 3:
+			tva += 20;
+			break;
+		default:
+			break;
+	}
+	switch(this->margeCommercialeStatistiqueBox->SelectedIndex)
+	{
+		case 0:
+			tva += 0;
+			break;
+		case 1:
+			tva += 5;
+			break;
+		case 2:
+			tva += 10;
+			break;
+		case 3:
+			tva += 15;
+			break;
+		default:
+			break;
+	}
+	switch(this->remiseCommercialeStatistiqueBox->SelectedIndex)
+	{
+		case 0:
+			remise += 0;
+			break;
+		case 1:
+			remise += 5;
+			break;
+		case 2:
+			remise += 6;
+			break;
+		default:
+			break;
+	}
+	switch(this->demarqueStatistiqueBox->SelectedIndex)
+	{
+		case 0:
+			remise += 0;
+			break;
+		case 1:
+			remise += 2;
+			break;
+		case 2:
+			remise += 3;
+			break;
+		case 3:
+			remise += 5;
+			break;
+		default:
+			break;
+	}
+	article->setTaxe(tva);
+	article->setRemise(remise);
+
 	switch(this->statistiqueBox->SelectedIndex)
 	{
 		case PANIER_MOYEN:
@@ -605,6 +693,10 @@ System::Void ProjetPOO::Projet::clickOnCalculerStatistiques(System::Object^ send
 			sqlHandler->afficherValeurAchatStock();
 			addHistorique("Affichage de la valeur d'achat du stock");
 			break;
+		case VARIATION_PRIX_ARTICLE:
+			sqlHandler->afficherVariationArticle(article);
+			addHistorique("Affichage de la variation du prix d'un article - TVA : " + tva + "%  - Remise : " + remise + "%");
+			break;
 		default:
 			break;
 	}
@@ -615,6 +707,16 @@ System::Void ProjetPOO::Projet::clickOnStatistiqueBox(System::Object^ sender, Sy
 	this->dateMoisStatistiquePicker->Enabled = false;
 	this->idClientStatistiqueLabel->Enabled = false;
 	this->idClientStatistiqueBox->Enabled = false;
+	this->idArticleStatistiqueLabel->Enabled = false;
+	this->idArticleStatistiqueBox->Enabled = false;
+	this->tvaStatistiqueBox->Enabled = false;
+	this->margeCommercialeStatistiqueBox->Enabled = false;
+	this->remiseCommercialeStatistiqueBox->Enabled = false;
+	this->demarqueStatistiqueBox->Enabled = false;
+	this->tvaStatistiqueLabel->Enabled = false;
+	this->margeCommercialeStatistiqueLabel->Enabled = false;
+	this->remiseCommercialeStatistiqueLabel->Enabled = false;
+	this->demarqueInconnueStatistiqueLabel->Enabled = false;
 
 	switch(this->statistiqueBox->SelectedIndex)
 	{
@@ -625,6 +727,18 @@ System::Void ProjetPOO::Projet::clickOnStatistiqueBox(System::Object^ sender, Sy
 		case MONTANT_TOTAL_ACHAT_CLIENT:
 			this->idClientStatistiqueLabel->Enabled = true;
 			this->idClientStatistiqueBox->Enabled = true;
+			break;
+		case VARIATION_PRIX_ARTICLE:
+			this->idArticleStatistiqueLabel->Enabled = true;
+			this->idArticleStatistiqueBox->Enabled = true;
+			this->tvaStatistiqueBox->Enabled = true;
+			this->margeCommercialeStatistiqueBox->Enabled = true;
+			this->remiseCommercialeStatistiqueBox->Enabled = true;
+			this->demarqueStatistiqueBox->Enabled = true;
+			this->tvaStatistiqueLabel->Enabled = true;
+			this->margeCommercialeStatistiqueLabel->Enabled = true;
+			this->remiseCommercialeStatistiqueLabel->Enabled = true;
+			this->demarqueInconnueStatistiqueLabel->Enabled = true;
 			break;
 		case ARTICLES_SOUS_SEUIL_REAPPROVISIONNEMENT:
 		case PANIER_MOYEN:
@@ -653,6 +767,8 @@ System::Void ProjetPOO::Projet::clickOnRechercheBouton(System::Object^ sender, S
 		sqlHandler->filtre(Table::COMMANDES, colonne, recherche);
 	else if(isActive(tabClients))
 		sqlHandler->filtreClients(colonne, recherche);
+	else if(isActive(tabStatistiques))
+		sqlHandler->filtre(Table::ARTICLES, colonne, recherche);
 }
 System::Void ProjetPOO::Projet::resetBoxes()
 {
@@ -743,7 +859,7 @@ System::Void ProjetPOO::Projet::generatePdf(CommandeMap^ commande, ClientMap^ cl
 	gfx->DrawString(String::Format("{0} {1}", client->getAdresseFacturation()->getNumero(), client->getAdresseFacturation()->getRue()), gcnew XFont("Arial", 13), XBrushes::Black, outBorderX - 260 + 4, 185);
 	gfx->DrawString(String::Format("{0} {1}", client->getAdresseFacturation()->getVille()->getCodePostal(), client->getAdresseFacturation()->getVille()->getNom()), gcnew XFont("Arial", 13), XBrushes::Black, outBorderX - 260 + 4, 205);
 	gfx->DrawString("France", gcnew XFont("Arial", 13), XBrushes::Black, outBorderX - 260 + 4, 225);
-	
+
 
 	int yPos = 270;
 	gfx->DrawLine(XPens::Gray, borderX, yPos, outBorderX, yPos);
@@ -797,7 +913,7 @@ System::Void ProjetPOO::Projet::generatePdf(CommandeMap^ commande, ClientMap^ cl
 	gfx->DrawString("générales ou particulières non expressément agréées par EVAL.", gcnew XFont("Arial", 10), XBrushes::Black, pageWidth / 2, yPos += 12, XStringFormat::Center);
 
 	String^ documentName = String::Format("FACTURE-{0}_{1}-{2}.pdf", client->getNom(), client->getPrenom(), commande->getIdCommande());
-	
+
 	document->Save(documentName);
 
 	System::Diagnostics::Process::Start(documentName);

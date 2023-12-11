@@ -33,7 +33,8 @@ namespace ProjetPOO
 		ARTICLES_PLUS_VENDUS,
 		ARTICLES_MOINS_VENDUS,
 		STOCK_VALEUR_COMMERCIALE,
-		STOCK_VALEUR_ACHAT
+		STOCK_VALEUR_ACHAT,
+		VARIATION_PRIX_ARTICLE
 	};
 
 	/// <summary>
@@ -239,6 +240,32 @@ private: System::Windows::Forms::Label^ idClientStatistiqueLabel;
 private: System::Windows::Forms::CheckBox^ superviseurCheckBox;
 private: System::Windows::Forms::CheckBox^ superviseurPersonnelCheckBox;
 private: System::Windows::Forms::Button^ factureCommandeBouton;
+private: System::Windows::Forms::Label^ remiseCommercialeStatistiqueLabel;
+
+private: System::Windows::Forms::Label^ margeCommercialeStatistiqueLabel;
+
+
+
+
+private: System::Windows::Forms::Label^ tvaStatistiqueLabel;
+
+private: System::Windows::Forms::ComboBox^ demarqueStatistiqueBox;
+
+private: System::Windows::Forms::ComboBox^ remiseCommercialeStatistiqueBox;
+
+private: System::Windows::Forms::ComboBox^ margeCommercialeStatistiqueBox;
+
+private: System::Windows::Forms::ComboBox^ tvaStatistiqueBox;
+private: System::Windows::Forms::Label^ demarqueInconnueStatistiqueLabel;
+
+
+
+
+
+private: System::Windows::Forms::Label^ idArticleStatistiqueLabel;
+
+private: System::Windows::Forms::TextBox^ idArticleStatistiqueBox;
+
 
 
 
@@ -270,6 +297,16 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->historiqueLabel = (gcnew System::Windows::Forms::Label());
 			   this->backgroundWorker1 = (gcnew System::ComponentModel::BackgroundWorker());
 			   this->tabStatistiques = (gcnew System::Windows::Forms::TabPage());
+			   this->idArticleStatistiqueLabel = (gcnew System::Windows::Forms::Label());
+			   this->idArticleStatistiqueBox = (gcnew System::Windows::Forms::TextBox());
+			   this->demarqueInconnueStatistiqueLabel = (gcnew System::Windows::Forms::Label());
+			   this->remiseCommercialeStatistiqueLabel = (gcnew System::Windows::Forms::Label());
+			   this->margeCommercialeStatistiqueLabel = (gcnew System::Windows::Forms::Label());
+			   this->tvaStatistiqueLabel = (gcnew System::Windows::Forms::Label());
+			   this->demarqueStatistiqueBox = (gcnew System::Windows::Forms::ComboBox());
+			   this->remiseCommercialeStatistiqueBox = (gcnew System::Windows::Forms::ComboBox());
+			   this->margeCommercialeStatistiqueBox = (gcnew System::Windows::Forms::ComboBox());
+			   this->tvaStatistiqueBox = (gcnew System::Windows::Forms::ComboBox());
 			   this->idClientStatistiqueBox = (gcnew System::Windows::Forms::NumericUpDown());
 			   this->idClientStatistiqueLabel = (gcnew System::Windows::Forms::Label());
 			   this->calculerStatistiqueBouton = (gcnew System::Windows::Forms::Button());
@@ -294,6 +331,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->idClientLabel = (gcnew System::Windows::Forms::Label());
 			   this->nomClientLabel = (gcnew System::Windows::Forms::Label());
 			   this->tabCommandes = (gcnew System::Windows::Forms::TabPage());
+			   this->factureCommandeBouton = (gcnew System::Windows::Forms::Button());
 			   this->idClientCommandeLabel = (gcnew System::Windows::Forms::Label());
 			   this->idClientCommandeBox = (gcnew System::Windows::Forms::NumericUpDown());
 			   this->articlesCommandeLabel = (gcnew System::Windows::Forms::Label());
@@ -359,7 +397,6 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->rechercheBox = (gcnew System::Windows::Forms::TextBox());
 			   this->voirRequetesCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			   this->clearBouton = (gcnew System::Windows::Forms::Button());
-			   this->factureCommandeBouton = (gcnew System::Windows::Forms::Button());
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			   this->tabStatistiques->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->idClientStatistiqueBox))->BeginInit();
@@ -474,6 +511,16 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   // 
 			   // tabStatistiques
 			   // 
+			   this->tabStatistiques->Controls->Add(this->idArticleStatistiqueLabel);
+			   this->tabStatistiques->Controls->Add(this->idArticleStatistiqueBox);
+			   this->tabStatistiques->Controls->Add(this->demarqueInconnueStatistiqueLabel);
+			   this->tabStatistiques->Controls->Add(this->remiseCommercialeStatistiqueLabel);
+			   this->tabStatistiques->Controls->Add(this->margeCommercialeStatistiqueLabel);
+			   this->tabStatistiques->Controls->Add(this->tvaStatistiqueLabel);
+			   this->tabStatistiques->Controls->Add(this->demarqueStatistiqueBox);
+			   this->tabStatistiques->Controls->Add(this->remiseCommercialeStatistiqueBox);
+			   this->tabStatistiques->Controls->Add(this->margeCommercialeStatistiqueBox);
+			   this->tabStatistiques->Controls->Add(this->tvaStatistiqueBox);
 			   this->tabStatistiques->Controls->Add(this->idClientStatistiqueBox);
 			   this->tabStatistiques->Controls->Add(this->idClientStatistiqueLabel);
 			   this->tabStatistiques->Controls->Add(this->calculerStatistiqueBouton);
@@ -489,11 +536,131 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->tabStatistiques->Text = L"Statistique";
 			   this->tabStatistiques->UseVisualStyleBackColor = true;
 			   // 
+			   // idArticleStatistiqueLabel
+			   // 
+			   this->idArticleStatistiqueLabel->AutoSize = true;
+			   this->idArticleStatistiqueLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->idArticleStatistiqueLabel->Location = System::Drawing::Point(109, 196);
+			   this->idArticleStatistiqueLabel->Name = L"idArticleStatistiqueLabel";
+			   this->idArticleStatistiqueLabel->Size = System::Drawing::Size(84, 20);
+			   this->idArticleStatistiqueLabel->TabIndex = 65;
+			   this->idArticleStatistiqueLabel->Text = L"ID Article :";
+			   // 
+			   // idArticleStatistiqueBox
+			   // 
+			   this->idArticleStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->idArticleStatistiqueBox->Location = System::Drawing::Point(199, 193);
+			   this->idArticleStatistiqueBox->Name = L"idArticleStatistiqueBox";
+			   this->idArticleStatistiqueBox->Size = System::Drawing::Size(198, 27);
+			   this->idArticleStatistiqueBox->TabIndex = 64;
+			   // 
+			   // demarqueInconnueStatistiqueLabel
+			   // 
+			   this->demarqueInconnueStatistiqueLabel->AutoSize = true;
+			   this->demarqueInconnueStatistiqueLabel->Location = System::Drawing::Point(416, 228);
+			   this->demarqueInconnueStatistiqueLabel->Name = L"demarqueInconnueStatistiqueLabel";
+			   this->demarqueInconnueStatistiqueLabel->Size = System::Drawing::Size(109, 13);
+			   this->demarqueInconnueStatistiqueLabel->TabIndex = 63;
+			   this->demarqueInconnueStatistiqueLabel->Text = L"Démarque inconnue :";
+			   // 
+			   // remiseCommercialeStatistiqueLabel
+			   // 
+			   this->remiseCommercialeStatistiqueLabel->AutoSize = true;
+			   this->remiseCommercialeStatistiqueLabel->Location = System::Drawing::Point(289, 228);
+			   this->remiseCommercialeStatistiqueLabel->Name = L"remiseCommercialeStatistiqueLabel";
+			   this->remiseCommercialeStatistiqueLabel->Size = System::Drawing::Size(110, 13);
+			   this->remiseCommercialeStatistiqueLabel->TabIndex = 62;
+			   this->remiseCommercialeStatistiqueLabel->Text = L"Remise commerciale :";
+			   // 
+			   // margeCommercialeStatistiqueLabel
+			   // 
+			   this->margeCommercialeStatistiqueLabel->AutoSize = true;
+			   this->margeCommercialeStatistiqueLabel->Location = System::Drawing::Point(162, 228);
+			   this->margeCommercialeStatistiqueLabel->Name = L"margeCommercialeStatistiqueLabel";
+			   this->margeCommercialeStatistiqueLabel->Size = System::Drawing::Size(105, 13);
+			   this->margeCommercialeStatistiqueLabel->TabIndex = 61;
+			   this->margeCommercialeStatistiqueLabel->Text = L"Marge commerciale :";
+			   // 
+			   // tvaStatistiqueLabel
+			   // 
+			   this->tvaStatistiqueLabel->AutoSize = true;
+			   this->tvaStatistiqueLabel->Location = System::Drawing::Point(35, 228);
+			   this->tvaStatistiqueLabel->Name = L"tvaStatistiqueLabel";
+			   this->tvaStatistiqueLabel->Size = System::Drawing::Size(34, 13);
+			   this->tvaStatistiqueLabel->TabIndex = 60;
+			   this->tvaStatistiqueLabel->Text = L"TVA :";
+			   // 
+			   // demarqueStatistiqueBox
+			   // 
+			   this->demarqueStatistiqueBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			   this->demarqueStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->demarqueStatistiqueBox->FormattingEnabled = true;
+			   this->demarqueStatistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(4)
+			   {
+				   L"Démarque 0 (0%)", L"Démarque 1 (2%)",
+					   L"Démarque 2 (3%)", L"Démarque 3 (5%)"
+			   });
+			   this->demarqueStatistiqueBox->Location = System::Drawing::Point(419, 244);
+			   this->demarqueStatistiqueBox->Name = L"demarqueStatistiqueBox";
+			   this->demarqueStatistiqueBox->Size = System::Drawing::Size(121, 28);
+			   this->demarqueStatistiqueBox->TabIndex = 59;
+			   // 
+			   // remiseCommercialeStatistiqueBox
+			   // 
+			   this->remiseCommercialeStatistiqueBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			   this->remiseCommercialeStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->remiseCommercialeStatistiqueBox->FormattingEnabled = true;
+			   this->remiseCommercialeStatistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(3)
+			   {
+				   L"Remise 0 (0%)", L"Remise 1 (5%)",
+					   L"Remise 2 (6%)"
+			   });
+			   this->remiseCommercialeStatistiqueBox->Location = System::Drawing::Point(292, 244);
+			   this->remiseCommercialeStatistiqueBox->Name = L"remiseCommercialeStatistiqueBox";
+			   this->remiseCommercialeStatistiqueBox->Size = System::Drawing::Size(121, 28);
+			   this->remiseCommercialeStatistiqueBox->TabIndex = 58;
+			   // 
+			   // margeCommercialeStatistiqueBox
+			   // 
+			   this->margeCommercialeStatistiqueBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			   this->margeCommercialeStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->margeCommercialeStatistiqueBox->FormattingEnabled = true;
+			   this->margeCommercialeStatistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(4)
+			   {
+				   L"Marge 0 (0%)", L"Marge 1 (5%)",
+					   L"Marge 2 (10%)", L"Marge 3 (15%)"
+			   });
+			   this->margeCommercialeStatistiqueBox->Location = System::Drawing::Point(165, 244);
+			   this->margeCommercialeStatistiqueBox->Name = L"margeCommercialeStatistiqueBox";
+			   this->margeCommercialeStatistiqueBox->Size = System::Drawing::Size(121, 28);
+			   this->margeCommercialeStatistiqueBox->TabIndex = 57;
+			   // 
+			   // tvaStatistiqueBox
+			   // 
+			   this->tvaStatistiqueBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			   this->tvaStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
+				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
+			   this->tvaStatistiqueBox->FormattingEnabled = true;
+			   this->tvaStatistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(4)
+			   {
+				   L"TVA 0 (0%)", L"TVA 1 (5.5%)", L"TVA 2 (10%)",
+					   L"TVA 3 (20%)"
+			   });
+			   this->tvaStatistiqueBox->Location = System::Drawing::Point(38, 244);
+			   this->tvaStatistiqueBox->Name = L"tvaStatistiqueBox";
+			   this->tvaStatistiqueBox->Size = System::Drawing::Size(121, 28);
+			   this->tvaStatistiqueBox->TabIndex = 56;
+			   // 
 			   // idClientStatistiqueBox
 			   // 
 			   this->idClientStatistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->idClientStatistiqueBox->Location = System::Drawing::Point(199, 162);
+			   this->idClientStatistiqueBox->Location = System::Drawing::Point(199, 150);
 			   this->idClientStatistiqueBox->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
 			   {
 				   999999999, 0, 0, 0
@@ -507,7 +674,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->idClientStatistiqueLabel->AutoSize = true;
 			   this->idClientStatistiqueLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->idClientStatistiqueLabel->Location = System::Drawing::Point(115, 164);
+			   this->idClientStatistiqueLabel->Location = System::Drawing::Point(115, 152);
 			   this->idClientStatistiqueLabel->Name = L"idClientStatistiqueLabel";
 			   this->idClientStatistiqueLabel->Size = System::Drawing::Size(78, 20);
 			   this->idClientStatistiqueLabel->TabIndex = 54;
@@ -517,7 +684,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   // 
 			   this->calculerStatistiqueBouton->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->calculerStatistiqueBouton->Location = System::Drawing::Point(221, 273);
+			   this->calculerStatistiqueBouton->Location = System::Drawing::Point(221, 282);
 			   this->calculerStatistiqueBouton->Name = L"calculerStatistiqueBouton";
 			   this->calculerStatistiqueBouton->Size = System::Drawing::Size(142, 32);
 			   this->calculerStatistiqueBouton->TabIndex = 53;
@@ -530,7 +697,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->moisStatistiquesLabel->AutoSize = true;
 			   this->moisStatistiquesLabel->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			   this->moisStatistiquesLabel->Location = System::Drawing::Point(140, 126);
+			   this->moisStatistiquesLabel->Location = System::Drawing::Point(140, 119);
 			   this->moisStatistiquesLabel->Name = L"moisStatistiquesLabel";
 			   this->moisStatistiquesLabel->Size = System::Drawing::Size(53, 20);
 			   this->moisStatistiquesLabel->TabIndex = 52;
@@ -554,11 +721,11 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->statistiqueBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(0)));
 			   this->statistiqueBox->FormattingEnabled = true;
-			   this->statistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(8)
+			   this->statistiqueBox->Items->AddRange(gcnew cli::array< System::Object^  >(9)
 			   {
 				   L"Panier moyen (après remise)", L"Chiffre d’affaire sur un mois en particulier",
 					   L"Produits sous le seuil de réapprovisionnement", L"Montant total des achats pour un client", L"Les 10 articles les plus vendus",
-					   L"Les 10 articles les moins vendus", L"Valeur commerciale du stock", L"Valeur d’achat du stock"
+					   L"Les 10 articles les moins vendus", L"Valeur commerciale du stock", L"Valeur d’achat du stock", L"Variation du prix d\'un article"
 			   });
 			   this->statistiqueBox->Location = System::Drawing::Point(73, 62);
 			   this->statistiqueBox->Name = L"statistiqueBox";
@@ -574,7 +741,7 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->dateMoisStatistiquePicker->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular,
 				   System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			   this->dateMoisStatistiquePicker->Format = System::Windows::Forms::DateTimePickerFormat::Custom;
-			   this->dateMoisStatistiquePicker->Location = System::Drawing::Point(199, 121);
+			   this->dateMoisStatistiquePicker->Location = System::Drawing::Point(199, 114);
 			   this->dateMoisStatistiquePicker->Name = L"dateMoisStatistiquePicker";
 			   this->dateMoisStatistiquePicker->Size = System::Drawing::Size(198, 27);
 			   this->dateMoisStatistiquePicker->TabIndex = 0;
@@ -808,6 +975,16 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->tabCommandes->Text = L"Commande";
 			   this->tabCommandes->UseVisualStyleBackColor = true;
 			   // 
+			   // factureCommandeBouton
+			   // 
+			   this->factureCommandeBouton->Location = System::Drawing::Point(3, 298);
+			   this->factureCommandeBouton->Name = L"factureCommandeBouton";
+			   this->factureCommandeBouton->Size = System::Drawing::Size(97, 23);
+			   this->factureCommandeBouton->TabIndex = 45;
+			   this->factureCommandeBouton->Text = L"Générer facture";
+			   this->factureCommandeBouton->UseVisualStyleBackColor = true;
+			   this->factureCommandeBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnFactureCommandeBouton);
+			   // 
 			   // idClientCommandeLabel
 			   // 
 			   this->idClientCommandeLabel->AutoSize = true;
@@ -1035,6 +1212,10 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 				   static_cast<System::Byte>(0)));
 			   this->tvaStockBox->Location = System::Drawing::Point(196, 274);
 			   this->tvaStockBox->Margin = System::Windows::Forms::Padding(2);
+			   this->tvaStockBox->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
+			   {
+				   99, 0, 0, 0
+			   });
 			   this->tvaStockBox->Name = L"tvaStockBox";
 			   this->tvaStockBox->Size = System::Drawing::Size(244, 27);
 			   this->tvaStockBox->TabIndex = 26;
@@ -1620,16 +1801,6 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 			   this->clearBouton->Text = L"✕";
 			   this->clearBouton->UseVisualStyleBackColor = true;
 			   this->clearBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnClearBouton);
-			   // 
-			   // factureCommandeBouton
-			   // 
-			   this->factureCommandeBouton->Location = System::Drawing::Point(3, 298);
-			   this->factureCommandeBouton->Name = L"factureCommandeBouton";
-			   this->factureCommandeBouton->Size = System::Drawing::Size(97, 23);
-			   this->factureCommandeBouton->TabIndex = 45;
-			   this->factureCommandeBouton->Text = L"Générer facture";
-			   this->factureCommandeBouton->UseVisualStyleBackColor = true;
-			   this->factureCommandeBouton->Click += gcnew System::EventHandler(this, &Projet::clickOnFactureCommandeBouton);
 			   // 
 			   // Projet
 			   // 

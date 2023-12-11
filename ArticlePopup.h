@@ -131,6 +131,10 @@ namespace ProjetPOO
 			this->remiseArticleBox->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei UI", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->remiseArticleBox->Location = System::Drawing::Point(174, 493);
+			this->remiseArticleBox->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4)
+			{
+				99, 0, 0, 0
+			});
 			this->remiseArticleBox->Name = L"remiseArticleBox";
 			this->remiseArticleBox->Size = System::Drawing::Size(156, 27);
 			this->remiseArticleBox->TabIndex = 3;

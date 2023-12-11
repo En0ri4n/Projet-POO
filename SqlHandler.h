@@ -60,6 +60,7 @@ namespace ProjetPOOServices
 		void afficherArticlesMoinsVendu();
 		void afficherValeurCommercialStock();
 		void afficherValeurAchatStock();
+		void afficherVariationArticle(ArticleMap^);
 
 		void generatePdfFacture(CommandeMap^);
 

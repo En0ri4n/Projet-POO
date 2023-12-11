@@ -32,50 +32,71 @@ String^ ProjetPOOServices::SqlQueries::AjouterPersonnel(PersonnelMap^ personnel)
 		"DECLARE @IdVille INT; " +
 		"SET @IdVille = (SELECT Id_ville FROM Villes WHERE Nom_ville = @NomVille AND Code_postal = @CodePostal); " +
 		" " +
-		"IF @IdVille IS NULL " +
-		"BEGIN  " +
+		"IF @Numero_rue < 0 " +
+		"BEGIN " +
+		"	ROLLBACK; " +
+		"	PRINT 'Ajout annulé car le numéro de rue ne peut pas être inférieur à 0' " +
+		"END " +
+		" " +
+		"ELSE IF @IdVille IS NULL " +
+		"BEGIN " +
 		"    ROLLBACK; " +
 		"    PRINT 'Ajout annulé car la ville n''existe pas'; " +
-		"END  " +
-		"ELSE  " +
-		"BEGIN  " +
-		"    SET @Id_superieur = (SELECT Id_personnel FROM Personnels WHERE Id_personnel = @Id_superieur); " +
+		"END " +
+		"ELSE " +
+		"BEGIN " +
+		"	IF @Id_superieur IS NOT NULL " +
+		"	BEGIN  " +
+		"		SET @Id_superieur = (SELECT Id_personnel FROM [Projet].[dbo].[Personnels] WHERE Id_personnel = @Id_superieur); " +
+		"		IF @Id_superieur IS NULL " +
+		"		BEGIN " +
+		"			ROLLBACK; " +
+		"			PRINT 'Ajout annulé car le supérieur n''existe pas'; " +
+		"		END " +
+		"		ELSE  " +
+		"		BEGIN " +
+		"			DECLARE @Id_sup_sup INT; " +
+		"			SET @Id_sup_sup = (SELECT Id_superieur FROM [Projet].[dbo].[Personnels] WHERE Id_personnel = @Id_superieur); " +
 		" " +
-		"    IF @Id_superieur IS NULL " +
+		"			IF @Id_sup_sup IS NOT NULL " +
+		"			BEGIN " +
+		"			    ROLLBACK; " +
+		"			    PRINT 'Ajout annulé car le supérieur a lui-même un supérieur'; " +
+		"			END " +
+		"			ELSE  " +
+		"			BEGIN " +
+		"				INSERT INTO [Projet].[dbo].[Adresses] (Numero_rue, Nom_rue, Id_ville) " +
+		"				VALUES (@Numero_rue, @Nom_rue, @IdVille); " +
+		"				SET @IdAdresse = SCOPE_IDENTITY(); " +
+		" " +
+		"			    INSERT INTO [Projet].[dbo].[Personnes] (Nom, Prenom) " +
+		"				VALUES (@NomPersonne, @PrenomPersonne); " +
+		"				SET @IdPersonne = SCOPE_IDENTITY(); " +
+		" " +
+		"				INSERT INTO [Projet].[dbo].[Personnels] (Id_personnel, Date_embauche, Id_adresse, Id_superieur) " +
+		"				VALUES (@IdPersonne, @Date_embauche, @IdAdresse, @Id_superieur); " +
+		"			END " +
+		"		END " +
+		"	END " +
+		"    ELSE IF @Id_superieur IS NULL " +
 		"    BEGIN " +
-		"        ROLLBACK; " +
-		"        PRINT 'Ajout annulé car le supérieur n''existe pas'; " +
-		"    END " +
-		"    ELSE " +
-		"    BEGIN " +
-		"        DECLARE @Id_sup_sup INT; " +
-		"        SET @Id_sup_sup = (SELECT Id_superieur FROM Personnels WHERE Id_personnel = @Id_superieur); " +
+		"        INSERT INTO [Projet].[dbo].[Adresses] (Numero_rue, Nom_rue, Id_ville) " +
+		"        VALUES (@Numero_rue, @Nom_rue, @IdVille); " +
+		"        SET @IdAdresse = SCOPE_IDENTITY(); " +
 		" " +
-		"        IF @Id_sup_sup IS NOT NULL " +
-		"        BEGIN  " +
-		"            ROLLBACK; " +
-		"            PRINT 'Ajout annulé car le supérieur a lui-même un supérieur'; " +
-		"        END  " +
-		"        ELSE  " +
-		"        BEGIN  " +
-		"            INSERT INTO Personnes (Nom, Prenom) " +
-		"            VALUES (@NomPersonne, @PrenomPersonne); " +
-		"            SET @IdPersonne = SCOPE_IDENTITY(); " +
+		"        INSERT INTO [Projet].[dbo].[Personnes] (Nom, Prenom) " +
+		"        VALUES (@NomPersonne, @PrenomPersonne); " +
+		"        SET @IdPersonne = SCOPE_IDENTITY(); " +
 		" " +
-		"            INSERT INTO Adresses (Numero_rue, Nom_rue, Id_ville) " +
-		"            VALUES (@Numero_rue, @Nom_rue, @IdVille); " +
-		"            SET @IdAdresse = SCOPE_IDENTITY(); " +
-		" " +
-		"            INSERT INTO Personnels (Id_personnel, Date_embauche, Id_adresse, Id_superieur) " +
-		"            VALUES (@IdPersonne, @Date_embauche, @IdAdresse, @Id_superieur); " +
-		"            COMMIT; " +
-		"        END; " +
+		"        INSERT INTO [Projet].[dbo].[Personnels] (Id_personnel, Date_embauche, Id_adresse, Id_superieur) " +
+		"        VALUES (@IdPersonne, @Date_embauche, @IdAdresse, @Id_superieur); " +
 		"    END; " +
+		"	COMMIT; " +
 		"END;",
 		personnel->getNom(),
 		personnel->getPrenom(),
 		personnel->getAdresse()->getNumero().ToString(),
-		personnel->getAdresse()->getRue(),
+		personnel->getAdresse()->getRue()->Replace("'", "''"),
 		personnel->getAdresse()->getVille()->getNom(),
 		personnel->getAdresse()->getVille()->getCodePostal(),
 		personnel->getDateEmbauche()->ToShortDateString(),
@@ -109,67 +130,102 @@ String^ ProjetPOOServices::SqlQueries::ModifierPersonnel(PersonnelMap^ personnel
 		"SET @IdPersonne = {8}; " +
 		" " +
 		"BEGIN TRANSACTION; " +
-		"IF NOT EXISTS (SELECT 1 FROM Personnes WHERE Id_personne = @IdPersonne) " +
+		" " +
+		"BEGIN TRANSACTION; " +
+		"DECLARE @IdVille INT; " +
+		"SET @IdVille = (SELECT Id_ville FROM Villes WHERE Nom_ville = @NomVille AND Code_postal = @CodePostal); " +
+		" " +
+		"IF @IdVille IS NULL " +
 		"BEGIN " +
 		"    ROLLBACK; " +
-		"    PRINT 'Modification annulée car la personne n''existe pas'; " +
+		"    PRINT 'Modification annulée car la ville n''existe pas'; " +
 		"END " +
+		" " +
+		"ELSE IF @Numero_rue < 0 " +
+		"BEGIN " +
+		"	ROLLBACK; " +
+		"	PRINT 'Modification annulée car le numéro de rue ne peut pas être inférieur à 0' " +
+		"END " +
+		" " +
 		"ELSE " +
 		"BEGIN " +
-		"    DECLARE @IdVille INT; " +
-		"    SET @IdVille = (SELECT Id_ville FROM Villes WHERE Nom_ville = @NomVille AND Code_postal = @CodePostal); " +
-		"    IF @IdVille IS NULL " +
-		"    BEGIN " +
-		// "        -- Annuler la transaction en cas d'erreur " +
-		"        ROLLBACK; " +
-		"        PRINT 'Modification annulée car la ville n''existe pas'; " +
-		// "        ----- Erreur Adresse ville n'existe pas ------; " +
+		"    SET @Id_superieur = (SELECT Id_personnel FROM [Projet].[dbo].[Personnels] WHERE Id_personnel = @Id_superieur); " +
+		" " +
+		"    IF @Id_superieur IS NOT NULL " +
+		"    BEGIN  " +
+		"        IF NOT EXISTS (SELECT 1 FROM [Projet].[dbo].[Personnels] WHERE Id_personnel = @Id_superieur) " +
+		"        BEGIN " +
+		"            ROLLBACK; " +
+		"            PRINT 'Modification annulée car le supérieur n''existe pas'; " +
+		"        END " +
+		"        ELSE " +
+		"        BEGIN " +
+		"            IF EXISTS (SELECT 1 FROM [Projet].[dbo].[Personnels] WHERE Id_superieur = @IdPersonne) " +
+		"            BEGIN " +
+		"                ROLLBACK; " +
+		"                PRINT 'Modification annulée car le personnel supervise des personnels'; " +
+		"            END " +
+		"            ELSE  " +
+		"            BEGIN " +
+		"                UPDATE [Projet].[dbo].[Personnes] " +
+		"                SET  " +
+		"                    Nom = @NomPersonne, " +
+		"                    Prenom = @PrenomPersonne " +
+		"                WHERE Id_personne = @IdPersonne; " +
+		" " +
+		"                UPDATE [Projet].[dbo].[Adresses] " +
+		"                SET  " +
+		"                    Nom_rue = @Nom_rue, " +
+		"                    Numero_rue = @Numero_rue, " +
+		"                    Id_ville = @IdVille " +
+		"                WHERE Id_adresse = (SELECT Id_adresse FROM [Projet].[dbo].[Personnels] WHERE Id_personnel = @IdPersonne); " +
+		" " +
+		"                UPDATE [Projet].[dbo].[Personnels] " +
+		"                SET " +
+		"                    Date_embauche = @Date_embauche, " +
+		"                    Id_superieur = @Id_superieur " +
+		"                WHERE Id_personnel = @IdPersonne; " +
+		"                 " +
+		"                COMMIT; " +
+		"            END " +
+		"        END " +
 		"    END " +
 		"    ELSE " +
 		"    BEGIN " +
-		"       SET @Id_superieur = (SELECT Id_personnel FROM Personnels WHERE Id_personnel = @Id_superieur); " +
-		"       IF @Id_superieur IS NULL " +
-		"       BEGIN " +
-		"           ROLLBACK; " +
-		"           PRINT 'Modification annulée car le supérieur n''existe pas'; " +
-		"       END; " +
+		"        IF EXISTS (SELECT 1 FROM [Projet].[dbo].[Personnels] WHERE Id_superieur = @IdPersonne) " +
+		"        BEGIN " +
+		"            ROLLBACK; " +
+		"            PRINT 'Modification annulée car le personnel supervise des personnels, veuillez retirer/changer le supérieur des personnels associés.'; " +
+		"        END " +
+		"        ELSE " +
+		"        BEGIN " +
+		"            UPDATE [Projet].[dbo].[Personnes] " +
+		"            SET  " +
+		"                Nom = @NomPersonne, " +
+		"                Prenom = @PrenomPersonne " +
+		"            WHERE Id_personne = @IdPersonne; " +
 		" " +
-		"   DECLARE @Id_sup_sup INT; " +
-		"       SET @Id_sup_sup = (SELECT Id_superieur FROM Personnels WHERE Id_personnel = @Id_superieur); " +
+		"            UPDATE [Projet].[dbo].[Adresses] " +
+		"            SET  " +
+		"                Nom_rue = @Nom_rue, " +
+		"                Numero_rue = @Numero_rue, " +
+		"                Id_ville = @IdVille " +
+		"            WHERE Id_adresse = (SELECT Id_adresse FROM [Projet].[dbo].[Personnels] WHERE Id_personnel = @IdPersonne); " +
 		" " +
-		"       IF @Id_sup_sup IS NOT NULL " +
-		"       BEGIN " +
-		"           ROLLBACK; " +
-		"           PRINT 'Ajout annulé car le supérieur a lui-même un supérieur'; " +
-		"       END " +
-		"       ELSE " +
-		"       BEGIN " +
-		"       UPDATE Personnes " +
-		"       SET  " +
-		"           Nom = @NomPersonne, " +
-		"           Prenom = @PrenomPersonne " +
-		"       WHERE Id_personne = @IdPersonne; " +
-		" " +
-		"       UPDATE Adresses " +
-		"       SET  " +
-		"           Nom_rue = @Nom_rue, " +
-		"           Numero_rue = @Numero_rue, " +
-		"           Id_ville = @IdVille " +
-		"       WHERE Id_adresse = (SELECT Id_adresse FROM Personnels WHERE Id_personnel = @IdPersonne); " +
-		" " +
-		"       UPDATE Personnels " +
-		"       SET " +
-		"           Date_embauche = @Date_embauche, " +
-		"           Id_superieur = @Id_superieur " +
-		"       WHERE Id_personnel = @IdPersonne; " +
-		"       COMMIT; " +
-		"        END; " +
-		"    END; " +
+		"            UPDATE [Projet].[dbo].[Personnels] " +
+		"            SET " +
+		"                Date_embauche = @Date_embauche, " +
+		"                Id_superieur = @Id_superieur " +
+		"            WHERE Id_personnel = @IdPersonne; " +
+		"             " +
+		"            COMMIT; " +
+		"        END " +
+		"    END " +
 		"END;",
 		personnel->getNom(),
 		personnel->getPrenom(),
 		personnel->getAdresse()->getNumero().ToString(),
-		personnel->getAdresse()->getRue(),
+		personnel->getAdresse()->getRue()->Replace("'", "''"),
 		personnel->getAdresse()->getVille()->getNom(),
 		personnel->getAdresse()->getVille()->getCodePostal(),
 		personnel->getDateEmbauche()->ToShortDateString(),
@@ -433,7 +489,7 @@ String^ ProjetPOOServices::SqlQueries::AjouterArticle(ArticleMap^ article)
 		"    PRINT 'Ajout de l''article impossible, car la quantite est inférieure à 0' " +
 		"END " +
 		" " +
-		"ELSE IF @Pourcentage_taxe < 0 " +
+		"ELSE IF (@Pourcentage_taxe < 0) OR (@Pourcentage_taxe > 99) " +
 		"BEGIN " +
 		"    ROLLBACK; " +
 		"    PRINT 'Ajout de l''article impossible, car la taxe est inférieure à 0' " +
@@ -482,13 +538,13 @@ String^ ProjetPOOServices::SqlQueries::ModifierArticle(ArticleMap^ article)
 		"    PRINT 'Modification annulée car la personne n''existe pas'; " +
 		"END " +
 		" " +
-		"IF @Quantite_article < 0  " +
+		"ELSE IF @Quantite_article < 0  " +
 		"BEGIN  " +
 		"    ROLLBACK; " +
 		"    PRINT 'Ajout de l''article impossible, car la quantite est inférieure à 0' " +
 		"END " +
 		" " +
-		"ELSE IF @Pourcentage_taxe < 0 " +
+		"ELSE IF (@Pourcentage_taxe < 0)  OR (@Pourcentage_taxe > 99) " +
 		"BEGIN " +
 		"    ROLLBACK; " +
 		"    PRINT 'Ajout de l''article impossible, car la taxe est inférieure à 0' " +
@@ -621,6 +677,11 @@ String^ ProjetPOOServices::SqlQueries::AjouterClient(ClientMap^ client)
 		"    ROLLBACK; " +
 		"    PRINT 'Ajout annulé car la ville de livraison n''existe pas'; " +
 		"END " +
+		"ELSE IF (@NumeroRueFacturation < 0) OR (@NumeroRueLivraison < 0) " +
+		"BEGIN " +
+		"    ROLLBACK; " +
+		"    PRINT 'Ajout annulé car le numéro d''une des rues est inférieure à 0' " +
+		"END " +
 		"ELSE " +
 		"BEGIN " +
 		"    INSERT INTO Personnes (Nom, Prenom) " +
@@ -645,12 +706,12 @@ String^ ProjetPOOServices::SqlQueries::AjouterClient(ClientMap^ client)
 		client->getDateNaissance()->ToShortDateString(),
 
 		client->getAdresseLivraison()->getNumero(),
-		client->getAdresseLivraison()->getRue(),
+		client->getAdresseLivraison()->getRue()->Replace("'", "''"),
 		client->getAdresseLivraison()->getVille()->getNom(),
 		client->getAdresseLivraison()->getVille()->getCodePostal(),
 
 		client->getAdresseFacturation()->getNumero(),
-		client->getAdresseFacturation()->getRue(),
+		client->getAdresseFacturation()->getRue()->Replace("'", "''"),
 		client->getAdresseFacturation()->getVille()->getNom(),
 		client->getAdresseFacturation()->getVille()->getCodePostal());
 }
@@ -696,6 +757,11 @@ String^ ProjetPOOServices::SqlQueries::ModifierClient(ClientMap^ client)
 		"    ROLLBACK; " +
 		"    PRINT 'Modification annulée car le client n''existe pas'; " +
 		"END " +
+		"ELSE IF (@NumeroRueFacturation < 0) OR (@NumeroRueLivraison < 0) " +
+		"BEGIN " +
+		"    ROLLBACK; " +
+		"    PRINT 'Ajout annulé car le numéro d''une des rues est inférieure à 0' " +
+		"END " +
 		"ELSE " +
 		"BEGIN " +
 		"    UPDATE Personnes " +
@@ -733,12 +799,12 @@ String^ ProjetPOOServices::SqlQueries::ModifierClient(ClientMap^ client)
 		client->getDatePremierAchat()->ToShortDateString(),
 
 		client->getAdresseLivraison()->getNumero(),
-		client->getAdresseLivraison()->getRue(),
+		client->getAdresseLivraison()->getRue()->Replace("'", "''"),
 		client->getAdresseLivraison()->getVille()->getNom(),
 		client->getAdresseLivraison()->getVille()->getCodePostal(),
 
 		client->getAdresseFacturation()->getNumero(),
-		client->getAdresseFacturation()->getRue(),
+		client->getAdresseFacturation()->getRue()->Replace("'", "''"),
 		client->getAdresseFacturation()->getVille()->getNom(),
 		client->getAdresseFacturation()->getVille()->getCodePostal());
 }
@@ -846,7 +912,7 @@ String^ ProjetPOOServices::SqlQueries::AjouterCommandeArticle(SqlQuery^ query, C
 			"	PRINT 'Erreur d''ajout de l''article car le nombre commandé est supérieur au stock'; " +
 			"END " +
 			" " +
-			"ELSE IF @Pourcentage_remise_article < 0 " +
+			"ELSE IF (@Pourcentage_remise_article < 0) OR (@Pourcentage_remise_article > 99) " +
 			"BEGIN " +
 			"	ROLLBACK; " +
 			"	PRINT 'Erreur d''ajout de la remise car celle-ci est inférieure à 0'; " +
@@ -916,7 +982,7 @@ String^ ProjetPOOServices::SqlQueries::ModifierCommandeArticle(SqlQuery^ query, 
 			"    PRINT 'Erreur d''ajout de l''article, car celui-ci n''est plus en stock' " +
 			"END " +
 			" " +
-			"ELSE IF @Pourcentage_remise_article < 0 " +
+			"ELSE IF (@Pourcentage_remise_article < 0) OR (@Pourcentage_remise_article > 99) " +
 			"BEGIN " +
 			"    ROLLBACK; " +
 			"    PRINT 'Erreur d''ajout de la remise car celle-ci est inférieure à 0'; " +
@@ -1122,11 +1188,11 @@ String^ ProjetPOOServices::SqlQueries::filtre(Table^ table, String^ column, Stri
 	return query;
 }
 
-String^ ProjetPOOServices::SqlQueries::filtreClients(String^ column, String^ value)
+String^ ProjetPOOServices::SqlQueries::filtreClients(String^ columnName, String^ value)
 {
 	String^ query = listeClients();
 
-	column = column->ToLower();
+	String^ column = columnName->ToLower();
 	String^ table = "";
 	String^ attribut = "";
 
@@ -1182,10 +1248,13 @@ String^ ProjetPOOServices::SqlQueries::filtreClients(String^ column, String^ val
 				attribut = "Id_ville";
 			}
 		}
+
+		query += String::Format(" WHERE [{0}].[{1}] LIKE '%{2}%';", table, attribut, value);
 	}
-
-
-	query += String::Format(" WHERE [{0}].[{1}] LIKE '%{2}%';", table, attribut, value);
+	else
+	{
+		query += String::Format(" WHERE {0} LIKE '%{1}%';", columnName, value);
+	}
 
 	return query;
 }
@@ -1240,4 +1309,39 @@ String^ ProjetPOOServices::SqlQueries::getFullCommande(CommandeMap^ commande)
 		"INNER JOIN  " +
 		"    [Projet].[dbo].[Articles] AS Articles ON constituer.Reference_article = Articles.Reference_article " +
 		"WHERE Commandes.Reference_commande = @Reference_commande;", commande->getIdCommande());
+}
+
+String^ ProjetPOOServices::SqlQueries::getVariationPrixArticle(ArticleMap^ article)
+{
+	return String::Format("DECLARE @Reference_article VARCHAR(30); " +
+		"DECLARE @TVA INT; " +
+		"DECLARE @REMISE INT; " +
+		"SET @Reference_article = '{0}'; " +
+		"SET @TVA = {1}; " +
+		"SET @REMISE = {2}; " +
+		" " +
+		"BEGIN TRANSACTION; " +
+		" " +
+		"IF NOT EXISTS (SELECT Reference_article FROM [Projet].[dbo].Articles WHERE Reference_article = @Reference_article) " +
+		"BEGIN  " +
+		"    ROLLBACK; " +
+		"    PRINT 'Article n''existe pas.' " +
+		"END " +
+		" " +
+		"ELSE IF  (@TVA < 0) OR (@TVA > 99) " +
+		"BEGIN " +
+		"    ROLLBACK; " +
+		"    PRINT 'Valeur de TVA incorrecte.' " +
+		"END " +
+		" " +
+		"ELSE " +
+		"BEGIN " +
+		"    SELECT Reference_article, Nom_article, Prix_article_HT, (Prix_article_HT * (1 + CAST(@TVA AS DECIMAL(2)) / 100 - CAST(@REMISE AS DECIMAL(2)) / 100)) AS Prix_article_variation_nouvelle_TVA " +
+		"    FROM [Projet].[dbo].Articles " +
+		"    WHERE Articles.Reference_article = @Reference_article " +
+		"    COMMIT; " +
+		"END",
+		article->getIdArticle(),
+		article->getTaxe(),
+		article->getRemise());
 }
