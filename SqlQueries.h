@@ -48,6 +48,8 @@ namespace ProjetPOOServices
 
 		static String^ filtre(Table^, String^, String^);
 		static String^ filtreClients(String^, String^);
+
+		static String^ getFullCommande(CommandeMap^);
 	};
 }
 

@@ -218,6 +218,47 @@ void ProjetPOOServices::SqlHandler::afficherValeurAchatStock()
 	fill(Table::STATISTIQUES);
 }
 
+void ProjetPOOServices::SqlHandler::generatePdfFacture(CommandeMap^ commande)
+{
+	ClientMap^ clientOut = gcnew ClientMap();
+
+	this->query->newQuery(false, SqlQueries::getFullCommande(commande));
+	SqlManager^ manager = gcnew SqlManager(SqlManager::username, SqlManager::password);
+	System::Data::DataSet^ dataset = manager->getRows(query, Table::COMMANDES);
+
+	System::Data::DataRow^ baseRow = dataset->Tables[Table::COMMANDES->getName()]->Rows[0];
+
+	clientOut->setId(Convert::ToInt32(baseRow["Id_client"]->ToString()));
+	clientOut->setNom(baseRow["Nom"]->ToString());
+	clientOut->setPrenom(baseRow["Prenom"]->ToString());
+
+	AdresseMap^ adresseFacturation = gcnew AdresseMap();
+	adresseFacturation->setNumero(Convert::ToInt32(baseRow["Numero_rue_facturation"]->ToString()));
+	adresseFacturation->setRue(baseRow["Nom_rue_facturation"]->ToString());
+	VilleMap^ villeFacturation = gcnew VilleMap();
+	villeFacturation->setCodePostal(baseRow["Code_postal_facturation"]->ToString());
+	villeFacturation->setNom(baseRow["Nom_ville_facturation"]->ToString());
+	adresseFacturation->setVille(villeFacturation);
+	clientOut->setAdresseFacturation(adresseFacturation);
+
+	clientOut->setDateNaissance(Convert::ToDateTime(baseRow["Date_naissance"]->ToString()));
+	clientOut->setDatePremierAchat(Convert::ToDateTime(baseRow["Date_premier_achat"]->ToString()));
+
+	commande->setIdCommande(commande->getIdCommande());
+	commande->setDatePaiement(Convert::ToDateTime(baseRow["Date_paiement"]));
+	commande->setDateLivraison(Convert::ToDateTime(baseRow["Date_livraison"]));
+	commande->setDateEmission(Convert::ToDateTime(baseRow["Date_emission"]));
+	commande->setMoyenPaiement(baseRow["Moyen_paiement"]->ToString());
+	// commande->setRemise(Convert::ToInt32(baseRow["Pourcentage_remise_commande"]));
+	
+	System::Collections::ArrayList^ articles = gcnew System::Collections::ArrayList();
+	remplirArticlesCommande(commande, articles);
+
+	commande->setListeArticles(articles);
+
+	ProjetPOO::Projet::instance->generatePdf(commande, clientOut);
+}
+
 void ProjetPOOServices::SqlHandler::filtre(Table^ table, String^ column, String^ value)
 {
 	this->query->newQuery(false, SqlQueries::filtre(table, column, value));

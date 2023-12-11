@@ -61,6 +61,8 @@ namespace ProjetPOOServices
 		void afficherValeurCommercialStock();
 		void afficherValeurAchatStock();
 
+		void generatePdfFacture(CommandeMap^);
+
 		void filtre(Table^, String^, String^);
 		void filtreClients(String^, String^);
 

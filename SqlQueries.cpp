@@ -1189,3 +1189,55 @@ String^ ProjetPOOServices::SqlQueries::filtreClients(String^ column, String^ val
 
 	return query;
 }
+
+String^ ProjetPOOServices::SqlQueries::getFullCommande(CommandeMap^ commande)
+{
+	return String::Format("DECLARE @Reference_commande VARCHAR(30); " +
+		" " +
+		"SET @Reference_commande = '{0}'; " +
+		" " +
+		"SELECT  " +
+		"	Clients.Id_client, " +
+		"    Personnes.Nom,  " +
+		"    Personnes.Prenom, " +
+		"    Clients.Date_naissance,  " +
+		"    Clients.Date_premier_achat, " +
+		"    AdressesLivraison.Nom_rue AS Nom_rue_livraison, " +
+		"    AdressesLivraison.Numero_rue AS Numero_rue_livraison, " +
+		"    VilleLivraison.Nom_ville AS Nom_ville_livraison, " +
+		"    AdressesFacturation.Nom_rue AS Nom_rue_facturation, " +
+		"    AdressesFacturation.Numero_rue AS Numero_rue_facturation, " +
+		"    VilleFacturation.Nom_ville AS Nom_ville_facturation, " +
+		"	 VilleFacturation.Code_postal AS Code_postal_facturation, " +
+		"    Commandes.Reference_commande, " +
+		"    Commandes.Date_paiement, " +
+		"	 Commandes.Date_emission, " +
+		"    Commandes.Date_livraison, " +
+		"	 Commandes.Moyen_paiement, " +
+		"    constituer.Quantite_article_commande, " +
+		"    Articles.Nom_article, " +
+		"	 constituer.Pourcentage_remise_article, " +
+		"    Articles.Prix_article_HT AS Prix_unitaire_HT, " +
+		"    Articles.Prix_article_HT * (1 + (CAST(Articles.Pourcentage_taxe AS DECIMAL(2)) / 100)) AS Prix_unitaire_TVA, " +
+		"    Articles.Prix_article_HT * (1 + (CAST(Articles.Pourcentage_taxe AS DECIMAl(2)) / 100)) * constituer.Quantite_article_commande AS Prix_commande_TTC, " +
+		"    Articles.Prix_article_HT * (1 + (CAST(Articles.Pourcentage_taxe AS DECIMAL(2)) / 100)) * constituer.Quantite_article_commande * (1 - (CAST(constituer.Pourcentage_remise_article AS DECIMAL(2)) / 100)) AS Prix_commande_TTC_remise " +
+		"FROM  " +
+		"    [Projet].[dbo].[Personnes] AS Personnes " +
+		"INNER JOIN  " +
+		"    [Projet].[dbo].[Clients] AS Clients ON Personnes.Id_personne = Clients.Id_client " +
+		"LEFT JOIN  " +
+		"    [Projet].[dbo].[Adresses] AS AdressesLivraison ON Clients.Id_adresse_livraison = AdressesLivraison.Id_adresse " +
+		"LEFT JOIN  " +
+		"    [Projet].[dbo].[Adresses] AS AdressesFacturation ON Clients.Id_adresse_facturation = AdressesFacturation.Id_adresse " +
+		"LEFT JOIN " +
+		"    [Projet].[dbo].[Villes] AS VilleLivraison ON AdressesLivraison.Id_ville = VilleLivraison.Id_ville " +
+		"LEFT JOIN " +
+		"    [Projet].[dbo].[Villes] AS VilleFacturation ON AdressesFacturation.Id_ville = VilleFacturation.Id_ville " +
+		"INNER JOIN  " +
+		"    [Projet].[dbo].[Commandes] AS Commandes ON Clients.Id_client = Commandes.Id_client " +
+		"INNER JOIN  " +
+		"    [Projet].[dbo].[constituer] AS constituer ON Commandes.Reference_commande = constituer.Reference_commande " +
+		"INNER JOIN  " +
+		"    [Projet].[dbo].[Articles] AS Articles ON constituer.Reference_article = Articles.Reference_article " +
+		"WHERE Commandes.Reference_commande = @Reference_commande;", commande->getIdCommande());
+}

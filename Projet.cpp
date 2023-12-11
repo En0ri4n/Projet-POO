@@ -790,14 +790,14 @@ System::Void ProjetPOO::Projet::generatePdf(CommandeMap^ commande, ClientMap^ cl
 	{
 		gfx->DrawString(article->getNom(), gcnew XFont("Arial", 11), XBrushes::Black, borderX, yPos);
 		gfx->DrawString(String::Format("{0} | {1}", article->getNature(), article->getCouleur()), gcnew XFont("Arial", 9), XBrushes::Black, borderX, yPos + 10);
-		gfx->DrawString(article->getPrix().ToString("C"), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 225, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString(String::Format("{0:0.00}€", article->getPrix()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 225, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString(article->getQuantite().ToString(), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 305, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString((article->getQuantite() * article->getPrix()).ToString("C"), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 365, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString(String::Format("{0}%", article->getTaxe()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 423, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString(String::Format("{0}€", (article->getPrix() * article->getQuantite() * (article->getTaxe() / 100.0))), gcnew XFont("Arial", 9), XBrushes::Black, borderX + 423, yPos + 10, XStringFormat::BottomCenter);
 		gfx->DrawString(String::Format("{0}%", article->getRemise()), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 475, yPos, XStringFormat::BottomCenter);
 		gfx->DrawString(String::Format("{0}€", (article->getQuantite() * article->getPrix() * (1 + article->getTaxe() / 100.0) * (article->getRemise() / 100.0))), gcnew XFont("Arial", 9), XBrushes::Black, borderX + 475, yPos + 10, XStringFormat::BottomCenter);
-		gfx->DrawString((article->getQuantite() * article->getPrix() * (1 + article->getTaxe() / 100.0) * (1 - article->getRemise() / 100.0)).ToString("C"), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 533, yPos, XStringFormat::BottomCenter);
+		gfx->DrawString(String::Format("{0:0.00}€", (article->getQuantite() * article->getPrix() * (1 + article->getTaxe() / 100.0) * (1 - article->getRemise() / 100.0))), gcnew XFont("Arial", 11), XBrushes::Black, borderX + 533, yPos, XStringFormat::BottomCenter);
 
 		gfx->DrawLine(XPens::Gray, borderX, yPos += 15, outBorderX, yPos);
 		yPos += 20;
@@ -806,13 +806,13 @@ System::Void ProjetPOO::Projet::generatePdf(CommandeMap^ commande, ClientMap^ cl
 		totalTTC += article->getQuantite() * article->getPrix() * (1 + article->getTaxe() / 100.0) * (1 - article->getRemise() / 100.0);
 	}
 
-	gfx->DrawString(String::Format("Total HT : {0}", totalHT.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Total HT : {0}", totalHT.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold)).Width, yPos);
-	gfx->DrawString(String::Format("Total TTC : {0}", totalTTC.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Total TTC : {0}", totalTTC.ToString("C")), gcnew XFont("Arial", 11, XFontStyle::Bold)).Width, yPos += 15);
+	gfx->DrawString(String::Format("Total HT : {0:0.00} €", totalHT), gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Total HT : {0:0.00} €", totalHT), gcnew XFont("Arial", 11, XFontStyle::Bold)).Width, yPos);
+	gfx->DrawString(String::Format("Total TTC : {0:0.00} €", totalTTC), gcnew XFont("Arial", 11, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Total TTC : {0:0.00} €", totalTTC), gcnew XFont("Arial", 11, XFontStyle::Bold)).Width, yPos += 15);
 
 	gfx->DrawLine(XPens::Gray, borderX, yPos += 15, outBorderX, yPos);
 
 	gfx->DrawString("Net à Payer :", gcnew XFont("Arial", 14, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString("Net à Payer :", gcnew XFont("Arial", 14, XFontStyle::Bold)).Width, yPos += 30);
-	gfx->DrawString(totalTTC.ToString("C"), gcnew XFont("Arial", 14, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(totalTTC.ToString("C"), gcnew XFont("Arial", 14, XFontStyle::Bold)).Width, yPos += 20);
+	gfx->DrawString(String::Format("{0:0.00} €", totalTTC), gcnew XFont("Arial", 14, XFontStyle::Bold), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("{0:0.00} €", totalTTC), gcnew XFont("Arial", 14, XFontStyle::Bold)).Width, yPos += 20);
 
 	gfx->DrawString(String::Format("Moyen de paiement : {0}", commande->getMoyenPaiement()), gcnew XFont("Arial", 11), XBrushes::Black, outBorderX - gfx->MeasureString(String::Format("Moyen de paiement : {0}", commande->getMoyenPaiement()), gcnew XFont("Arial", 11)).Width, yPos += 30);
 
@@ -822,12 +822,15 @@ System::Void ProjetPOO::Projet::generatePdf(CommandeMap^ commande, ClientMap^ cl
 	gfx->DrawString("Ces conditions générales de vente prévaudront sur toutes autres conditions", gcnew XFont("Arial", 10), XBrushes::Black, pageWidth / 2, yPos += 12, XStringFormat::Center);
 	gfx->DrawString("générales ou particulières non expressément agréées par EVAL.", gcnew XFont("Arial", 10), XBrushes::Black, pageWidth / 2, yPos += 12, XStringFormat::Center);
 
+	String^ documentName = String::Format("FACTURE-{0}_{1}-{2}.pdf", client->getNom(), client->getPrenom(), commande->getIdCommande());
+	
+	document->Save(documentName);
 
-	document->Save("test.pdf");
+	System::Diagnostics::Process::Start(documentName);
 }
 System::Void ProjetPOO::Projet::clickOnFactureCommandeBouton(System::Object^ sender, System::EventArgs^ e)
 {
-	// generatePdf();
+	sqlHandler->generatePdfFacture(CommandeMap::from(this->idCommandeBox->Text));
 }
 Collections::ArrayList^ ProjetPOO::Projet::getArticlesCommande()
 {

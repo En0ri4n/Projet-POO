@@ -1715,7 +1715,6 @@ private: System::Windows::Forms::Label^ adressePersonnelLabel;
 	private: System::Void resetBoxes();
 	private: System::Void clickOnHistoriqueLabel(System::Object^ sender, System::EventArgs^ e);
 	private: System::Boolean isActive(System::Windows::Forms::TabPage^ tab);
-	private: System::Void generatePdf(CommandeMap^, ClientMap^);
 private: System::Void clickOnFactureCommandeBouton(System::Object^ sender, System::EventArgs^ e);
 
 	public:
@@ -1727,6 +1726,7 @@ private: System::Void clickOnFactureCommandeBouton(System::Object^ sender, Syste
 		System::Void updateArticlesCommande(ArrayList^ list);
 		System::Void addQueryHistorique(System::String^ query);
 		System::Void updateRechercheColonneBox();
+		System::Void generatePdf(CommandeMap^, ClientMap^);
 };
 }
 #pragma endregion
